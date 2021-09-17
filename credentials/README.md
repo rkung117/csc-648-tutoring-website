@@ -20,7 +20,7 @@ Download the sshKey.pem file to your system and place somewhere convienent.
 <br>ssh into the server by using <br>'ssh -i  "\<path to sshKey.pem>" ubuntu@csc648team3.ddns.net'. 
 <br> Create a ssh tunnel to the database by using 
 <br>'ssh -i  "\<path to sshKey.pem>" -N -L 3306:127.0.0.1:3306 ubuntu@csc648team3.ddns.net'. 
-<br>Then log into the database as if it was localhost using standard methods.
+<br>Then log into the database as if it was localhost using standard methods: mysql -u admin -p -h 127.0.0.1 or a GUI based program.
 
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
