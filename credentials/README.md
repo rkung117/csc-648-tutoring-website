@@ -11,17 +11,16 @@
 2. SSH username: <b>ubuntu</b>
 3. SSH password or key: <b>sshKey.pem in credentials directory.</b>
 4. Database URL or IP and port used: <b>LocalHost only, use ssh tunneling. Default port: 3306.</b>
-    <br><strong> NOTE THIS DOES NOT MEAN YOUR DATABASE NEEDS A PUBLIC FACING PORT.</strong> But knowing the IP and port number will help with SSH tunneling into the database. The default port is more than sufficient for this class.
 5. Database username: <b>admin</b>
 6. Database password: <b>admin-648T3</b>
-7. Database name (basically the name that contains all your tables): <b>To be determined</b>
+7. Database name (basically the name that contains all your tables): <b>csc648t3_production</b>
 8. Instructions on how to use the above information.
 
 Download the sshKey.pem file to your system and place somewhere convienent. 
 <br>ssh into the server by using <br>'ssh -i  "\<path to sshKey.pem>" ubuntu@csc648team3.ddns.net'. 
 <br> Create a ssh tunnel to the database by using 
 <br>'ssh -i  "\<path to sshKey.pem>" -N -L 3306:127.0.0.1:3306 ubuntu@csc648team3.ddns.net'. 
-<br>Then log into the database as if it was localhost using standard methods.
+<br>Then log into the database as if it was localhost using standard methods: mysql -u admin -p -h 127.0.0.1 or a GUI based program.
 
 # Most important things to Remember
 ## These values need to kept update to date throughout the semester. <br>
