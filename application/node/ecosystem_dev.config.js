@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
      name: 'CSC648-T3-dev',
-     script: '/opt/dev/source/application/node/index.js',
+     script: '/opt/dev/source/application/node/app.js',
       env_development: {
         PORT: 3010
       }
