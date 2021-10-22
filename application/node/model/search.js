@@ -2,15 +2,15 @@
 /*
 TODO:
  Should move this connection out of this file to a more global declaration.
- keeping here for now.
+ Keeping here for now.
 */
 const mysql = require("mysql");
 
 const database = mysql.createConnection({
     host: 'localhost',
-    user: 'dev',
-    password: '',
-    database: 'development'
+    user: 'admin',
+    password: 'admin-648T3',
+    database: 'csc648t3_testing'
 })
 database.connect((err) => {
     if(err) throw err;
@@ -30,16 +30,51 @@ function search(request, response, callback) {
     let category = request.query.category;
 
     // Create the query based on the data passed. By default we return everything from the table.
-    let query = 'SELECT * FROM courses';
-    if(searchTerm != '' && category != '') {
-        query = `SELECT * FROM courses WHERE major = '${category}' AND (name LIKE '%${searchTerm}%')`;
+    let query = `SELECT users.id,\n` +
+                `       users.first_name,\n` +
+                `       users.last_name,\n` +
+                `       tutors.tutor_id,\n` +
+                `       tutors.image,\n` +
+                `       tutors.major_long_name,\n` +
+                `       tutors.major_short_name\n` +
+                `FROM tutors\n` +
+                `JOIN users ON users.id = tutors.user_id`;
+    if(searchTerm !== '' && category !== '') {
+        query = `SELECT users.id,\n` +
+                `       users.first_name,\n` +
+                `       users.last_name,\n` +
+                `       tutors.tutor_id,\n` +
+                `       tutors.image,\n` +
+                `       tutors.major_long_name,\n` +
+                `       tutors.major_short_name\n` +
+                `FROM tutors\n` +
+                `JOIN users ON users.id = tutors.user_id\n` +
+                `WHERE tutors.major_short_name = '${category}' AND \n` +
+                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
     }
-    else if(searchTerm != '' && category == '') {
-        query = `SELECT * FROM courses WHERE (name LIKE '%${searchTerm}%')`;
-
+    else if(searchTerm !== '' && category === '') {
+        query = `SELECT users.id,\n` +
+                `       users.first_name,\n` +
+                `       users.last_name,\n` +
+                `       tutors.tutor_id,\n` +
+                `       tutors.image,\n` +
+                `       tutors.major_long_name,\n` +
+                `       tutors.major_short_name\n` +
+                `FROM tutors\n` +
+                `JOIN users ON users.id = tutors.user_id\n` +
+                `WHERE (users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
     }
-    else if(searchTerm == '' && category != '') {
-        query = `SELECT * FROM courses WHERE major = '${category}'`;
+    else if(searchTerm === '' && category !== '') {
+        query = `SELECT users.id,\n` +
+                `       users.first_name,\n` +
+                `       users.last_name,\n` +
+                `       tutors.tutor_id,\n` +
+                `       tutors.image,\n` +
+                `       tutors.major_long_name,\n` +
+                `       tutors.major_short_name\n` +
+                `FROM tutors\n` +
+                `JOIN users ON users.id = tutors.user_id\n` +
+                `WHERE tutors.major_short_name = '${category}'`;
     }
 
     // Perform the query on the database passing the result to our anonymous callback function.

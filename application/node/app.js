@@ -7,7 +7,6 @@ const app = express()
 app.use('/', require('./controller/index'));
 
 // Tell node our templates will be under the views directory
-app.set('views', path.join(__dirname, 'views/about'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
