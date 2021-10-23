@@ -30,51 +30,59 @@ function search(request, response, callback) {
     let category = request.query.category;
 
     // Create the query based on the data passed. By default we return everything from the table.
-    let query = `SELECT users.id,\n` +
+    let query = `SELECT users.user_id,\n` +
                 `       users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
-                `       tutors.major_long_name,\n` +
-                `       tutors.major_short_name\n` +
+                `       major.major_long_name,\n` +
+                `       major.major_short_name\n` +
                 `FROM tutors\n` +
-                `JOIN users ON users.id = tutors.user_id`;
+                `JOIN users ON users.user_id = tutors.tutor_id\n` +
+                `JOIN major ON users.major = major.major_id`;
     if(searchTerm !== '' && category !== '') {
-        query = `SELECT users.id,\n` +
+        query = `SELECT users.user_id,\n` +
                 `       users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
-                `       tutors.major_long_name,\n` +
-                `       tutors.major_short_name\n` +
+                `       major.major_long_name,\n` +
+                `       major.major_short_name\n` +
                 `FROM tutors\n` +
-                `JOIN users ON users.id = tutors.user_id\n` +
-                `WHERE tutors.major_short_name = '${category}' AND \n` +
+                `JOIN users ON users.user_id = tutors.tutor_id\n` +
+                `JOIN major ON users.major = major.major_id\n` +
+                `WHERE major.major_short_name = '${category}' AND \n` +
                 `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
     }
     else if(searchTerm !== '' && category === '') {
-        query = `SELECT users.id,\n` +
+        query = `SELECT users.user_id,\n` +
                 `       users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
-                `       tutors.major_long_name,\n` +
-                `       tutors.major_short_name\n` +
+                `       major.major_long_name,\n` +
+                `       major.major_short_name\n` +
                 `FROM tutors\n` +
-                `JOIN users ON users.id = tutors.user_id\n` +
+                `JOIN users ON users.user_id = tutors.tutor_id\n` +
+                `JOIN major ON users.major = major.major_id\n` +
                 `WHERE (users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
     }
     else if(searchTerm === '' && category !== '') {
-        query = `SELECT users.id,\n` +
+        query = `SELECT users.user_id,\n` +
                 `       users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
-                `       tutors.major_long_name,\n` +
-                `       tutors.major_short_name\n` +
+                `       major.major_long_name,\n` +
+                `       major.major_short_name\n` +
                 `FROM tutors\n` +
-                `JOIN users ON users.id = tutors.user_id\n` +
-                `WHERE tutors.major_short_name = '${category}'`;
+                `JOIN users ON users.user_id = tutors.tutor_id\n` +
+                `JOIN major ON users.major = major.major_id\n` +
+                `WHERE major.major_short_name = '${category}'`;
     }
 
     // Perform the query on the database passing the result to our anonymous callback function.
