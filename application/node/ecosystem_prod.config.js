@@ -1,10 +1,12 @@
 module.exports = {
   apps: [{
     name: 'CSC648-T3-prod',
-    script: '/opt/prod/source/application/node/index.js',
-    env_production: {
-        NODE_ENV: "production",
-        PORT: 3000
+    script: '/opt/prod/source/application/node/app.js',
+    env  : {
+      PORT: 3000,
+      DB_USER: "admin",
+      DB_PASSWORD: "admin-648T3",
+      DATABASE: "csc648t3_production"
     }
    }],
   deploy: {
@@ -18,6 +20,9 @@ module.exports = {
       'post-deploy': 'cd /opt/prod/source/application/node && npm install && pm2 startOrRestart ecosystem_prod.config.js',
       env  : {
         PORT: 3000,
+        DB_USER: "admin",
+        DB_PASSWORD: "admin-648T3",
+        DATABASE: "csc648t3_production"
       }
     }
   }

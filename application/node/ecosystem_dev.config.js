@@ -1,9 +1,12 @@
 module.exports = {
   apps: [{
      name: 'CSC648-T3-dev',
-     script: '/opt/dev/source/application/node/index.js',
-      env_development: {
-        PORT: 3010
+     script: '/opt/dev/source/application/node/app.js',
+      env  : {
+          PORT: 3010,
+          DB_USER: "admin",
+          DB_PASSWORD: "admin-648T3",
+          DATABASE: "csc648t3_development"
       }
    }
   ],
@@ -16,9 +19,12 @@ module.exports = {
       repo: 'git@github.com:CSC-648-SFSU/csc648-03-fa21-team03.git',
       path: '/opt/dev',
       'post-deploy': 'cd /opt/dev/source/application/node && npm install && pm2 startOrRestart ecosystem_dev.config.js',
-      env  : {
-        PORT: 3010
-      }
+        env  : {
+            PORT: 3010,
+            DB_USER: "admin",
+            DB_PASSWORD: "admin-648T3",
+            DATABASE: "csc648t3_development"
+        }
     }
   }
 }
