@@ -30,8 +30,9 @@
 <form>
     <select name="category" onchange="this.form.submit()">
         <option value="">All Categories </option>
-        <option value="csc" <% if(category === "csc") { %> selected <% } %>>Computer Science</option>
-        <option value="phil"  <% if(category === "phil") { %> selected <% } %>>Philosophy</option>
+        <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
+            <option value="<%= searchCategoriesShortName[i]%>" <% if(category === searchCategoriesShortName[i]) { %> selected <% } %>><%= searchCategoriesLongName[i]%></option>
+        <%}%>
     </select>
     <input id="search" type="text" name="search" value="<%= searchTerm %>" placeholder="Search...">
     <button>Search</button>
