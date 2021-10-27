@@ -18,9 +18,54 @@ database.connect((err) => {
 });
 
 /***
+ * searchCategories currently retrieves the short and long names of all majors in the database. This can be updated
+ * at a later point when we have all of the search categories set in stone. This allows us to dynamically adjust
+ * what the users are allowed to select during search to filter the results by. The results found here are appended
+ * to the request variable before the callback is called.
+ *
+ * @param request the request from the user to be processed by the server.
+ * @param response the response that will eventually be rendered to the user
+ * @param callback the next method in the call stack before the response is rendered to the user.
+ */
+function searchCategories(request, response, callback) {
+
+    // Set up the query to select all of the data from the majors table in the database.
+    let query = `SELECT * FROM major`;
+
+    // Perform the query on the database passing the result to our anonymous callback function.
+    database.query(query, (err, result) => {
+
+        // Append default data to the request before calling callback, this make sure we at least return
+        // an empty array of no results if something goes wrong, hopefully preventing a crash.
+        request.majors_short_name = []
+        request.majors_long_name = []
+
+        // If we hit an error with the mysql connection or query we just return the above empty data
+        // since we have no data to display from the database. This should never happen in production.
+        if(err) {
+            console.log(`Encountered an error when performing query: ${query}`)
+        }
+        else {
+
+            // Go through all of the resulting data and append it to the two lists
+            for(let i = 0; i < result.length; i++) {
+
+                let item = result[i]
+                request.majors_short_name.push(item['major_short_name']);
+                request.majors_long_name.push(item['major_long_name']);
+            }
+        }
+
+        // pass the data to the next callback in the queue.
+        callback()
+    });
+}
+
+/***
  * This function performs the search of the mysql database and passes all values found into a callback function.
  *
  * @param request The request from the user sent to the server, contains all data needed to perform the search
+ * @param response The response that will be rendered to the user in the final callback method.
  * @param callback The function that we pass the data to after finishing the search.
  */
 function search(request, response, callback) {
@@ -128,4 +173,4 @@ function search(request, response, callback) {
     });
 }
 
-module.exports = search;
+module.exports = {search, searchCategories};
