@@ -1,3 +1,15 @@
+/**
+ * The controller that defines the connections to the root page of the website.
+ *
+ * This file defines the routes and controls the flow of data between the model and the view for the root page.
+ * Currently the file serves the vertical prototype and retrieves data from two model functions before rendering
+ * the resulting page to the user from the ejs view.
+ *
+ * @author Cameron Robinson.
+ * @date 10/21/2021
+ * @since  0.0.1
+ */
+
 const express = require('express')
 const router = express.Router()
 
