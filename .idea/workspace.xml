@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4344e5fd-17d6-4e1e-976b-ab25546d6081" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/application/node/views/landingPage.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/node/public/img/landingPage.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/node/views/partials/footer.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/node/views/partials/navbar.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/node/controller/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/node/controller/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/node/views/about.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/application/node/views/about.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/node/views/landingPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/application/node/views/landingPage.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/node/views/vp.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/application/node/views/vp.ejs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
