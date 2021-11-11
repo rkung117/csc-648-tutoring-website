@@ -57,6 +57,10 @@ router.get('/about', (req, res) => {
         res.render("about")
 });
 
+router.get('/landingPage', (req, res) => {
+    res.render("landingPage")
+});
+
 // Not sure if there is an easier way to do this, still investigating.
 router.get('/about/ckRobinson', (req, res) => {
     res.render('about/ckRobinson')
