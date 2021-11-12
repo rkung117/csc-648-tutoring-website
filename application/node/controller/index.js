@@ -52,6 +52,39 @@ router.get('/', searchModel.searchCategories, searchModel.search, (req, res) => 
     });
 });
 
+router.get('/landingPage', searchModel.searchCategories, searchModel.search, (req, res) => {
+
+    // If the search result is not an array we create an empty array
+    // to keep from type errors in the template. This is temporary
+    // because of loading the index page into a black VP template page
+    // when we have a real search bar across the site this will be removed.
+    let searchResult = req.searchResult;
+    if (Array.isArray(searchResult) === false) {
+        searchResult = []
+    }
+
+    // Make sure we have categories to load into the search field categories, otherwise set to empty to prevent a
+    // crash.
+    let searchCategoriesShortName = req.majors_short_name;
+    let searchCategoriesLongName = req.majors_long_name;
+    if (Array.isArray(searchCategoriesShortName) === false) {
+        searchCategoriesShortName = []
+        searchCategoriesLongName = []
+    }
+
+    // Render the vertical prototype template, passing data from
+    // model
+    res.render("landingPage", {
+        results: 1,
+        searchTerm: req.searchTerm,
+        searchResult: searchResult,
+        category: req.category,
+        images: req.images,
+        searchCategoriesShortName: searchCategoriesShortName,
+        searchCategoriesLongName: searchCategoriesLongName
+    });
+});
+
 // Render the about page.
 router.get('/about', (req, res) => {
         res.render("about")

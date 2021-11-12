@@ -5,5 +5,16 @@
         </ul>
         <h3 class="text-muted">TutorPal - CSC648 Fall 2021 Team 3</h3>
 
+        <form>
+            <select name="category" onchange="this.form.submit()">
+                <option value="">All Categories </option>
+                <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
+                    <option value="<%= searchCategoriesShortName[i]%>" <% if(category === searchCategoriesShortName[i]) { %> selected <% } %>><%= searchCategoriesLongName[i]%></option>
+                <%}%>
+            </select>
+            <input id="search" type="text" name="search" value="<%= searchTerm %>" placeholder="Search...">
+            <button>Search</button>
+        </form>
+
     </nav>
 </div>
