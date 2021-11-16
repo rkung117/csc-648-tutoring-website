@@ -76,5 +76,7 @@ router.get('/about/snehalP', (req, res) => {
 router.get('/about/srRoy', (req, res) => {
     res.render('about/srRoy')
 })
-
+router.get('/tutorinfo', (req, res) => {
+    res.render("tutorinfo")
+});
 module.exports = router;
