@@ -1,93 +1,100 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
 
 body{
     font-family: 'Poppins', sans-serif;
-    background-image: linear-gradient(90deg, #e5edfd,#ecedee);
+    background-image: linear-gradient(90deg, #e5edfd, #d9d2e6);
 }
-
 *{
-    padding: 0;
-    margin: 0;
-    font-family: 'Josefin Sans' , sans-serif;
+    margin: 0px;
+    padding: 0px;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: 'Poppins', sans-serif;
+    
 }
-.about{
-    width 100%;
-    padding: 78px 0px;
-    background-color: #c3f6ff;
+.section{
+    width: 100%;
+    min-height: 100vh;
+    /* background-color: #ddd; */
+    background-image: linear-gradient(90deg, #e5edfd, #d9d2e6);
 }
-.about img{
+
+.about-item .team-item .row .team-details .btn {
+    font-size: 25px;
+}
+.container{
+    width: 80%;
+    display: block;
+    margin: auto;
+    padding-top: 100px;
+}
+.content-section{
+    float: left;
+    width: 55%;
+
+}
+.title-section{
+    width: 100%; 
+    float: auto;
+
+}
+.title-section .title{
+    font-family: fantasy ;
+    font-size: 30px;
+    
+}
+.image-section{
+float: right;
+width: 40%;
+}
+.image-section img{
+    width: 60%;
     height: auto;
-    width: 420px;
 }
-.about-text{
-    width: 550px;
+.content-section .title{
+    text-transform: uppercase;
+    font-size: 28px;
+    color: #a52a2a;
 }
-.main{
-    width: 1130px;
-    max-width: 95%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+.content-section .content h3{
+    margin-top: 20px;
+    color:#5d5d5d;
+    font-size: 23px;
+}
+.content-section .content p{
+    margin-top: 20px;
+    font-family: cursive;
+    font-size: 20px;
+    line-height: 1.5;
+}
+.content-section .content .button a{
+    margin-top: 90px;
+}
 
-}
-.about-text h1{
-    color: black;
-    font-size: 80px;
-    text-transform: capitalize;
-    margin-bottom: 20px;
-}
-.about-text h5 {
-    color: black;
-    font-size: 80px;
-    text-transform: capitalize;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-}
-button{
-    background: gold;
-    color: black;
+/* .content-section .content .button a{
+    background-color: #3d3d3d;
+    padding: 12px 40px;
     text-decoration: none;
-    border: 2px solid transparent;
-    font-weight: bold;
-    padding: 13px 30px;
-    border-radius: 30px;
-    transition: .4s;
+    color: #fff;
+    font-size: 25px;
+    letter-spacing: 1.5px;
 }
-button{
-    background: #ffcd39;
-    border: 2px solid gold;
-    cursor: pointer;
+.content-section .content .button a:hover{ */
 
+    /* background-color: #a52a2a;
+    color: #fff;
+} */
+.content-section .social{
+    margin-top: 70px 90px;
 }
-.content{
-    height: 100vh;
+.content-section .social i{
+    color: #a52a2a;
+    font-size: 30px;
+    padding: 50px 10px;
 }
+.content-section .social i:hover{
+    color:#3d3d3d;
 
-.form-check-input:checked{
-    background: #673AB7 ;
-    border-color: #673AB7;
-}
-
-.btn-dark{
-    background: #673AB7 !important;
-}
-.flex-search-results {
-    display: flex;
-    flex-direction: column;
-}
-.flex-search-item {
-    display: flex;
-    flex-direction: row;
-    outline: 3px solid black;
-    border-radius: 4pt;
-    padding: 5px;
-    margin: 5px;
-}
-.search_image {
-    width: 200px;
 }
 
 @media screen and (max-width:768px) {
@@ -116,5 +123,5 @@ button{
     }
     .content-section .social{
     margin-top: 70px 90px;
-}
+}   
 }
