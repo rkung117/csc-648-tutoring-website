@@ -65,6 +65,12 @@ function searchCategories(request, response, callback) {
                 request.majors_short_name.push(item['major_short_name']);
                 request.majors_long_name.push(item['major_long_name']);
             }
+
+            // Store the data found in the response before passing to callback. This is done
+            // to make it cleaner to load the search categories in the header of all of the required pages
+            // rather than passing data back to the final callback to be appended to the response.
+            response.locals.searchCategoriesShortName = request.majors_short_name
+            response.locals.searchCategoriesLongName = request.majors_long_name
         }
 
         // pass the data to the next callback in the queue.

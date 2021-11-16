@@ -17,6 +17,8 @@ const app = express()
 // When someone accesses / we pass the call to the controller/index.js file
 app.use('/', require('./controller/index'));
 
+app.use('/about', require('./controller/aboutPages'));
+
 // Tell node our templates will be under the views directory
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
