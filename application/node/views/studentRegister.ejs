@@ -52,9 +52,9 @@
                   </div>
                   <div class="form-floating mb-3 col-md-12">
                     <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                      <option value="">Other</option>
+                      <option value="">Select One</option>
                       <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-                        <option value="<%= searchCategoriesShortName[i]%>" <% if(category === searchCategoriesShortName[i]) { %> selected <% } %>><%= searchCategoriesLongName[i]%></option>
+                        <option value="<%= searchCategoriesShortName[i]%>"><%= searchCategoriesLongName[i]%></option>
                       <%}%>
                     </select>
                     <label for="floatingSelect">Major</label>

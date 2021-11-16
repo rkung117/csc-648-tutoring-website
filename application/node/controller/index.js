@@ -46,4 +46,24 @@ router.get('/login', searchModel.searchCategories, (req, res) => {
     res.render("login");
 });
 
+router.get('/dashboard', searchModel.searchCategories, (req, res) => {
+
+    res.render("studentDashboard");
+});
+
+router.get('/register', searchModel.searchCategories, (req, res) => {
+
+    res.render("studentRegister");
+});
+
+router.get('/tutor_signup', searchModel.searchCategories, (req, res) => {
+
+    res.render("tutorRegister");
+});
+
+router.get('/tutorDashboard', searchModel.searchCategories, (req, res) => {
+
+    res.render("tutorDashboard");
+});
+
 module.exports = router;
