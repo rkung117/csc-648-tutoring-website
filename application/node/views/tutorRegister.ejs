@@ -13,25 +13,8 @@
     <title>Tutor Signup Page</title>
   </head>
   <body>
-  
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand">TutorPal</a>
-        <form class="d-flex me-auto my-2 my-lg-0">
-          <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
-            <option value="">Major </option>
-            <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-              <option value="<%= searchCategoriesShortName[i]%>" <% if(category === searchCategoriesShortName[i]) { %> selected <% } %>><%= searchCategoriesLongName[i]%></option>
-          <%}%>
-          </select>
-          <input class="form-control me-2" id="search" name="search" value="<%= searchTerm %>"type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-        <div class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/about">About Us</a>
-        </div>
-      </div>
-    </nav>
+
+    <%- include('partials/header') %>
     
     <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
     <div style="text-align:center;"><strong> Fall 2021 | Section 3 | Team 3</strong></div>
