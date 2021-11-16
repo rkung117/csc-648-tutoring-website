@@ -69,5 +69,7 @@ router.get('/tutorDashboard', searchModel.searchCategories, (req, res) => {
 
     res.render("tutorDashboard");
 });
-
+router.get('/tutorinfo',  searchModel.searchCategories, (req, res) => {
+    res.render("tutorinfo")
+});
 module.exports = router;
