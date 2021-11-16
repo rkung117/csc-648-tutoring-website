@@ -19,7 +19,7 @@ const searchModel = require('../model/search');
 // the database. Then we pass to the search method to actually search if we have data to search with. Search and
 // searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
 // The searchModel method then calls the final callback (anonymous function here) that renders the data for the client.
-router.get('/', searchModel.searchCategories, searchModel.search, (req, res) => {
+router.get('/search', searchModel.searchCategories, searchModel.search, (req, res) => {
 
     // If the search result is not an array we create an empty array
     // to keep from type errors in the template. This is temporary
@@ -30,51 +30,20 @@ router.get('/', searchModel.searchCategories, searchModel.search, (req, res) => 
         searchResult = []
     }
 
-    // Make sure we have categories to load into the search field categories, otherwise set to empty to prevent a
-    // crash.
-    let searchCategoriesShortName = req.majors_short_name;
-    let searchCategoriesLongName = req.majors_long_name;
-    if (Array.isArray(searchCategoriesShortName) === false) {
-        searchCategoriesShortName = []
-        searchCategoriesLongName = []
-    }
-
     // Render the vertical prototype template, passing data from
     // model
-    res.render("vp", {
+    res.render("search", {
         results: 1,
         searchTerm: req.searchTerm,
         searchResult: searchResult,
         category: req.category,
-        images: req.images,
-        searchCategoriesShortName: searchCategoriesShortName,
-        searchCategoriesLongName: searchCategoriesLongName
+        images: req.images
     });
 });
 
-// Render the about page.
-router.get('/about', (req, res) => {
-        res.render("about")
-});
+router.get('/login', searchModel.searchCategories, (req, res) => {
 
-// Not sure if there is an easier way to do this, still investigating.
-router.get('/about/ckRobinson', (req, res) => {
-    res.render('about/ckRobinson')
-})
-router.get('/about/dsElnaggar', (req, res) => {
-    res.render('about/dsElnaggar')
-})
-router.get('/about/jamespratt', (req, res) => {
-    res.render('about/jamespratt')
-})
-router.get('/about/rKung', (req, res) => {
-    res.render('about/rKung')
-})
-router.get('/about/snehalP', (req, res) => {
-    res.render('about/snehalP')
-})
-router.get('/about/srRoy', (req, res) => {
-    res.render('about/srRoy')
-})
+    res.render("login");
+});
 
 module.exports = router;
