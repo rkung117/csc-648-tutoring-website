@@ -15,6 +15,10 @@ const router = express.Router()
 
 const searchModel = require('../model/search');
 
+router.get('/', searchModel.searchCategories, (req, res) => {
+    res.render("landingPage");
+});
+
 // Right now our root path is rendered here, we first pass the call to searchCategories to retrieve the categories from
 // the database. Then we pass to the search method to actually search if we have data to search with. Search and
 // searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
