@@ -55,7 +55,7 @@ router.get('/dashboard', searchModel.searchCategories, (req, res) => {
     res.render("studentDashboard");
 });
 
-router.get('/studentRegister', searchModel.searchCategories, (req, res) => {
+router.get('/register', searchModel.searchCategories, (req, res) => {
 
     res.render("studentRegister");
 });
