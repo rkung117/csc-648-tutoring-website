@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">TutorPal</a>
+        <form action="/search" class="d-flex me-auto my-2 my-lg-0">
+            <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
+                <option value="">Major</option>
+                <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
+                    <option value="<%= searchCategoriesShortName[i]%>"
+                    <% if(typeof(category) !== 'undefined') { %>
+                            <% if(category=== searchCategoriesShortName[i]) { %>
+                                selected
+                            <% } %>
+                    <% } %>
+                    ><%= searchCategoriesLongName[i]%></option>
+                <%}%>
+            </select>
+            <input class="form-control me-2" id="search" name="search"
+                   <% if(typeof(searchTerm) !== 'undefined') { %>
+                            value="<%= searchTerm %>"
+                   <% } else {%>
+                            value=""
+                   <% } %>
+                   type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <div id="AboutDiv" class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/about">About</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/tutorRegister">Tutor Apply</a>
+        </div>
+    </div>
+</nav>

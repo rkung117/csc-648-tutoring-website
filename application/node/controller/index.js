@@ -15,11 +15,15 @@ const router = express.Router()
 
 const searchModel = require('../model/search');
 
+router.get('/', searchModel.searchCategories, (req, res) => {
+    res.render("landingPage");
+});
+
 // Right now our root path is rendered here, we first pass the call to searchCategories to retrieve the categories from
 // the database. Then we pass to the search method to actually search if we have data to search with. Search and
 // searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
 // The searchModel method then calls the final callback (anonymous function here) that renders the data for the client.
-router.get('/', searchModel.searchCategories, searchModel.search, (req, res) => {
+router.get('/search', searchModel.searchCategories, searchModel.search, (req, res) => {
 
     // If the search result is not an array we create an empty array
     // to keep from type errors in the template. This is temporary
@@ -30,88 +34,42 @@ router.get('/', searchModel.searchCategories, searchModel.search, (req, res) => 
         searchResult = []
     }
 
-    // Make sure we have categories to load into the search field categories, otherwise set to empty to prevent a
-    // crash.
-    let searchCategoriesShortName = req.majors_short_name;
-    let searchCategoriesLongName = req.majors_long_name;
-    if (Array.isArray(searchCategoriesShortName) === false) {
-        searchCategoriesShortName = []
-        searchCategoriesLongName = []
-    }
-
     // Render the vertical prototype template, passing data from
     // model
-    res.render("vp", {
+    res.render("search", {
         results: 1,
         searchTerm: req.searchTerm,
         searchResult: searchResult,
         category: req.category,
-        images: req.images,
-        searchCategoriesShortName: searchCategoriesShortName,
-        searchCategoriesLongName: searchCategoriesLongName
+        images: req.images
     });
 });
 
-router.get('/landingPage', searchModel.searchCategories, searchModel.search, (req, res) => {
+router.get('/login', searchModel.searchCategories, (req, res) => {
 
-    // If the search result is not an array we create an empty array
-    // to keep from type errors in the template. This is temporary
-    // because of loading the index page into a black VP template page
-    // when we have a real search bar across the site this will be removed.
-    let searchResult = req.searchResult;
-    if (Array.isArray(searchResult) === false) {
-        searchResult = []
-    }
-
-    // Make sure we have categories to load into the search field categories, otherwise set to empty to prevent a
-    // crash.
-    let searchCategoriesShortName = req.majors_short_name;
-    let searchCategoriesLongName = req.majors_long_name;
-    if (Array.isArray(searchCategoriesShortName) === false) {
-        searchCategoriesShortName = []
-        searchCategoriesLongName = []
-    }
-
-    // Render the vertical prototype template, passing data from
-    // model
-    res.render("landingPage", {
-        results: 1,
-        searchTerm: req.searchTerm,
-        searchResult: searchResult,
-        category: req.category,
-        images: req.images,
-        searchCategoriesShortName: searchCategoriesShortName,
-        searchCategoriesLongName: searchCategoriesLongName
-    });
+    res.render("login");
 });
 
-// Render the about page.
-router.get('/about', (req, res) => {
-        res.render("about")
+router.get('/dashboard', searchModel.searchCategories, (req, res) => {
+
+    res.render("studentDashboard");
 });
 
-router.get('/landingPage', (req, res) => {
-    res.render("landingPage")
+router.get('/register', searchModel.searchCategories, (req, res) => {
+
+    res.render("studentRegister");
 });
 
-// Not sure if there is an easier way to do this, still investigating.
-router.get('/about/ckRobinson', (req, res) => {
-    res.render('about/ckRobinson')
-})
-router.get('/about/dsElnaggar', (req, res) => {
-    res.render('about/dsElnaggar')
-})
-router.get('/about/jamespratt', (req, res) => {
-    res.render('about/jamespratt')
-})
-router.get('/about/rKung', (req, res) => {
-    res.render('about/rKung')
-})
-router.get('/about/snehalP', (req, res) => {
-    res.render('about/snehalP')
-})
-router.get('/about/srRoy', (req, res) => {
-    res.render('about/srRoy')
-})
+router.get('/tutorRegister', searchModel.searchCategories, (req, res) => {
 
+    res.render("tutorRegister");
+});
+
+router.get('/tutorDashboard', searchModel.searchCategories, (req, res) => {
+
+    res.render("tutorDashboard");
+});
+router.get('/tutorinfo',  searchModel.searchCategories, (req, res) => {
+    res.render("tutorinfo")
+});
 module.exports = router;

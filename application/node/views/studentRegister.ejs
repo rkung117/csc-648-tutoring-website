@@ -13,27 +13,8 @@
     <title>Student Signup Page</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand">TutorPal</a>
-        <form class="d-flex me-auto my-2 my-lg-0">
-          <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
-            <option value="">Major</option>
-            <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-              <option value="<%= searchCategoriesShortName[i]%>" <% if(category === searchCategoriesShortName[i]) { %> selected <% } %>><%= searchCategoriesLongName[i]%></option>
-            <%}%>
-          </select>
-          <input class="form-control me-2" id="search" name="search" value="<%= searchTerm %>"type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-        <div class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/about">About Us</a>
-        </div>
-        <div class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/about">Tutor Apply</a>
-        </div>
-      </div>
-    </nav>
+
+    <%- include('partials/header') %>
 
     <br>
     <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
@@ -71,9 +52,9 @@
                   </div>
                   <div class="form-floating mb-3 col-md-12">
                     <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                      <option value="">Other</option>
+                      <option value="">Select One</option>
                       <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-                        <option value="<%= searchCategoriesShortName[i]%>" <% if(category === searchCategoriesShortName[i]) { %> selected <% } %>><%= searchCategoriesLongName[i]%></option>
+                        <option value="<%= searchCategoriesShortName[i]%>"><%= searchCategoriesLongName[i]%></option>
                       <%}%>
                     </select>
                     <label for="floatingSelect">Major</label>
