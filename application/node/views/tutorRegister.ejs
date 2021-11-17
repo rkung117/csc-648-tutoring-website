@@ -22,30 +22,19 @@
     <section class="container">
       <div class="row content d-flex justify-content-center  mt-2">
         <div class="col-md-5 mt-0">
-          <h3 class="h3 mb-4 text-center ">Create Your Account Tutors</h3>
+          <h3 class="h3 mb-4 text-center ">Apply to be a Tutor!</h3>
           <div class="signup-form text-center box shadow bg-white p-4 ">
             <form action="" class="mb-3">
               <div class="row">
-                <div class="form-floating mb-3">
-                  <input type="email" class="form-control rounded-0" id="floatingInput" placeholder="Email Address" required autofocus>
-                  <label for="floatingInput">SFSU Email Address<span class="text-danger">*</span></label>
-                </div>
-                <div class="form-floating mb-3 col-md-12">
-                  <input type="password" name="password" class="form-control rounded-0" id="floatingPassword" placeholder="password" required autofocus>
-                  <label for="floatingPassword">Password<span class="text-danger">*</span></label>
-                </div>
-                <div class="form-floating mb-3 col-md-12">
-                  <input type="password" name="confirmpassword" class="form-control rounded-0" id="floatingPassword" placeholder="confirm password" required autofocus>
-                  <label for="floatingPassword">Confirm Password<span class="text-danger">*</span></label>
-                </div>
+                
                 <div class="form-floating mb-3 col-md-6">
-                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" required autofocus>
                     <option selected>Other</option>
                     <option value="1">CSC 848</option>
                     <option value="2">CSC 810</option>
                     <option value="3">CSC 745</option>
                   </select>
-                  <label for="floatingSelect">Courses to Tutor</label>
+                  <label for="floatingSelect">Courses to Tutor<span class="text-danger">*</span></label>
                 </div>
                 <div class="form-floating mb-3 col-md-6">
                   <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
@@ -56,9 +45,15 @@
                   </select>
                   <label for="floatingSelect">Courses to Tutor</label>
                 </div>
+                <div class="form-floating mb-3">
+                  <textarea class="form-control rounded-0" id="floatingInput" rows="3" required autofocus></textarea>
+                  <label for="floatingInput" class="form-label" >Describe yourself<span class="text-danger">*</span></label>
+                  
+                </div>
+               
                 <div class="mb-5">
-                  <label for="Image" class="form-label">Bootstrap 5 image Upload with Preview</label>
-                    <input class="form-control" type="file" id="formFile" onchange="preview()">
+                  <label for="Image" class="form-label">Upload your Profile Image<span class="text-danger">*</span></label>
+                    <input class="form-control" type="file" id="formFile" onchange="preview()" required autofocus>
                     <button onclick="clearImage()" class="btn btn-primary mt-3">Click me</button>
                 </div>
                 <img id="frame" src="" class="img-fluid" />
