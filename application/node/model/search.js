@@ -98,11 +98,13 @@ function search(request, response, callback) {
                 `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
+                `       tutors.approved,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
                 `FROM tutors\n` +
                 `JOIN users ON users.user_id = tutors.tutor_id\n` +
-                `JOIN major ON users.major = major.major_id`;
+                `JOIN major ON users.major = major.major_id\n` +
+                `WHERE tutors.approved = 1`;
     if(searchTerm !== '' && category !== '') {
         query = `SELECT users.user_id,\n` +
                 `       users.first_name,\n` +
@@ -110,13 +112,14 @@ function search(request, response, callback) {
                 `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
+                `       tutors.approved,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
                 `FROM tutors\n` +
                 `JOIN users ON users.user_id = tutors.tutor_id\n` +
                 `JOIN major ON users.major = major.major_id\n` +
                 `WHERE major.major_short_name = '${category}' AND \n` +
-                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
+                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%') AND tutors.approved = 1`;
     }
     else if(searchTerm !== '' && category === '') {
         query = `SELECT users.user_id,\n` +
@@ -125,12 +128,13 @@ function search(request, response, callback) {
                 `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
+                `       tutors.approved,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
                 `FROM tutors\n` +
                 `JOIN users ON users.user_id = tutors.tutor_id\n` +
                 `JOIN major ON users.major = major.major_id\n` +
-                `WHERE (users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
+                `WHERE (users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%') AND tutors.approved = 1`;
     }
     else if(searchTerm === '' && category !== '') {
         query = `SELECT users.user_id,\n` +
@@ -139,12 +143,13 @@ function search(request, response, callback) {
                 `       users.major,\n` +
                 `       tutors.tutor_id,\n` +
                 `       tutors.image,\n` +
+                `       tutors.approved,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
                 `FROM tutors\n` +
                 `JOIN users ON users.user_id = tutors.tutor_id\n` +
                 `JOIN major ON users.major = major.major_id\n` +
-                `WHERE major.major_short_name = '${category}'`;
+                `WHERE major.major_short_name = '${category}' AND tutors.approved = 1`;
     }
 
     // Perform the query on the database passing the result to our anonymous callback function.
