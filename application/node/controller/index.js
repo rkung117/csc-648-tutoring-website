@@ -88,9 +88,9 @@ router.get('/logout', (req, res) => {
     })
 })
 
-router.get('/tutorinfo',  searchModel.searchCategories, login.validateUser, (req, res) => {
-    res.render("tutorinfo")
-});
+// router.get('/tutorinfo',  searchModel.searchCategories, login.validateUser, (req, res) => {
+//     res.render("tutorinfo")
+// });
 
 // Removing access to tutor dashboard for now. Don't think it is needed but still investigating
 // router.get('/tutorDashboard', searchModel.searchCategories, login.validateUser, (req, res) => {
