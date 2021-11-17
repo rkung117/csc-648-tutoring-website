@@ -22,13 +22,17 @@
     <br>
     <section class="about">
         <div class="main">
-            <img src="img/PaulKelly.png">
+            <div>
+                <% if (image !== undefined) { %>
+                    <img class="search_image" src="data:image/jpeg;base64,  <%- image %>">
+                <% } else { %>
+                    <div class="search_image"></div>
+                <% } %>
+            </div>
             <div class="about-text">
-                <h1>Paul Kelly</h1>
-                <h3> Computer Science</h3>
-                <p>I am a current graduate student working towards my masters degree in computer science
-                at San Francisco State University. I have extensive knowledge in software development as
-                well as machine assembly language. It is a pleasure helping others learn the subject I love. </p>
+                <h1><%= tutorData['first_name']%> <%= tutorData['last_name']%></h1>
+                <h3><%= tutorData['major_long_name']%></h3>
+                <p><%= tutorData['tutor_description']%></p>
                 <button type="button">Contact Me</button>
             </div>
         </div>
