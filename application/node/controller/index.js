@@ -48,20 +48,6 @@ router.get('/search', searchModel.searchCategories, login.validateUser, searchMo
 });
 
 /**
- * When the user attempts to load the dashboard checks if the user is logged in and if so allows the viewing of the
- * dashboard, otherwise the user is redirected to the login page.
- */
-router.get('/dashboard', searchModel.searchCategories, login.validateUser, (req, res) => {
-
-    if(req.loginValidated ) {
-        res.render("studentDashboard");
-    }
-    else {
-        res.redirect("/login");
-    }
-});
-
-/**
  * When the user attempts to load the register page checks if the user is logged in, if so redirects to /
  * TODO: Refactor this into a dedicated controller or the registration pages.
  */

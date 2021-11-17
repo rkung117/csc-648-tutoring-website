@@ -35,6 +35,8 @@ app.use('/', require('./controller/index'));
 // Pass all calls to the login page to the login router.
 app.use('/login', require('./controller/login').router)
 
+app.use('/dashboard', require('./controller/dashboard'))
+
 app.use('/about', require('./controller/aboutPages'));
 
 app.use('/tutor', require('./controller/tutorPages'))
