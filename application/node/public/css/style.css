@@ -96,7 +96,9 @@ width: 40%;
     color:#3d3d3d;
 
 }
-
+.search_image {
+    width: 350px;
+}
 @media screen and (max-width:768px) {
     .container{
         width: 80%;

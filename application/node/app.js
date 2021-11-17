@@ -19,6 +19,8 @@ app.use('/', require('./controller/index'));
 
 app.use('/about', require('./controller/aboutPages'));
 
+app.use('/tutor', require('./controller/tutorPages'))
+
 // Tell node our templates will be under the views directory
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
