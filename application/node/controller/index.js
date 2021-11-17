@@ -14,8 +14,10 @@ const express = require('express')
 const router = express.Router()
 
 const searchModel = require('../model/search');
+const login = require('./login')
 
-router.get('/', searchModel.searchCategories, (req, res) => {
+router.get('/', searchModel.searchCategories, login.validateUser, (req, res) => {
+
     res.render("landingPage");
 });
 
@@ -23,7 +25,7 @@ router.get('/', searchModel.searchCategories, (req, res) => {
 // the database. Then we pass to the search method to actually search if we have data to search with. Search and
 // searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
 // The searchModel method then calls the final callback (anonymous function here) that renders the data for the client.
-router.get('/search', searchModel.searchCategories, searchModel.search, (req, res) => {
+router.get('/search', searchModel.searchCategories, login.validateUser, searchModel.search, (req, res) => {
 
     // If the search result is not an array we create an empty array
     // to keep from type errors in the template. This is temporary
@@ -45,31 +47,69 @@ router.get('/search', searchModel.searchCategories, searchModel.search, (req, re
     });
 });
 
-router.get('/login', searchModel.searchCategories, (req, res) => {
+/**
+ * When the user attempts to load the dashboard checks if the user is logged in and if so allows the viewing of the
+ * dashboard, otherwise the user is redirected to the login page.
+ */
+router.get('/dashboard', searchModel.searchCategories, login.validateUser, (req, res) => {
 
-    res.render("login");
+    if(req.loginValidated ) {
+        res.render("studentDashboard");
+    }
+    else {
+        res.redirect("/login");
+    }
 });
 
-router.get('/dashboard', searchModel.searchCategories, (req, res) => {
+/**
+ * When the user attempts to load the register page checks if the user is logged in, if so redirects to /
+ * TODO: Refactor this into a dedicated controller or the registration pages.
+ */
+router.get('/register', searchModel.searchCategories, login.validateUser, (req, res) => {
 
-    res.render("studentDashboard");
+    if(req.loginValidated) {
+
+        res.redirect("/")
+    }
+    else {
+        res.render("studentRegister");
+    }
 });
 
-router.get('/register', searchModel.searchCategories, (req, res) => {
+/**
+ * If the user attempts to load into tutor apply after already being a tutor will redirect to the dashboard.
+ */
+router.get('/tutorApply', searchModel.searchCategories, login.validateUser, (req, res) => {
 
-    res.render("studentRegister");
+    if(res.locals.userIsTutor === undefined || res.locals.userIsTutor  === false) {
+        console.log(res.locals.userIsTutor )
+        res.render("tutorRegister");
+    }
+    else {
+        res.redirect("/dashboard");
+    }
 });
 
-router.get('/tutorRegister', searchModel.searchCategories, (req, res) => {
+/**
+ * When a user hits the logout button the session data is destroyed and then the user is redirected to /
+ */
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if(err) {
+            return console.log(err)
+        }
+        res.redirect('/')
+    })
+})
 
-    res.render("tutorRegister");
-});
-
-router.get('/tutorDashboard', searchModel.searchCategories, (req, res) => {
-
-    res.render("tutorDashboard");
-});
-router.get('/tutorinfo',  searchModel.searchCategories, (req, res) => {
+router.get('/tutorinfo',  searchModel.searchCategories, login.validateUser, (req, res) => {
     res.render("tutorinfo")
 });
+
+// Removing access to tutor dashboard for now. Don't think it is needed but still investigating
+// router.get('/tutorDashboard', searchModel.searchCategories, login.validateUser, (req, res) => {
+//
+//     res.render("tutorDashboard");
+// });
+
 module.exports = router;
