@@ -28,7 +28,7 @@
       }
     </script>
 
-    <%- include('partials/dashboardHeader') %>
+    <%- include('partials/header') %>
 
     <br>
     <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
@@ -62,18 +62,20 @@
                     </tr>
                   </thead>
                   <tbody>
+                  <% if(messages.length > 0) { %>
+                    <% for(let i = 0; i < messages.length; i++) { %>
+                      <tr>
+                        <td><%= messages[i]['tutorName']%></td>
+                        <td><%= messages[i]['messageText']%></td>
+                        <td><%= messages[i]['dateTime']%></td>
+                        <td><%= messages[i]['status']%></td>
+                      </tr>
+                    <% } %>
+                  <% } else { %>
                     <tr>
-                      <td>Kesha Mourey</td>
-                      <td>Hi Kesha, I am a senior at SFSU and am taking...</td>
-                      <td>10/27/2021 10:00 AM</td>
-                      <td>Sent</td>
+                      <td>No Messages</td>
                     </tr>
-                    <tr>
-                      <td>Joe Pierce</td>
-                      <td>Hi Joe, I am willing to connect with you regarding ...</td>
-                      <td>10/24/2021 11:00 AM</td>
-                      <td>Sent</td>
-                    </tr>
+                  <% } %>
                   </tbody>
                 </table>
                 <table id="mytutors" class=" hidden table table-hover">

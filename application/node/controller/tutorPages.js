@@ -11,6 +11,8 @@
 const express = require('express')
 const router = express.Router()
 const searchModel = require("../model/search");
+const login = require("../controller/login");
+
 const mysql = require("mysql");
 
 const database = mysql.createConnection({
@@ -23,6 +25,39 @@ database.connect((err) => {
     if(err) throw err;
     console.log("connected");
 });
+
+// TODO: Clean this up and document.
+function sendMessage(request, response) {
+    let tutor = request.url.replace("/tutor/", "");
+    tutor = tutor.substring(1, tutor.length)
+
+    let tutorID = tutor.split("-")[2]
+    tutorID = tutorID.substring(1, tutorID.length)
+
+    let fromUserID = request.session.userID;
+    let messageText = request.body.message_text;
+    let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES ('${dateNow}', '${messageText}', ${tutorID}, ${fromUserID} )`
+    database.query(query, (err, result) => {
+
+        let messageSent = false
+        // If we hit an error with the mysql connection or query we just return the above empty data
+        // since we have no data to display from the database. This should never happen in production.
+        if(err) {
+            console.log(`Encountered an error when performing query: ${query}`)
+        }
+        else {
+            messageSent = true
+        }
+
+        response.render('tutorinfo',{
+            tutorData: request.tutorData,
+            image: request.image,
+            messageSent: messageSent
+        });
+    })
+}
 
 function getTutorInfo(request, response, callback) {
     let tutor = request.url.replace("/tutor/", "");
@@ -94,6 +129,28 @@ router.get("/*", searchModel.searchCategories, getTutorInfo, (req, res) => {
             tutorData: req.tutorData,
             image: req.image
         });
+    }else {
+
+        res.sendStatus(404)
+    }
+});
+
+router.post("/*", searchModel.searchCategories, getTutorInfo, login.validateUser, (req, res) => {
+
+    // If the data was not found and appended to the request we want to return 404 because something went wrong.
+    if(req.tutorData) {
+
+        if(req.loginValidated) {
+
+            sendMessage(req, res)
+        }
+        else {
+            //TODO: Need lazy registration here.
+            res.render('tutorinfo',{
+                tutorData: req.tutorData,
+                image: req.image
+            });
+        }
     }else {
 
         res.sendStatus(404)

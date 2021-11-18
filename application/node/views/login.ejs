@@ -24,18 +24,18 @@
         <div class="col-md-5 mt-0">
           <h3 class="h3 mb-4 text-center ">Login</h3>
           <div class="text-center box shadow bg-white p-4">
-            <form class="mb-3">
+            <form action="/login" class="mb-3" method="post">
               <img class="mt-4 mb-4 img-thumbnail img-responsive" src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png" style="height: 15%  ; width: 15%; margin: auto;"  alt="Login logo">
                 <div class="form-floating mb-3">
-                  <input type="email" class="form-control rounded-0" id="floatingInput" placeholder="Email Address" required autofocus>
-                  <label for="floatingInput">Email Address</label>
+                  <input type="email" class="form-control rounded-0" id="userEmail" name="userEmail" placeholder="Email Address" required autofocus>
+                  <label for="userEmail">Email Address</label>
                 </div>
                 <div class="form-floating mb-3">
-                  <input type="password" class="form-control rounded-0" id="floatingPassword" placeholder="password" required autofocus>
-                  <label for="floatingPassword">Password</label>
+                  <input type="password" class="form-control rounded-0" id="enteredPassword" name="enteredPassword" placeholder="password" required autofocus>
+                  <label for="enteredPassword">Password</label>
                 </div>
                 <div class="mb-3 ">
-                  <input class="form-check-input" type="checkbox" value="remember-me" id="autoSizingCheck2" required>
+                  <input class="form-check-input" type="checkbox" value="remember-me" id="autoSizingCheck2">
                   <label class="form-check-label" for="remember">Remember Me</label>
                   <a href="#" title="Forgot Password" class="text-decoration-none">Forgot Password?</a>
                 </div>
