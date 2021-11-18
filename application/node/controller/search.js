@@ -13,7 +13,7 @@
 const database = require('../model/mysqlConnection')
 
 /***
- * searchCategories currently retrieves the short and long names of all majors in the database. This can be updated
+ * getSearchCategories currently retrieves the short and long names of all majors in the database. This can be updated
  * at a later point when we have all of the search categories set in stone. This allows us to dynamically adjust
  * what the users are allowed to select during search to filter the results by. The results found here are appended
  * to the request variable before the callback is called.
@@ -22,7 +22,7 @@ const database = require('../model/mysqlConnection')
  * @param response the response that will eventually be rendered to the user
  * @param callback the next method in the call stack before the response is rendered to the user.
  */
-function searchCategories(request, response, callback) {
+function getSearchCategories(request, response, callback) {
 
     // Set up the query to select all of the data from the majors table in the database.
     let query = `SELECT * FROM major`;
@@ -179,4 +179,4 @@ function search(request, response, callback) {
     });
 }
 
-module.exports = {search, searchCategories};
+module.exports = {search, getSearchCategories};

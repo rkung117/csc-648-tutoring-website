@@ -9,32 +9,32 @@
 
 const express = require('express')
 const router = express.Router()
-const searchModel = require("./search");
+const search = require("./search");
 
 // When a user enters site/about express first looks for /about in app.js which forwards to this file. Then becuase there
 // is no further path looks for the root path in this file, which will be the response below that renders the about page.
-router.get('/', searchModel.searchCategories,  (req, res) => {
+router.get('/', search.getSearchCategories,  (req, res) => {
     res.render("about")
 });
 
 // Should store our data in the database and use a template for each of these requests but have not
 // started work on it. Is low priority.
-router.get('/ckRobinson', searchModel.searchCategories, (req, res) => {
+router.get('/ckRobinson', search.getSearchCategories, (req, res) => {
     res.render('about/ckRobinson')
 })
-router.get('/dsElnaggar', searchModel.searchCategories, (req, res) => {
+router.get('/dsElnaggar', search.getSearchCategories, (req, res) => {
     res.render('about/dsElnaggar')
 })
-router.get('/jamespratt', searchModel.searchCategories, (req, res) => {
+router.get('/jamespratt', search.getSearchCategories, (req, res) => {
     res.render('about/jamespratt')
 })
-router.get('/rKung', searchModel.searchCategories, (req, res) => {
+router.get('/rKung', search.getSearchCategories, (req, res) => {
     res.render('about/rKung')
 })
-router.get('/snehalP', searchModel.searchCategories, (req, res) => {
+router.get('/snehalP', search.getSearchCategories, (req, res) => {
     res.render('about/snehalP')
 })
-router.get('/srRoy', searchModel.searchCategories, (req, res) => {
+router.get('/srRoy', search.getSearchCategories, (req, res) => {
     res.render('about/srRoy')
 })
 

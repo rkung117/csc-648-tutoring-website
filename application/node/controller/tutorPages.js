@@ -10,7 +10,7 @@
 
 const express = require('express')
 const router = express.Router()
-const searchModel = require("./search");
+const search = require("./search");
 const login = require("../controller/login");
 
 const database = require('../model/mysqlConnection')
@@ -109,7 +109,7 @@ function getTutorInfo(request, response, callback) {
 }
 
 // All requests under products/ will be routed here
-router.get("/*", searchModel.searchCategories, getTutorInfo, (req, res) => {
+router.get("/*", search.getSearchCategories, getTutorInfo, (req, res) => {
 
     // If the data was not found and appended to the request we want to return 404 because something went wrong.
     if(req.tutorData) {
@@ -124,7 +124,7 @@ router.get("/*", searchModel.searchCategories, getTutorInfo, (req, res) => {
     }
 });
 
-router.post("/*", searchModel.searchCategories, getTutorInfo, login.validateUser, (req, res) => {
+router.post("/*", search.getSearchCategories, getTutorInfo, login.validateUser, (req, res) => {
 
     // If the data was not found and appended to the request we want to return 404 because something went wrong.
     if(req.tutorData) {

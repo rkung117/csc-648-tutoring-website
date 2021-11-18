@@ -1,8 +1,19 @@
+/**
+ *
+ * This file handles the loading of the dashboard. When the user attempts to access the dashboard the route will
+ * either reject the request if the user is not logged in, redirecting them to the login page, or allow the
+ * request to continue and properly make the request to the database for all data required to be displayed on the
+ * dashboard.
+ *
+ * @author Cameron Robinson.
+ * @date 11/17/2021
+ * @since  0.0.1
+ */
 
 const express = require('express')
 const router = express.Router()
 
-const searchModel = require("./search");
+const search = require("./search");
 const login = require("./login");
 
 const database = require('../model/mysqlConnection')
@@ -73,7 +84,7 @@ function loadDashboard(req, res) {
  * When the user attempts to load the dashboard checks if the user is logged in and if so allows the viewing of the
  * dashboard, otherwise the user is redirected to the login page.
  */
-router.get('/', searchModel.searchCategories, login.validateUser, (req, res) => {
+router.get('/', search.getSearchCategories, login.validateUser, (req, res) => {
 
     if(req.loginValidated === false) {
         res.redirect("/login");
