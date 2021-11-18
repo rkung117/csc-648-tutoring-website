@@ -5,21 +5,21 @@
             <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
                 <option value="">Major</option>
                 <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-                    <option value="<%= searchCategoriesShortName[i]%>"
+                    <option value="<%= searchCategoriesShortName[i]; %>"
                     <% if(typeof(category) !== 'undefined') { %>
                         <% if(category=== searchCategoriesShortName[i]) { %>
                             selected
-                                <% } %>
-                            <% } %>
-                    ><%= searchCategoriesLongName[i]%></option>
-                <%}%>
+                        <% } %>
+                    <% } %>
+                    ><%= searchCategoriesLongName[i]; %></option>
+                <% } %>
             </select>
             <input class="form-control me-2" id="search" name="search"
             <% if(typeof(searchTerm) !== 'undefined') { %>
-                   value="<%= searchTerm %>"
-            <% } else {%>
+                   value="<%= searchTerm; %>"
+            <% } else { %>
                    value=""
-                    <% } %>
+            <% } %>
                    type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>

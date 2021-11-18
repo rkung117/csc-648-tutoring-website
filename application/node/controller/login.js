@@ -9,23 +9,12 @@
  * @since  0.0.1
  */
 
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const loginHashing = require("./helpers/loginHashing");
-const mysql = require("mysql");
-const searchModel = require("../model/search");
+const loginHashing = require("../model/loginHashing");
 
-const database = mysql.createConnection({
-    host: 'localhost',
-    user: process.env.DB_USER || "admin",
-    password: process.env.DB_PASSWORD || "admin-648T3",
-    database: process.env.DATABASE || "csc648t3_testing"
-})
-database.connect((err) => {
-    if(err) throw err;
-    console.log("connected");
-});
+const database = require('../model/mysqlConnection');
 
 /**
  * This function is called during every route processing stage. It checks if the user has been logged in and validated
@@ -38,25 +27,26 @@ database.connect((err) => {
 function validateUser(request, response, callback) {
 
     // Set this data immediatly to be used by the next callback if needed.
-    request.loginValidated = false
+    request.loginValidated = false;
+    response.locals.userLoggedIn = false;
 
     // If the session has the userID stored in it we know the user is logged in.
     // TODO: update this to use a token when that functionality is implemented.
     if(request.session.userID) {
 
         // Update the request data to inform the next function call that the user is logged in.
-        request.loginValidated = true
+        request.loginValidated = true;
 
         // Check if the user is a tutor and if so set the response data to true signaling the rendered view
         // to modify the view to suit a tutor rather than a student.
-        response.locals.userIsTutor = false
+        response.locals.userIsTutor = false;
         if(request.session.userIsTutor) {
-            response.locals.userIsTutor = true
+            response.locals.userIsTutor = true;
         }
 
         // Update the response to contain the user logged in flag and the user's first name for the header
-        response.locals.loggedIn = true
-        response.locals.userFirstName = request.session.firstName
+        response.locals.userLoggedIn = true;
+        response.locals.userFirstName = request.session.firstName;
     }
     callback()
 }
@@ -75,8 +65,8 @@ function validateUserForLogin(request, response, callback) {
 
     // Get the user email and user entered password from the request body. This is the data from the form on the
     // login page and uses the body-parser middleware module loaded in app.js to be visible here.
-    let userEmail = request.body.userEmail
-    let enteredPassword = request.body.enteredPassword
+    let userEmail = request.body.userEmail;
+    let enteredPassword = request.body.enteredPassword;
 
     // Create query for database. We want to get all basic user data to finalize login as well as left outer joining
     // on the tutors table in case the user is a tutor. If the user is not on the tutors table the tutors.tutor_id
@@ -112,19 +102,19 @@ function validateUserForLogin(request, response, callback) {
                     enteredPassword)) {
 
                     // Set up the session data appending the first name, userID and if the user is a tutor.
-                    request.session.firstName = result[0]['first_name']
-                    request.session.userID = result[0]['user_id']
-                    request.session.userIsTutor = false
+                    request.session.firstName = result[0]['first_name'];
+                    request.session.userID = result[0]['user_id'];
+                    request.session.userIsTutor = false;
 
                     if(result[0]['tutor_id'] !== null) {
-                        request.session.userIsTutor = true
+                        request.session.userIsTutor = true;
                     }
                 }
             }
         }
 
         // pass the data to the next callback in the queue.
-        callback()
+        callback();
     });
 }
 
@@ -132,10 +122,10 @@ function validateUserForLogin(request, response, callback) {
  * Route path for get /login, when the user first attempts to load into the login page. If the user is already logged in
  * redirects to /.
  */
-router.get('/', searchModel.searchCategories, validateUser, (req, res) => {
+router.get('/', (req, res) => {
 
-    if(req.loginValidated ) {
-        res.redirect("/")
+    if(req.loginValidated) {
+        res.redirect("/");
     }
     else {
         res.render("login");
@@ -147,12 +137,15 @@ router.get('/', searchModel.searchCategories, validateUser, (req, res) => {
  * getting called back here. If the data is valid redirects to / if not passes data to the view to show the invalid
  * username / password line.
  */
-router.post('/', searchModel.searchCategories, validateUserForLogin, (req, res) => {
+router.post('/', validateUserForLogin, (req, res) => {
 
-    console.log(req.session)
-    if(req.session.userID > 0) {
-
-        res.redirect("/")
+    if(req.loginValidated) {
+        if(req.session.lazyRegistration) {
+            res.redirect(req.session.lazyRegistration.referringPage);
+        }
+        else {
+            res.redirect("/");
+        }
     }
     else {
         res.render("login", {
@@ -164,4 +157,4 @@ router.post('/', searchModel.searchCategories, validateUserForLogin, (req, res) 
 module.exports = {
     router: router,
     validateUser
-}
+};

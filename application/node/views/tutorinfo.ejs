@@ -23,24 +23,27 @@
         <div class="main">
             <div>
                 <% if (image !== undefined) { %>
-                    <img class="search_image" src="data:image/jpeg;base64,  <%- image %>">
+                    <img class="search_image" src="data:image/jpeg;base64,  <%- image; %>">
                 <% } else { %>
                     <div class="search_image"></div>
                 <% } %>
             </div>
             <div class="about-text">
-                <h1><%= tutorData['first_name']%> <%= tutorData['last_name']%></h1>
-                <h3><%= tutorData['major_long_name']%></h3>
-                <p><%= tutorData['tutor_description']%></p>
+                <h1><%= tutorData['first_name'];%> <%= tutorData['last_name'];%></h1>
+                <h3><%= tutorData['major_long_name'];%></h3>
+                <p><%= tutorData['tutor_description'];%></p>
             </div>
         </div>
         <br>
         <div>
-            <form method="post">
-                
+            <form <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post">
+                <input type="text" id="messageText" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText; %>" <% } %>>
+                <% if(userLoggedIn === false) { %>
+                <input type="hidden" id="referringTutorPage" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']; %>-<%= tutorData['last_name']; %>-t<%= tutorData['tutor_id']; %>">
+                <% } %>
                 <div class="d-grid gap-5 col-4 mx-2 float-end">
-                        <button class="btn btn-primary btn-lg border=0 rounded-0 " type="button">Contact Me!</button>
-                      </div>
+                        <button class="btn btn-primary btn-lg border=0 rounded-0 " type="submit">Contact Me!</button>
+                </div>
             </form>
         </div>
     </section>
