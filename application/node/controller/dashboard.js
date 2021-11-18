@@ -4,18 +4,8 @@ const router = express.Router()
 
 const searchModel = require("../model/search");
 const login = require("./login");
-const mysql = require("mysql");
 
-const database = mysql.createConnection({
-    host: 'localhost',
-    user: process.env.DB_USER || "admin",
-    password: process.env.DB_PASSWORD || "admin-648T3",
-    database: process.env.DATABASE || "csc648t3_testing"
-})
-database.connect((err) => {
-    if(err) throw err;
-    console.log("connected");
-});
+const database = require('../model/mysqlConnection')
 
 /**
  * When the user loads the dashboard this function will retrieve their messages from the database. To get to this point

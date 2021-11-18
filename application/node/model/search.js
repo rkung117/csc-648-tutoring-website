@@ -10,23 +10,7 @@
  * @since  0.0.1
  */
 
-/*
-TODO:
- Should move this connection out of this file to a more global declaration.
- Keeping here for now.
-*/
-const mysql = require("mysql");
-
-const database = mysql.createConnection({
-    host: 'localhost',
-    user: process.env.DB_USER || "admin",
-    password: process.env.DB_PASSWORD || "admin-648T3",
-    database: process.env.DATABASE || "csc648t3_testing"
-})
-database.connect((err) => {
-    if(err) throw err;
-    console.log("connected");
-});
+const database = require('../model/mysqlConnection')
 
 /***
  * searchCategories currently retrieves the short and long names of all majors in the database. This can be updated

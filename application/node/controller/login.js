@@ -13,19 +13,9 @@ const express = require('express')
 const router = express.Router()
 
 const loginHashing = require("./helpers/loginHashing");
-const mysql = require("mysql");
 const searchModel = require("../model/search");
 
-const database = mysql.createConnection({
-    host: 'localhost',
-    user: process.env.DB_USER || "admin",
-    password: process.env.DB_PASSWORD || "admin-648T3",
-    database: process.env.DATABASE || "csc648t3_testing"
-})
-database.connect((err) => {
-    if(err) throw err;
-    console.log("connected");
-});
+const database = require('../model/mysqlConnection')
 
 /**
  * This function is called during every route processing stage. It checks if the user has been logged in and validated
