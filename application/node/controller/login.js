@@ -13,7 +13,6 @@ const express = require('express')
 const router = express.Router()
 
 const loginHashing = require("../model/loginHashing");
-const search = require("./search");
 
 const database = require('../model/mysqlConnection')
 
@@ -123,7 +122,7 @@ function validateUserForLogin(request, response, callback) {
  * Route path for get /login, when the user first attempts to load into the login page. If the user is already logged in
  * redirects to /.
  */
-router.get('/', search.getSearchCategories, validateUser, (req, res) => {
+router.get('/', (req, res) => {
 
     if(req.loginValidated) {
         res.redirect("/")
@@ -138,7 +137,7 @@ router.get('/', search.getSearchCategories, validateUser, (req, res) => {
  * getting called back here. If the data is valid redirects to / if not passes data to the view to show the invalid
  * username / password line.
  */
-router.post('/', validateUserForLogin, search.getSearchCategories, validateUser, (req, res) => {
+router.post('/', validateUserForLogin, (req, res) => {
 
     if(req.loginValidated) {
         if(req.session.lazyRegistration) {

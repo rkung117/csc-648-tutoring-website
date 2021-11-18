@@ -20,31 +20,6 @@ router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
     res.render("landingPage");
 });
 
-// Right now our root path is rendered here, we first pass the call to searchCategories to retrieve the categories from
-// the database. Then we pass to the search method to actually search if we have data to search with. Search and
-// searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
-// The search method then calls the final callback (anonymous function here) that renders the data for the client.
-router.get('/search', lazyReg.removeLazyRegistrationObject, search.search, (req, res) => {
-
-    // If the search result is not an array we create an empty array
-    // to keep from type errors in the template. This is temporary
-    // because of loading the index page into a black VP template page
-    // when we have a real search bar across the site this will be removed.
-    let searchResult = req.searchResult;
-    if (Array.isArray(searchResult) === false) {
-        searchResult = []
-    }
-
-    // Render the vertical prototype template, passing data from
-    // model
-    res.render("search", {
-        results: 1,
-        searchTerm: req.searchTerm,
-        searchResult: searchResult,
-        category: req.category,
-        images: req.images
-    });
-});
 
 /**
  * When the user attempts to load the register page checks if the user is logged in, if so redirects to /

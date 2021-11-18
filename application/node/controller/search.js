@@ -10,7 +10,11 @@
  * @since  0.0.1
  */
 
+const express = require('express')
+const router = express.Router()
+
 const database = require('../model/mysqlConnection')
+const lazyReg = require("../model/lazyRegistration");
 
 /***
  * getSearchCategories currently retrieves the short and long names of all majors in the database. This can be updated
@@ -179,4 +183,34 @@ function search(request, response, callback) {
     });
 }
 
-module.exports = {search, getSearchCategories};
+// Right now our root path is rendered here, we first pass the call to searchCategories to retrieve the categories from
+// the database. Then we pass to the search method to actually search if we have data to search with. Search and
+// searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
+// The search method then calls the final callback (anonymous function here) that renders the data for the client.
+router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
+
+    // If the search result is not an array we create an empty array
+    // to keep from type errors in the template. This is temporary
+    // because of loading the index page into a black VP template page
+    // when we have a real search bar across the site this will be removed.
+    let searchResult = req.searchResult;
+    if (Array.isArray(searchResult) === false) {
+        searchResult = []
+    }
+
+    // Render the vertical prototype template, passing data from
+    // model
+    res.render("search", {
+        results: 1,
+        searchTerm: req.searchTerm,
+        searchResult: searchResult,
+        category: req.category,
+        images: req.images
+    });
+});
+
+module.exports = {
+    router: router,
+    search,
+    getSearchCategories
+};

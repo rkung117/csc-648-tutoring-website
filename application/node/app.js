@@ -38,6 +38,8 @@ app.use(require('./controller/login').validateUser)
 // When someone accesses / we pass the call to the controller/index.js file
 app.use('/', require('./controller/index'));
 
+app.use('/search', require('./controller/search').router)
+
 // Pass all calls to the login page to the login router.
 app.use('/login', require('./controller/login').router)
 
