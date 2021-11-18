@@ -10,10 +10,10 @@
  * @since  0.0.1
  */
 
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const database = require('../model/mysqlConnection')
+const database = require('../model/mysqlConnection');
 
 const lazyReg = require("../model/lazyRegistration");
 
@@ -45,20 +45,20 @@ function loadDashboard(req, res) {
     database.query(query, (err, result) => {
 
         // Set up empty array to be used if no messages are found
-        let messages = []
+        let messages = [];
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
         if (err) {
-            console.log(`Encountered an error when performing query: ${query}`)
+            console.log(`Encountered an error when performing query: ${query}`);
         } else {
 
             // For each message found unpack the data and push new structure onto the message array
             for (let i = 0; i < result.length; i++) {
 
-                let status = "Read"
+                let status = "Read";
                 if(result[1]['is_unread']) {
-                    status = "Unread"
+                    status = "Unread";
                 }
 
                 messages.push({
@@ -66,8 +66,8 @@ function loadDashboard(req, res) {
                     messageText: result[i]['message_text'],
                     dateTime: result[i]['date_sent'],
                     status: status
-                })
-                console.log(messages)
+                });
+                console.log(messages);
             }
         }
 
@@ -88,7 +88,7 @@ router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
         res.redirect("/login");
     }
     else {
-        loadDashboard(req, res)
+        loadDashboard(req, res);
     }
 });
 

@@ -18,7 +18,7 @@ const database = mysql.createConnection({
     user: process.env.DB_USER || "admin",
     password: process.env.DB_PASSWORD || "admin-648T3",
     database: process.env.DATABASE || "csc648t3_testing"
-})
+});
 
 /**
  * Make the connection to the database, if the connection does not work, throw an error.

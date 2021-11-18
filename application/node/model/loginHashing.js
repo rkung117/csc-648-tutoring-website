@@ -8,7 +8,7 @@
  */
 
 const crypto = require('crypto');
-const tokenLength = 16
+const tokenLength = 16;
 
 /**
  * hashingPaswordForRegistration is used when a new user registers on the site. It takes the supplied password
@@ -18,13 +18,13 @@ const tokenLength = 16
  * @returns {hash, salt} returns an object containing the hash and the salt of the password. TODO: Right now returns the password, need to remove once registration is fully working.
  */
 function hashPasswordForRegistration(password) {
-    let salt = crypto.randomBytes(128).toString('base64')
-    let hash = crypto.pbkdf2Sync(password, salt, 1000, 64, `sha256`).toString(`hex`)
+    let salt = crypto.randomBytes(128).toString('base64');
+    let hash = crypto.pbkdf2Sync(password, salt, 1000, 64, `sha256`).toString(`hex`);
     let passwordData = {
         hash: hash,
         salt: salt
-    }
-    return passwordData
+    };
+    return passwordData;
 }
 
 /**
@@ -38,12 +38,12 @@ function hashPasswordForRegistration(password) {
  */
 function validatePassword(hash, salt, enteredPassword) {
 
-    let valid = hash === crypto.pbkdf2Sync(enteredPassword, salt, 1000, 64, `sha256`).toString(`hex`)
+    let valid = hash === crypto.pbkdf2Sync(enteredPassword, salt, 1000, 64, `sha256`).toString(`hex`);
 
-    console.log(`Checking provided hash against generated hash returned: ${valid}`)
-    valid = true // TODO: Remove this when ready to actually test login
+    console.log(`Checking provided hash against generated hash returned: ${valid}`);
+    valid = true; // TODO: Remove this when ready to actually test login
 
-    return valid 
+    return valid;
 }
 
 /**

@@ -10,10 +10,10 @@
  * @since  0.0.1
  */
 
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const database = require('../model/mysqlConnection')
+const database = require('../model/mysqlConnection');
 const lazyReg = require("../model/lazyRegistration");
 
 /***
@@ -36,20 +36,20 @@ function getSearchCategories(request, response, callback) {
 
         // Append default data to the request before calling callback, this make sure we at least return
         // an empty array of no results if something goes wrong, hopefully preventing a crash.
-        request.majors_short_name = []
-        request.majors_long_name = []
+        request.majors_short_name = [];
+        request.majors_long_name = [];
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
         if(err) {
-            console.log(`Encountered an error when performing query: ${query}`)
+            console.log(`Encountered an error when performing query: ${query}`);
         }
         else {
 
             // Go through all of the resulting data and append it to the two lists
             for(let i = 0; i < result.length; i++) {
 
-                let item = result[i]
+                let item = result[i];
                 request.majors_short_name.push(item['major_short_name']);
                 request.majors_long_name.push(item['major_long_name']);
             }
@@ -57,12 +57,12 @@ function getSearchCategories(request, response, callback) {
             // Store the data found in the response before passing to callback. This is done
             // to make it cleaner to load the search categories in the header of all of the required pages
             // rather than passing data back to the final callback to be appended to the response.
-            response.locals.searchCategoriesShortName = request.majors_short_name
-            response.locals.searchCategoriesLongName = request.majors_long_name
+            response.locals.searchCategoriesShortName = request.majors_short_name;
+            response.locals.searchCategoriesLongName = request.majors_long_name;
         }
 
         // pass the data to the next callback in the queue.
-        callback()
+        callback();
     });
 }
 
@@ -147,12 +147,12 @@ function search(request, response, callback) {
         request.searchResult = "";
         request.searchTerm = "";
         request.category = "";
-        request.images = []
+        request.images = [];
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
         if(err) {
-            console.log(`Encountered an error when performing query: ${query}`)
+            console.log(`Encountered an error when performing query: ${query}`);
         }
         else {
 
@@ -167,8 +167,8 @@ function search(request, response, callback) {
                     TODO: according to spec this should be a thumbnail. Not sure if
                      we're supposed to convert here or on upload. Something to ask about?
                     */
-                    image = Buffer.from(image.toString('base64'))
-                    images.push(image)
+                    image = Buffer.from(image.toString('base64'));
+                    images.push(image);
                 }
             }
 
@@ -195,7 +195,7 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
     // when we have a real search bar across the site this will be removed.
     let searchResult = req.searchResult;
     if (Array.isArray(searchResult) === false) {
-        searchResult = []
+        searchResult = [];
     }
 
     // Render the vertical prototype template, passing data from

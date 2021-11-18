@@ -5,19 +5,19 @@
             <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
                 <option value="">Major</option>
                 <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-                    <option value="<%= searchCategoriesShortName[i]%>"
+                    <option value="<%= searchCategoriesShortName[i];%>"
                     <% if(typeof(category) !== 'undefined') { %>
                             <% if(category=== searchCategoriesShortName[i]) { %>
                                 selected
                             <% } %>
                     <% } %>
-                    ><%= searchCategoriesLongName[i]%></option>
-                <%}%>
+                    ><%= searchCategoriesLongName[i]; %></option>
+                <% } %>
             </select>
             <input class="form-control me-2" id="search" name="search"
                    <% if(typeof(searchTerm) !== 'undefined') { %>
-                            value="<%= searchTerm %>"
-                   <% } else {%>
+                            value="<%= searchTerm ;%>"
+                   <% } else { %>
                             value=""
                    <% } %>
                    type="search" placeholder="CSC 648" aria-label="Search">
@@ -40,7 +40,7 @@
             </div>
             <div id="loggedInDropdown" class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Hi <%= userFirstName %>
+                    Hi <%= userFirstName; %>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>

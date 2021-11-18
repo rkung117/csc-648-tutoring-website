@@ -8,27 +8,27 @@
  * @since  0.0.1
  */
 
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const lazyReg = require('../model/lazyRegistration')
+const lazyReg = require('../model/lazyRegistration');
 
-const database = require('../model/mysqlConnection')
+const database = require('../model/mysqlConnection');
 
 function parseTutorDataFromURL(url) {
 
     // Pares the tutor ID out of the url. TODO: This can probably be simplified but is working for now.
     let tutor = url.replace("/tutor/", "");
-    tutor = tutor.substring(1, tutor.length)
+    tutor = tutor.substring(1, tutor.length);
 
-    tutor = tutor.split("-")
+    tutor = tutor.split("-");
 
     // Get the first name, last name and tutor id from the data.
-    let tutorFirstName = tutor[0]
-    let tutorLastName = tutor[1]
+    let tutorFirstName = tutor[0];
+    let tutorLastName = tutor[1];
 
-    let tutorID = tutor[2]
-    tutorID = tutorID.substring(1, tutorID.length)
+    let tutorID = tutor[2];
+    tutorID = tutorID.substring(1, tutorID.length);
 
     return {
         tutorFirstName: tutorFirstName,
@@ -45,8 +45,8 @@ function parseTutorDataFromURL(url) {
  */
 function sendMessage(request, response) {
 
-    let tutorURLData = parseTutorDataFromURL(request.url)
-    let tutorID = tutorURLData.tutorID
+    let tutorURLData = parseTutorDataFromURL(request.url);
+    let tutorID = tutorURLData.tutorID;
 
     // Get the current userID from the session data and get the message text from the body the form request.
     let fromUserID = request.session.userID;
@@ -56,21 +56,21 @@ function sendMessage(request, response) {
     let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     // Create the query for inserting the message to the database/
-    let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES ('${dateNow}', '${messageText}', ${tutorID}, ${fromUserID} )`
+    let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES ('${dateNow}', '${messageText}', ${tutorID}, ${fromUserID} )`;
 
     database.query(query, (err) => {
 
         // If we hit an error we want to display an error on the page so set this bool to false here.
-        let messageSent = false
+        let messageSent = false;
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
         if(err) {
-            console.log(`Encountered an error when performing query: ${query}`)
+            console.log(`Encountered an error when performing query: ${query}`);
         }
         else {
             // If there is no error we set messageSent to true to display a success message on the page.
-            messageSent = true
+            messageSent = true;
         }
 
         // Render the tutor info page with proper data and the boolean value of if the message was sent.
@@ -93,8 +93,8 @@ function sendMessage(request, response) {
  */
 function getTutorInfo(request, response, callback) {
 
-    let tutorURLData = parseTutorDataFromURL(request.url)
-    let tutorID = tutorURLData.tutorID
+    let tutorURLData = parseTutorDataFromURL(request.url);
+    let tutorID = tutorURLData.tutorID;
 
     let query = `SELECT users.user_id,\n` +
         `       users.first_name,\n` +
@@ -145,12 +145,12 @@ function getTutorInfo(request, response, callback) {
 }
 router.get('/', (req, res) => {
   res.sendStatus(404);
-})
+});
 
 router.post("/contactlogin", (req, res) => {
 
-    req.session.lazyRegistration = lazyReg.getLazyRegistrationObject(req.body.referringTutorPage, req.body.messageText)
-    res.redirect('/login')
+    req.session.lazyRegistration = lazyReg.getLazyRegistrationObject(req.body.referringTutorPage, req.body.messageText);
+    res.redirect('/login');
 });
 
 // All requests under products/ will be routed here
@@ -162,14 +162,14 @@ router.get("/*", getTutorInfo, (req, res) => {
         if(req.loginValidated) {
 
             if(req.session.lazyRegistration) {
-                res.locals.messageText = req.session.lazyRegistration.data
-                console.log(req.session)
-                delete req.session.lazyRegistration
-                console.log(req.session)
+                res.locals.messageText = req.session.lazyRegistration.data;
+                console.log(req.session);
+                delete req.session.lazyRegistration;
+                console.log(req.session);
             }
         }
 
-        console.log(res.locals)
+        console.log(res.locals);
 
         res.render('tutorinfo',{
             tutorData: req.tutorData,
@@ -177,7 +177,7 @@ router.get("/*", getTutorInfo, (req, res) => {
         });
     }else {
 
-        res.sendStatus(404)
+        res.sendStatus(404);
     }
 });
 
@@ -188,7 +188,7 @@ router.post("/*", getTutorInfo, (req, res) => {
 
         if(req.loginValidated) {
 
-            sendMessage(req, res)
+            sendMessage(req, res);
         }
         else {
             //TODO: Need lazy registration here.
@@ -199,7 +199,7 @@ router.post("/*", getTutorInfo, (req, res) => {
         }
     }else {
 
-        res.sendStatus(404)
+        res.sendStatus(404);
     }
 });
 module.exports = router;

@@ -21,11 +21,11 @@ function getLazyRegistrationObject(referringPage, data) {
 }
 
 function removeLazyRegistrationObject(req, res, callback) {
-    delete req.session.lazyRegistration
-    callback()
+    delete req.session.lazyRegistration;
+    callback();
 }
 
 module.exports = {
     getLazyRegistrationObject,
     removeLazyRegistrationObject
-}
+};

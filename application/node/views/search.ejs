@@ -29,16 +29,16 @@
             <div class="flex-search-item box shadow bg-white p-4">
                 <% item = searchResult[i];%>
                 <div class="">
-                    <%if (images[i] !== undefined) {%>
-                        <a href="/tutor/<%=item['first_name']%>-<%= item['last_name']%>-t<%= item['tutor_id']%>"><img class="search_image" src="data:image/jpeg;base64,  <%- images[i] %>"></a>
+                    <% if (images[i] !== undefined) { %>
+                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><img class="search_image" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
 
-                    <%} else {%>
-                    <a href="/tutor/<%=item['first_name']%>-<%= item['last_name']%>-t<%= item['tutor_id']%>"><div class="search_image"></div></a>
-                    <%}%>
+                    <% } else { %>
+                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><div class="search_image"></div></a>
+                    <% } %>
                 </div>
                 <div class="col-md-9 mt-0">
-                    <a href="/tutor/<%=item['first_name']%>-<%= item['last_name']%>-t<%= item['tutor_id']%>"><h1><%= item['first_name'] %> <%= item['last_name']%> </h1></a>
-                    <h4>Major: <%= item['major_long_name']%></h4>
+                    <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>"><h1><%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
+                    <h4>Major: <%= item['major_long_name'];%></h4>
                     
                       <div class="d-grid gap-5 col-4 mx-6 float-end">
                         <button class="btn btn-primary btn-lg border=0 rounded-0 " type="button">Contact!</button>

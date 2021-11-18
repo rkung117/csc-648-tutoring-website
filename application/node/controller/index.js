@@ -10,10 +10,10 @@
  * @since  0.0.1
  */
 
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const lazyReg = require('../model/lazyRegistration')
+const lazyReg = require('../model/lazyRegistration');
 
 router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
 
@@ -29,7 +29,7 @@ router.get('/register', (req, res) => {
 
     if(req.loginValidated) {
 
-        res.redirect("/")
+        res.redirect("/");
     }
     else {
         res.render("studentRegister");
@@ -42,7 +42,7 @@ router.get('/register', (req, res) => {
 router.get('/tutorApply', lazyReg.removeLazyRegistrationObject, (req, res) => {
 
     if(res.locals.userIsTutor === undefined || res.locals.userIsTutor  === false) {
-        console.log(res.locals.userIsTutor )
+        console.log(res.locals.userIsTutor );
         res.render("tutorRegister");
     }
     else {
@@ -56,10 +56,10 @@ router.get('/tutorApply', lazyReg.removeLazyRegistrationObject, (req, res) => {
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if(err) {
-            return console.log(err)
+            return console.log(err);
         }
-        res.redirect('/')
+        res.redirect('/');
     })
-})
+});
 
 module.exports = router;
