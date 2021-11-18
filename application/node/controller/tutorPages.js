@@ -15,31 +15,45 @@ const login = require("../controller/login");
 
 const database = require('../model/mysqlConnection')
 
-// TODO: Clean this up and document.
+/**
+ * sendMessage is responsible for making the insert into the database for the newly added message. To get to this
+ * point the user must be logged in and sending a message to a tutor from a valid tutor page.
+ * @param request
+ * @param response
+ */
 function sendMessage(request, response) {
+    // Pares the tutor ID out of the url. TODO: This can probably be simplified but is working for now.
     let tutor = request.url.replace("/tutor/", "");
     tutor = tutor.substring(1, tutor.length)
-
     let tutorID = tutor.split("-")[2]
     tutorID = tutorID.substring(1, tutorID.length)
 
+    // Get the current userID from the session data and get the message text from the body the form request.
     let fromUserID = request.session.userID;
     let messageText = request.body.message_text;
+
+    // Create a new datetime to be stored as the send time.
     let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+    // Create the query for inserting the message to the database/
     let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES ('${dateNow}', '${messageText}', ${tutorID}, ${fromUserID} )`
-    database.query(query, (err, result) => {
 
+    database.query(query, (err) => {
+
+        // If we hit an error we want to display an error on the page so set this bool to false here.
         let messageSent = false
+
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
         if(err) {
             console.log(`Encountered an error when performing query: ${query}`)
         }
         else {
+            // If there is no error we set messageSent to true to display a success message on the page.
             messageSent = true
         }
 
+        // Render the tutor info page with proper data and the boolean value of if the message was sent.
         response.render('tutorinfo',{
             tutorData: request.tutorData,
             image: request.image,
@@ -48,10 +62,20 @@ function sendMessage(request, response) {
     })
 }
 
+/**
+ * getTutorInfo handles the retrieval of tutor data from the database to be displayed on a tutor info page.
+ * It currently uses the url created on the search page to parse out the first name, last name and tutor id and
+ * then performs the query for the tutor data. If the data does not exists or the url doesnt match the found data
+ * we send a 404 because something went wrong.
+ * @param request
+ * @param response
+ * @param callback
+ */
 function getTutorInfo(request, response, callback) {
     let tutor = request.url.replace("/tutor/", "");
     tutor = tutor.substring(1, tutor.length)
 
+    // Get the first name, last name and tutor id from the data.
     let tutorFirstName = tutor.split("-")[0]
     let tutorLastName = tutor.split("-")[1]
     let tutorID = tutor.split("-")[2]
@@ -82,11 +106,14 @@ function getTutorInfo(request, response, callback) {
         else {
 
             // We have received data from the database.
-            // Extract all of the images from the result and convert them from mysql blob to a viewable image.
-            let image = null;
-            for(let i = 0; i < result.length; i++) {
+            // Make sure the URL and the requested tutor id are the same, if the passed url names dont match do not continue.
+            if(result[0]['first_name'] === tutorFirstName && result[0]['last_name'] === tutorLastName) {
 
-                image = result[i]['image'];
+                // Append the actual data to the request.
+                request.tutorData = result[0];
+
+                // Extract the images from the result and convert from mysql blob to a viewable image.
+                let image = result[0]['image'];
                 if(image !== null) {
                     /*
                     TODO: according to spec this should be a thumbnail. Not sure if
@@ -94,12 +121,6 @@ function getTutorInfo(request, response, callback) {
                     */
                     image = Buffer.from(image.toString('base64'))
                 }
-            }
-
-            // Make sure the URL and the requested tutor id are the same.
-            if(result[0]['first_name'] === tutorFirstName && result[0]['last_name'] === tutorLastName) {
-                // Append the actual data to the request.
-                request.tutorData = result[0];
                 request.image = image;
             }
         }
