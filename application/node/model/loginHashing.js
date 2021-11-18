@@ -15,7 +15,7 @@ const tokenLength = 16;
  * and creates a random salt, then hashes the password before returning the password data to be stored in the
  * database.
  * @param password the password the user has entered. The string must be validated before getting to this point.
- * @returns {hash, salt} returns an object containing the hash and the salt of the password. TODO: Right now returns the password, need to remove once registration is fully working.
+ * @returns {hash, salt} returns an object containing the hash and the salt of the password.
  */
 function hashPasswordForRegistration(password) {
     let salt = crypto.randomBytes(128).toString('base64');
