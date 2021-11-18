@@ -10,7 +10,7 @@
 
 const express = require('express')
 const router = express.Router()
-const searchModel = require("../model/search");
+const searchModel = require("./search");
 const login = require("../controller/login");
 
 const database = require('../model/mysqlConnection')

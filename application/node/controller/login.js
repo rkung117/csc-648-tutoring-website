@@ -12,8 +12,8 @@
 const express = require('express')
 const router = express.Router()
 
-const loginHashing = require("./helpers/loginHashing");
-const searchModel = require("../model/search");
+const loginHashing = require("../model/loginHashing");
+const searchModel = require("./search");
 
 const database = require('../model/mysqlConnection')
 

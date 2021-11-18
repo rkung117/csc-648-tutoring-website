@@ -9,7 +9,7 @@
 
 const express = require('express')
 const router = express.Router()
-const searchModel = require("../model/search");
+const searchModel = require("./search");
 
 // When a user enters site/about express first looks for /about in app.js which forwards to this file. Then becuase there
 // is no further path looks for the root path in this file, which will be the response below that renders the about page.

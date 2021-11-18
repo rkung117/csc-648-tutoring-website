@@ -13,7 +13,7 @@
 const express = require('express')
 const router = express.Router()
 
-const searchModel = require('../model/search');
+const searchModel = require('./search');
 const login = require('./login')
 
 router.get('/', searchModel.searchCategories, login.validateUser, (req, res) => {
