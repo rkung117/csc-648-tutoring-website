@@ -29,6 +29,12 @@ app.use(session({
     }
 }))
 
+// When loading into any page these two pieces of middleware will run. First we get the search categories for the
+// header search bar. then we validate if the user is logged in. The result of these calls is stored within the
+// request and response values depending on the required functionality.
+app.use(require('./controller/search').getSearchCategories)
+app.use(require('./controller/login').validateUser)
+
 // When someone accesses / we pass the call to the controller/index.js file
 app.use('/', require('./controller/index'));
 
