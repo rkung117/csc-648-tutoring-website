@@ -17,6 +17,7 @@ const search = require("./search");
 const login = require("./login");
 
 const database = require('../model/mysqlConnection')
+const lazyReg = require("../model/lazyRegistration");
 
 /**
  * When the user loads the dashboard this function will retrieve their messages from the database. To get to this point
@@ -84,7 +85,7 @@ function loadDashboard(req, res) {
  * When the user attempts to load the dashboard checks if the user is logged in and if so allows the viewing of the
  * dashboard, otherwise the user is redirected to the login page.
  */
-router.get('/', search.getSearchCategories, login.validateUser, (req, res) => {
+router.get('/', lazyReg.removeLazyRegistrationObject, search.getSearchCategories, login.validateUser, (req, res) => {
 
     if(req.loginValidated === false) {
         res.redirect("/login");

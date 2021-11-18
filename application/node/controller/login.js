@@ -29,6 +29,7 @@ function validateUser(request, response, callback) {
 
     // Set this data immediatly to be used by the next callback if needed.
     request.loginValidated = false
+    response.locals.userLoggedIn = false
 
     // If the session has the userID stored in it we know the user is logged in.
     // TODO: update this to use a token when that functionality is implemented.
@@ -45,7 +46,7 @@ function validateUser(request, response, callback) {
         }
 
         // Update the response to contain the user logged in flag and the user's first name for the header
-        response.locals.loggedIn = true
+        response.locals.userLoggedIn = true
         response.locals.userFirstName = request.session.firstName
     }
     callback()
@@ -124,7 +125,7 @@ function validateUserForLogin(request, response, callback) {
  */
 router.get('/', search.getSearchCategories, validateUser, (req, res) => {
 
-    if(req.loginValidated ) {
+    if(req.loginValidated) {
         res.redirect("/")
     }
     else {
@@ -137,12 +138,15 @@ router.get('/', search.getSearchCategories, validateUser, (req, res) => {
  * getting called back here. If the data is valid redirects to / if not passes data to the view to show the invalid
  * username / password line.
  */
-router.post('/', search.getSearchCategories, validateUserForLogin, (req, res) => {
+router.post('/', validateUserForLogin, search.getSearchCategories, validateUser, (req, res) => {
 
-    console.log(req.session)
-    if(req.session.userID > 0) {
-
-        res.redirect("/")
+    if(req.loginValidated) {
+        if(req.session.lazyRegistration) {
+            res.redirect(req.session.lazyRegistration.referringPage)
+        }
+        else {
+            res.redirect("/")
+        }
     }
     else {
         res.render("login", {

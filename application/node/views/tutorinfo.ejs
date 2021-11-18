@@ -36,8 +36,11 @@
         </div>
         <br>
         <div>
-            <form method="post">
-                <input type="text" id="message_text" name="message_text">
+            <form <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post">
+                <input type="text" id="messageText" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText %>" <% }%>>
+                <% if(userLoggedIn === false) { %>
+                <input type="hidden" id="referringTutorPage" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']%>-<%= tutorData['last_name']%>-t<%= tutorData['tutor_id']%>">
+                <% } %>
                 <button type="submit">Contact Me</button>
             </form>
         </div>
