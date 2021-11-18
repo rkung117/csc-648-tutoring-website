@@ -24,7 +24,7 @@ function hashPasswordForRegistration(password) {
         hash: hash,
         salt: salt
     }
-    return password // TODO: Update this at a later point after registration is completed.
+    return passwordData
 }
 
 /**
@@ -37,8 +37,13 @@ function hashPasswordForRegistration(password) {
  * @returns {boolean} returns true if the password is valid.
  */
 function validatePassword(hash, salt, enteredPassword) {
-    // return hash === crypto.pbkdf2Sync(enteredPassword, salt, 1000, 64, `sha256`).toString(`hex`)
-    return true // TODO: Remove this when ready to actually test login
+
+    let valid = hash === crypto.pbkdf2Sync(enteredPassword, salt, 1000, 64, `sha256`).toString(`hex`)
+
+    console.log(`Checking provided hash against generated hash returned: ${valid}`)
+    valid = true // TODO: Remove this when ready to actually test login
+
+    return valid 
 }
 
 /**
