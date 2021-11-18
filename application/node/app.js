@@ -11,11 +11,31 @@
 
 const express = require('express')
 const path = require('path');
+const bodyParser = require("body-parser");
+const session = require('express-session')
 
 const app = express()
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Set up the basic data for our session cookies. This is used to store user logged in data currently.
+app.use(session({
+    secret: "SuperSecretSessionKey",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 60 * 60 * 1000 // Time is in milliseconds so this keeps user logged in for 1 hour 60min * 60 sec * 1000ms
+    }
+}))
+
 // When someone accesses / we pass the call to the controller/index.js file
 app.use('/', require('./controller/index'));
+
+// Pass all calls to the login page to the login router.
+app.use('/login', require('./controller/login').router)
+
+app.use('/dashboard', require('./controller/dashboard'))
 
 app.use('/about', require('./controller/aboutPages'));
 
