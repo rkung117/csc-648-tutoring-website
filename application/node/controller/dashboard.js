@@ -26,7 +26,6 @@ const lazyReg = require("../model/lazyRegistration");
 function loadDashboard(req, res) {
 
     let userID = req.session.userID;
-    userID = 2 //TODO: Remove this when we have messaging working, this sets user id to 2 at all times so can view messages in database.
 
     // Set up query to get all of the required message data, only for this user and sorted by newest first.
     let query = `SELECT messages.message_id,\n` +
