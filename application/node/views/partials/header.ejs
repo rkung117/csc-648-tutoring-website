@@ -1,7 +1,15 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">TutorPal</a>
-        <form action="/search" class="d-flex me-auto my-2 my-lg-0">
+        <div id="AboutDiv" class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/about">About</a>
+        </div>
+        <% if(typeof(userIsTutor) === 'undefined' || userIsTutor === false) { %>
+            <div class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/tutorApply">Tutor Apply</a>
+            </div>
+        <% } %>
+        <form action="/search" class="d-flex me-4 my-2 my-lg-0 col-4 ">
             <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
                 <option value="">Major</option>
                 <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
@@ -23,14 +31,12 @@
                    type="search" placeholder="CSC 648" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        <div id="AboutDiv" class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/about">About</a>
+        <div id="Signup" class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/register">SignUp</a>
         </div>
-        <% if(typeof(userIsTutor) === 'undefined' || userIsTutor === false) { %>
-            <div class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/tutorApply">Tutor Apply</a>
-            </div>
-        <% } %>
+        <div id="login" class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/login">LogIn</a>
+        </div>
         <% if(userLoggedIn) { %>
             <div class="h2 mb-0">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
