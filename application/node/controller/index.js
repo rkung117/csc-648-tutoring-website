@@ -51,6 +51,37 @@ router.get('/tutorApply', lazyReg.removeLazyRegistrationObject, (req, res) => {
 });
 
 /**
+ * If the user attempts to post into tutor post , the user is redirected to /
+ */
+router.post('/tutorPost', lazyReg.removeLazyRegistrationObject, (req, res) => {
+
+    if(req.loginValidated) {
+
+        res.redirect("tutorPost");
+    }
+    else {
+        res.render("login");
+    }
+});
+
+/**
+ * If the user attempts to post into tutor post , the user is redirected to /
+ */
+ router.get('/tutorPost', lazyReg.removeLazyRegistrationObject, (req, res) => {
+
+    res.render("tutorPost");
+});
+
+/**
+ * If the user attempts to search a post, the user is redirected to /
+ */
+ router.get('/tutorPostInfo', (req, res) => {
+
+    res.render("tutorPostInfo");
+});
+
+
+/**
  * When a user hits the logout button the session data is destroyed and then the user is redirected to /
  */
 router.get('/logout', (req, res) => {
