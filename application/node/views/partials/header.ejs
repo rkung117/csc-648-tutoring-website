@@ -1,52 +1,67 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">TutorPal</a>
-        <form action="/search" class="d-flex me-auto my-2 my-lg-0">
-            <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
-                <option value="">Major</option>
-                <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-                    <option value="<%= searchCategoriesShortName[i];%>"
-                    <% if(typeof(category) !== 'undefined') { %>
-                            <% if(category=== searchCategoriesShortName[i]) { %>
-                                selected
+    <div class="collapse navbar-collapse justify-content-md-center" id="navigations-02">
+        <div class="row w-100 my-0 mt-0">
+            <div class="col-4 pl-lg-0 ">
+            <ul class="navbar-nav text-center">
+                <li id="LogoDiv" class="nav-item"><a class="navbar-brand " href="/">TutorPal</a></li>
+                <li id="AboutDiv" class="nav-item"><a class="nav-link active" aria-current="page" href="/about">About</a></li>
+                <li id="PostDiv" class="nav-item"><a class="nav-link active" aria-current="page" href="/tutorPost">Tutor Post</a></li>
+            </ul>
+            </div>
+            <div class="col-4 navbar-nav text-center">
+                <form action="/search" class="d-flex my-2">
+                    <select class="mdb-select md-form" name="category" onchange="this.form.submit()">
+                        <option value="">Major</option>
+                        <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
+                            <option value="<%= searchCategoriesShortName[i];%>"
+                            <% if(typeof(category) !== 'undefined') { %>
+                                    <% if(category=== searchCategoriesShortName[i]) { %>
+                                        selected
+                                    <% } %>
                             <% } %>
+                            ><%= searchCategoriesLongName[i]; %></option>
+                        <% } %>
+                    </select>
+                    <input class="form-control me-2" id="search" name="search"
+                        <% if(typeof(searchTerm) !== 'undefined') { %>
+                                    value="<%= searchTerm ;%>"
+                        <% } else { %>
+                                    value=""
+                        <% } %>
+                        type="search" placeholder="CSC 648" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col-4 pr-lg-0">
+                <ul class="navbar-nav justify-content-end">
+                    <li id="Signup" class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/register">SignUp</a>
+                    </li>
+                    <li id="login" class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/login">LogIn</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        
+                    </li> -->
+                    <% if(userLoggedIn) { %>
+                        <div class="h2 mb-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                                <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                            </svg>
+                        </div>
+                        <div id="loggedInDropdown" class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hi <%= userFirstName; %>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            </ul>
+                        </div>
                     <% } %>
-                    ><%= searchCategoriesLongName[i]; %></option>
-                <% } %>
-            </select>
-            <input class="form-control me-2" id="search" name="search"
-                   <% if(typeof(searchTerm) !== 'undefined') { %>
-                            value="<%= searchTerm ;%>"
-                   <% } else { %>
-                            value=""
-                   <% } %>
-                   type="search" placeholder="CSC 648" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-        <div id="AboutDiv" class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/about">About</a>
-        </div>
-        <% if(typeof(userIsTutor) === 'undefined' || userIsTutor === false) { %>
-            <div class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/tutorApply">Tutor Apply</a>
-            </div>
-        <% } %>
-        <% if(userLoggedIn) { %>
-            <div class="h2 mb-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
-                    <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-                </svg>
-            </div>
-            <div id="loggedInDropdown" class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Hi <%= userFirstName; %>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
-                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
-            </div>
-        <% } %>
+            </div>  
+        </div>
     </div>
 </nav>
