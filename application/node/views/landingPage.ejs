@@ -26,12 +26,12 @@
 <body>
 <%- include('partials/header') %>
 
-<div class="container text-center px-4">
+<div class="container px-4">
     <div class="row gx-5">
         <div class="col">
             <div class="p-3 border bg-light">
                 <div class="p-5 mb-4 bg-light rounded-3">
-                    <div class="container-fluid py-5">
+                    <div class="container-fluid py-5 text-center">
                         <h1 class="display-1">TutorPal</h1>
                         <p class="col-md-12 fs-4">A tutor website made by SFSU students, for SFSU students.</p>
                         <button class="btn btn-primary btn-lg" onclick="window.location.href='/register';"  type="button">Sign up</button>
@@ -41,8 +41,34 @@
             </div>
         </div>
         <div class="col">
-            <div class="p-3 border bg-light">Recently Added Tutors
+            <div class="p-3 border bg-light text-center">Recently Added Tutors
+                <div id="result">
+                    <div class="flex-search-results">
 
+                        <% for(let i = 0; i < searchResult.length; i++) { %>
+                            <div class="flex-search-item box shadow bg-white p-1">
+                                <% item = searchResult[i];%>
+                                <div class="col-md-3">
+                                    <% if (images[i] !== undefined) { %>
+                                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><img class="search_image" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
+
+                                    <% } else { %>
+                                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><div class="search_image"></div></a>
+                                    <% } %>
+                                </div>
+                                <div class="col-md-9 mt-0">
+                                    <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>"><h1><%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
+                                    <h4>Major: <%= item['major_long_name'];%></h4>
+
+                                    <div class="d-grid gap-5 col-4 mx-6 float-end">
+                                        <button class="btn btn-primary btn-lg border=0 rounded-0 " type="button">Contact!</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
