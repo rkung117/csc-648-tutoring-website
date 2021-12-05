@@ -15,12 +15,9 @@
 <body>
 
     <%- include('partials/header') %>
-    <br>
-    <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
-    <div style="text-align:center;"><strong> Fall 2021 | Section 3 | Team 3</strong></div>
-    <br>
     <section class="about">
-        <div class="main">
+
+        <div class="main container text-center px-4">
             <div>
                 <% if (image !== undefined) { %>
                     <img class="search_image" src="data:image/jpeg;base64,  <%- image; %>">
@@ -33,19 +30,18 @@
                 <h3><%= tutorData['major_long_name'];%></h3>
                 <p><%= tutorData['tutor_description'];%></p>
             </div>
+            <div class="main container text-center px-4">
+                <form <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post">
+                    <input type="text" id="messageText" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText; %>" <% } %>>
+                    <% if(userLoggedIn === false) { %>
+                        <input type="hidden" id="referringTutorPage" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']; %>-<%= tutorData['last_name']; %>-t<%= tutorData['tutor_id']; %>">
+                    <% } %>
+                    <button class="btn btn-primary btn-lg border=0 rounded-4 " type="submit">Contact Me!</button>
+                </form>
+            </div>
+            <%- include('partials/footer') %>
         </div>
-        <br>
-        <div>
-            <form <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post">
-                <input type="text" id="messageText" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText; %>" <% } %>>
-                <% if(userLoggedIn === false) { %>
-                <input type="hidden" id="referringTutorPage" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']; %>-<%= tutorData['last_name']; %>-t<%= tutorData['tutor_id']; %>">
-                <% } %>
-                <div class="d-grid gap-5 col-4 mx-2 float-end">
-                        <button class="btn btn-primary btn-lg border=0 rounded-0 " type="submit">Contact Me!</button>
-                </div>
-            </form>
-        </div>
+
     </section>
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
