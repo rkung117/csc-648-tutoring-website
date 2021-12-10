@@ -78,6 +78,7 @@ function search(request, response, callback) {
     // Extract the search query and category from the request. These are set by the form on the page.
     let searchTerm = request.query.search;
     let category = request.query.category;
+    let page = request.query.page;
 
     // Create the query based on the data passed. By default we return everything from the table.
     let query = `SELECT users.user_id,\n` +
@@ -202,6 +203,7 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
     // model
     res.render("search", {
         results: 1,
+        page: 0,
         searchTerm: req.searchTerm,
         searchResult: searchResult,
         category: req.category,
