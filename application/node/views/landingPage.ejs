@@ -60,12 +60,13 @@
                                 </div>
 
                                 <div class="col mt-0">
-                                    <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>"><h1><%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
+                                    <a href="/#"><h1><%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
                                     <h4>Major: <%= item['major_long_name'];%></h4>
                                 </div>
 
                                 <div class="flex-grow-0">
-                                    <button class="btn btn-primary btn-lg border=0 rounded-2 " type="button">Contact!</button>
+                                    <!-- <button class="btn btn-primary btn-lg border=0 rounded-2 " type="button"> <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>">Contact!</button></a></button> -->
+                                    <a class="btn btn-primary btn-lg border=0 rounded-2" href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>" role="button">Contact!</a>
                                 </div>
 
                             </div>
