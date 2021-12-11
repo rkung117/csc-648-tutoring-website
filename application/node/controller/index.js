@@ -14,7 +14,7 @@ const express = require('express');
 const router = express.Router();
 
 const lazyReg = require('../model/lazyRegistration');
-const database = require("../model/mysqlConnection");
+const { database, mysql } = require("../model/mysqlConnection");
 
 function getCSC(request, response, callback) {
 

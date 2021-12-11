@@ -13,7 +13,7 @@ const router = express.Router();
 
 const lazyReg = require('../model/lazyRegistration');
 
-const database = require('../model/mysqlConnection');
+const { database, mysql } = require('../model/mysqlConnection');
 
 function parseTutorDataFromURL(url) {
 

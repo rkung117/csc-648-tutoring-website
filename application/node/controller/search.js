@@ -13,7 +13,7 @@
 const express = require('express');
 const router = express.Router();
 
-const database = require('../model/mysqlConnection');
+const { database, mysql } = require('../model/mysqlConnection');
 const lazyReg = require("../model/lazyRegistration");
 
 /***
