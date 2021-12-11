@@ -78,7 +78,7 @@ function search(request, response, callback) {
     // Extract the search query and category from the request. These are set by the form on the page.
     let searchTerm = request.query.search;
     let category = request.query.category;
-    let page = request.query.page;
+    let pageNum = request.query.page;
 
     // Create the query based on the data passed. By default we return everything from the table.
     let query = `SELECT users.user_id,\n` +
@@ -174,10 +174,19 @@ function search(request, response, callback) {
             }
 
             // Append the actual data to the request.
-            request.searchResult = result;
             request.searchTerm = searchTerm;
             request.category = category;
-            request.images = images;
+
+            // if (not given specific page number), display first five results.
+            // else (we're given a specific page number), display sliced results based on given page.
+            if (!pageNum) {
+                request.searchResult = result.slice(0, 5);
+                request.images = images.slice(0, 5);
+            }
+            else {
+                request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
+                request.images = images.slice(pageNum * 5, (pageNum * 5) + 5);
+            }
         }
 
         callback();

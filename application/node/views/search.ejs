@@ -22,12 +22,9 @@
           <nav aria-label="Page navigation example ">
 
               <ul class="pagination pagination-lg justify-content-end">
-                  <% currentPageIndex = page %>
-                  <% if (currentPageIndex > 0) {%>
-                    <li class="page-item"><a class="page-link" href="/search?category=<% category %>&search=<% searchTerm %>&page=<% 1 %>">
+                  <li class="page-item"><a class="page-link" href="search?category=<% category %>&search=<% searchTerm %>&page=0">
                                              Previous</a></li>
-                  <% } %>
-                  <li class="page-item"><a class="page-link" href="#?/search?category=<% category %>&search=<% searchTerm %>&page=<% 2 %>">Next</a></li>
+                  <li class="page-item"><a class="page-link" href="search?category=<% category %>&search=<% searchTerm %>&page=1">Next</a></li>
               </ul>
           </nav>
 
