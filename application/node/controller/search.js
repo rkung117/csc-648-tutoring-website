@@ -150,6 +150,8 @@ function search(request, response, callback) {
         request.category = "";
         request.images = [];
         request.pageNum = pageNum;
+        request.upperBound = "";
+        request.lowerBound = "";
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
@@ -188,6 +190,16 @@ function search(request, response, callback) {
                 request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
                 request.images = images.slice(pageNum * 5, (pageNum * 5) + 5);
             }
+
+            request.totalNum = result.length;
+
+            request.upperBound = (pageNum * 5) + 5;
+
+            if((pageNum * 5) + 5 > result.length) {
+                request.upperBound = result.length
+            }
+
+            request.lowerBound = (pageNum * 5) + 1;
         }
 
         callback();
@@ -209,6 +221,8 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
         searchResult = [];
     }
 
+
+
     // Render the vertical prototype template, passing data from
     // model
     res.render("search", {
@@ -217,7 +231,10 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
         searchTerm: req.searchTerm,
         searchResult: searchResult,
         category: req.category,
-        images: req.images
+        images: req.images,
+        totalNum: req.totalNum,
+        upperBound: req.upperBound,
+        lowerBound: req.lowerBound
     });
 });
 
