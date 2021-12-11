@@ -1,3 +1,15 @@
+/**
+ *
+ * This file is used when the user attempt to register. It takes the data user inputs and
+ * inserts it into the database. If user is already logged in and attempts to register, it 
+ * redirects them to the home page. Otherwise, it continues to the regisration page. If user
+ * is already registered and they attempt to register again, they are redirected to the login
+ * page. Otherwise, it continues to the regisration page.
+ *
+ * @author Rollin Kung and Cameron Robinson.
+ * @date 12/10/2021
+ * @since  0.0.1
+ */
 
 const express = require('express');
 const router = express.Router();
@@ -6,6 +18,12 @@ const loginHashing = require("../model/loginHashing");
 
 const {database, mysql} = require('../model/mysqlConnection');
 
+/**
+ * This function is called when user submits data on the registration page. The data
+ * that the user has given is inserted into the database.
+ * @param request the request from the user that will be inserted into the database
+ * @param callback 
+ */
 function registerUser(request, response, callback){
 
     const hashedPassword = loginHashing.hashPasswordForRegistration(request.body.password);
