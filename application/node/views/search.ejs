@@ -16,44 +16,45 @@
 
     <%- include('partials/header') %>
 
-<br>
-<div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
-<div style="text-align:center;"><strong> Fall 2021 | Section 3 | Team 3</strong></div>
-<br>
+    <br>
+    <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
+    <div style="text-align:center;"><strong> Fall 2021 | Section 3 | Team 3</strong></div>
+    <br>
 
-<main>
-    <div id="result">
-        <div class="flex-search-results">
-
-        <% for(let i = 0; i < searchResult.length; i++) { %>
-            <div class="flex-search-item box shadow bg-white p-4">
-                <% item = searchResult[i];%>
-                <div class="">
-                    <% if (images[i] !== undefined) { %>
+    <section class="container">
+      <div class="row content d-flex justify-content-center  mt-2">
+        <div class="p-3 border bg-light">
+          <div id="result">
+            <div class="flex-search-results">
+              <% for(let i = 0; i < searchResult.length; i++) { %>
+                <div class="flex-search-item box shadow bg-light p-4">
+                  <% item = searchResult[i];%>
+                    <div class="">
+                      <% if (images[i] !== undefined) { %>
                         <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><img class="search_image" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
 
-                    <% } else { %>
-                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><div class="search_image"></div></a>
-                    <% } %>
+                      <% } else { %>
+                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>">
+                          <div class="search_image">
+
+                          </div>
+                        </a>
+                      <% } %>
+                    </div>
+                    <div class="col-md-9 mt-0">
+                    <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>"><h1>&nbsp;&nbsp; <%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
+                    <h4>&nbsp;&nbsp;&nbsp;&nbsp;Major: <%= item['major_long_name'];%></h4>
+                    <div class="d-grid gap-5 col-4 mx-6 float-end">
+                      <button class="btn btn-primary btn-lg border=0 rounded-0 " type="button">Contact!</button>
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-9 mt-0">
-                    <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>"><h1><%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
-                    <h4>Major: <%= item['major_long_name'];%></h4>
-                    
-                      <div class="d-grid gap-5 col-4 mx-6 float-end">
-                        <button class="btn btn-primary btn-lg border=0 rounded-0 " type="button">Contact!</button>
-                      </div>
-                </div>
-                
+                <% } %>
             </div>
-            <% } %>
+          </div>            
         </div>
-    </div>
-</main>
-
-<footer>
-</footer>
-
+      </div>
+    </section>
     <!-- Option 2: Separate Popper and Bootstrap JS -->
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>

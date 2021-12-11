@@ -37,6 +37,19 @@ body{
     padding: 5px;
     margin: 5px;
 }
+
+.flex-search-item-no-outline {
+    display: flex;
+    flex-direction: row;
+    border-radius: 4pt;
+    padding: 5px;
+    margin: 5px;
+}
+
 .search_image {
     width: 200px;
+}
+
+.search_image_sm {
+    width: 75px;
 }

@@ -14,7 +14,7 @@ const router = express.Router();
 
 const loginHashing = require("../model/loginHashing");
 
-const database = require('../model/mysqlConnection');
+const { database, mysql } = require('../model/mysqlConnection');
 
 /**
  * This function is called during every route processing stage. It checks if the user has been logged in and validated

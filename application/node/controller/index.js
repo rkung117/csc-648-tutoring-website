@@ -14,41 +14,108 @@ const express = require('express');
 const router = express.Router();
 
 const lazyReg = require('../model/lazyRegistration');
+const { database, mysql } = require("../model/mysqlConnection");
 
-router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
+function getCSC(request, response, callback) {
 
-    res.render("landingPage");
+    let query = `SELECT users.user_id,\n` +
+        `       users.first_name,\n` +
+        `       users.last_name,\n` +
+        `       users.major,\n` +
+        `       tutors.tutor_id,\n` +
+        `       tutors.image,\n` +
+        `       tutors.approved,\n` +
+        `       major.major_long_name,\n` +
+        `       major.major_short_name\n` +
+        `FROM tutors\n` +
+        `JOIN users ON users.user_id = tutors.tutor_id\n` +
+        `JOIN major ON users.major = major.major_id\n` +
+        `WHERE major.major_short_name = 'CSC' AND tutors.approved = 1`;
+
+    // Perform the query on the database passing the result to our anonymous callback function.
+    database.query(query, (err, result) => {
+
+        // Append default data to the request before calling callback.
+        request.searchResult = "";
+        request.images = [];
+
+        // If we hit an error with the mysql connection or query we just return the above empty data
+        // since we have no data to display from the database. This should never happen in production.
+        if(err) {
+            console.log(`Encountered an error when performing query: ${query}`);
+        }
+        else {
+
+            // We have received data from the database.
+            // Extract all of the images from the result and convert them from mysql blob to a viewable image.
+            let images = [];
+            for(let i = 0; i < result.length; i++) {
+
+                let image = result[i]['image'];
+                if(image !== null) {
+                    /*
+                    TODO: according to spec this should be a thumbnail. Not sure if
+                     we're supposed to convert here or on upload. Something to ask about?
+                    */
+                    image = Buffer.from(image.toString('base64'));
+                    images.push(image);
+                }
+            }
+
+            // Append the actual data to the request.
+            request.searchResult = result.slice(0, 5); // Only take the first 5 items from the results found.
+            request.images = images.slice(0, 5); // Only take the first 5 items from the results found.
+        }
+
+        callback();
+    });
+}
+
+router.get('/', lazyReg.removeLazyRegistrationObject, getCSC, (req, res) => {
+
+    let searchResult = req.searchResult;
+    if (Array.isArray(searchResult) === false) {
+        searchResult = [];
+    }
+
+    res.render("landingPage", {
+        results: 1,
+        searchResult: searchResult,
+        images: req.images
+    });
 });
 
 
 /**
- * When the user attempts to load the register page checks if the user is logged in, if so redirects to /
- * TODO: Refactor this into a dedicated controller or the registration pages.
+ * If the user attempts to post into tutor post , the user is redirected to /
  */
-router.get('/register', (req, res) => {
+router.post('/tutorPost', lazyReg.removeLazyRegistrationObject, (req, res) => {
 
     if(req.loginValidated) {
 
-        res.redirect("/");
+        res.redirect("tutorPost");
     }
     else {
-        res.render("studentRegister");
+        res.render("login");
     }
 });
 
 /**
- * If the user attempts to load into tutor apply after already being a tutor will redirect to the dashboard.
+ * If the user attempts to post into tutor post , the user is redirected to /
  */
-router.get('/tutorApply', lazyReg.removeLazyRegistrationObject, (req, res) => {
+ router.get('/tutorPost', lazyReg.removeLazyRegistrationObject, (req, res) => {
 
-    if(res.locals.userIsTutor === undefined || res.locals.userIsTutor  === false) {
-        console.log(res.locals.userIsTutor );
-        res.render("tutorRegister");
-    }
-    else {
-        res.redirect("/dashboard");
-    }
+    res.render("tutorPost");
 });
+
+/**
+ * If the user attempts to search a post, the user is redirected to /
+ */
+ router.get('/tutorPostInfo', (req, res) => {
+
+    res.render("tutorPostInfo");
+});
+
 
 /**
  * When a user hits the logout button the session data is destroyed and then the user is redirected to /
