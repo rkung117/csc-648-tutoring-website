@@ -137,9 +137,10 @@ router.get('/', (req, res) => {
  * getting called back here. If the data is valid redirects to / if not passes data to the view to show the invalid
  * username / password line.
  */
-router.post('/', validateUserForLogin, (req, res) => {
+router.post('/', validateUserForLogin, validateUser, (req, res) => {
 
     if(req.loginValidated) {
+
         if(req.session.lazyRegistration) {
             res.redirect(req.session.lazyRegistration.referringPage);
         }
