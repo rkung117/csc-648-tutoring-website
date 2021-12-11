@@ -55,7 +55,7 @@ function getCSC(request, response, callback) {
                 if(image !== null) {
                     /*
                     TODO: according to spec this should be a thumbnail. Not sure if
-                     we're supposed to convert here or on upload. Something to ask about?
+                    we're supposed to convert here or on upload. Something to ask about?
                     */
                     image = Buffer.from(image.toString('base64'));
                     images.push(image);
@@ -87,31 +87,9 @@ router.get('/', lazyReg.removeLazyRegistrationObject, getCSC, (req, res) => {
 
 
 /**
- * If the user attempts to post into tutor post , the user is redirected to /
- */
-router.post('/tutorPost', lazyReg.removeLazyRegistrationObject, (req, res) => {
-
-    if(req.loginValidated) {
-
-        res.redirect("tutorPost");
-    }
-    else {
-        res.render("login");
-    }
-});
-
-/**
- * If the user attempts to post into tutor post , the user is redirected to /
- */
- router.get('/tutorPost', lazyReg.removeLazyRegistrationObject, (req, res) => {
-
-    res.render("tutorPost");
-});
-
-/**
  * If the user attempts to search a post, the user is redirected to /
  */
- router.get('/tutorPostInfo', (req, res) => {
+router.get('/tutorPostInfo', (req, res) => {
 
     res.render("tutorPostInfo");
 });
