@@ -129,4 +129,7 @@ router.get('/logout', (req, res) => {
     })
 });
 
+router.get('/PopUp', (req, res) => {
+    res.render("PopUp")
+});
 module.exports = router;
