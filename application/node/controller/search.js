@@ -78,7 +78,17 @@ function search(request, response, callback) {
     // Extract the search query and category from the request. These are set by the form on the page.
     let searchTerm = request.query.search;
     let category = request.query.category;
-    let pageNum = request.query.page;
+
+    // Set default page number to 0 as we use the 0 index to calculate array
+    // indicies.
+    let pageNum = 0;
+    if(request.query.page) {
+
+        // if the request has the page value we want to get the page value passed
+        // from the user to overwrite our default above. Page 1 wants page index 0
+        // and page 2 wants index 1 so we set the pageNum - 1 here.
+        pageNum = request.query.page - 1;
+    }
 
     // Create the query based on the data passed. By default we return everything from the table.
     let query = `SELECT users.user_id,\n` +
@@ -178,16 +188,14 @@ function search(request, response, callback) {
             request.searchTerm = searchTerm;
             request.category = category;
 
-            // if (not given specific page number), display first five results.
-            // else (we're given a specific page number), display sliced results based on given page.
-            if (!pageNum) {
-                request.searchResult = result.slice(0, 5);
-                request.images = images.slice(0, 5);
-            }
-            else {
-                request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
-                request.images = images.slice(pageNum * 5, (pageNum * 5) + 5);
-            }
+            // Since pageNum is always 0 indexed and always has a int value
+            // set above we can calculate what items we want to display here.
+            // if pageNum is 0 we get indicies 0 through 4, etc.
+            //
+            // TODO: Make sure the page number indicies is valid, if user attempts
+            // to load an invalid page number we'll hit a index out of bound error here.
+            request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
+            request.images = images.slice(pageNum * 5, (pageNum * 5) + 5);
         }
 
         callback();
