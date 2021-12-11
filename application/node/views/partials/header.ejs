@@ -34,12 +34,14 @@
             </div>
             <div class="col-4 pr-lg-0">
                 <ul class="navbar-nav justify-content-end">
+                    <% if(userLoggedIn === false) { %>
                     <li id="Signup" class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/register">SignUp</a>
                     </li>
                     <li id="login" class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/login">LogIn</a>
                     </li>
+                    <% } %>
                     <!-- <li class="nav-item">
                         
                     </li> -->
