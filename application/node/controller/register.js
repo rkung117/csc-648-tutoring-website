@@ -1,12 +1,10 @@
-const { application } = require('express');
+
 const express = require('express');
 const router = express.Router();
 
 const loginHashing = require("../model/loginHashing");
 
-const database = require('../model/mysqlConnection');
-
-app.use(express.json());
+const {database, mysql} = require('../model/mysqlConnection');
 
 function registerUser(request, response, callback){
 
@@ -51,5 +49,27 @@ function registerUser(request, response, callback){
 }
 
 router.get('/', (req, res) => {   
-    res.render("studentRegister");    
+
+    if(req.loginValidated) {
+
+        res.redirect("/");
+    }
+    else {
+        res.render("studentRegister");
+    }
 });
+
+router.post('/', (req, res) => {
+
+    if(req.registered) {
+
+        res.redirect("/login");
+    }
+    else {
+
+        // TODO: Display error message here.
+    res.render("studentRegister");    
+    }
+});
+
+module.exports = router;

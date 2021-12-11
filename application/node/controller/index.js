@@ -87,35 +87,6 @@ router.get('/', lazyReg.removeLazyRegistrationObject, getCSC, (req, res) => {
 
 
 /**
- * When the user attempts to load the register page checks if the user is logged in, if so redirects to /
- * TODO: Refactor this into a dedicated controller or the registration pages.
- */
-router.get('/register', (req, res) => {
-
-    if(req.loginValidated) {
-
-        res.redirect("/");
-    }
-    else {
-        res.render("studentRegister");
-    }
-});
-
-/**
- * If the user attempts to load into tutor apply after already being a tutor will redirect to the dashboard.
- */
-router.get('/tutorApply', lazyReg.removeLazyRegistrationObject, (req, res) => {
-
-    if(res.locals.userIsTutor === undefined || res.locals.userIsTutor  === false) {
-        console.log(res.locals.userIsTutor );
-        res.render("tutorRegister");
-    }
-    else {
-        res.redirect("/dashboard");
-    }
-});
-
-/**
  * If the user attempts to post into tutor post , the user is redirected to /
  */
 router.post('/tutorPost', lazyReg.removeLazyRegistrationObject, (req, res) => {
