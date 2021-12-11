@@ -149,6 +149,7 @@ function search(request, response, callback) {
         request.searchTerm = "";
         request.category = "";
         request.images = [];
+        request.pageNum = pageNum;
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
@@ -212,7 +213,7 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
     // model
     res.render("search", {
         results: 1,
-        page: 0,
+        pageNum: req.pageNum,
         searchTerm: req.searchTerm,
         searchResult: searchResult,
         category: req.category,
