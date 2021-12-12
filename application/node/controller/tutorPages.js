@@ -27,13 +27,13 @@ function parseTutorDataFromURL(url) {
     let tutorFirstName = tutor[0];
     let tutorLastName = tutor[1];
 
-    let tutorID = tutor[2];
-    tutorID = tutorID.substring(1, tutorID.length);
+    let tutorPostId = tutor[2];
+    tutorPostId = tutorPostId.substring(1, tutorPostId.length);
 
     return {
         tutorFirstName: tutorFirstName,
         tutorLastName: tutorLastName,
-        tutorID: tutorID
+        tutorPostId: tutorPostId
     }
 }
 
@@ -46,7 +46,7 @@ function parseTutorDataFromURL(url) {
 function sendMessage(request, response) {
 
     let tutorURLData = parseTutorDataFromURL(request.url);
-    let tutorID = tutorURLData.tutorID;
+    let tutorPostId = tutorURLData.tutorPostId;
 
     // Get the current userID from the session data and get the message text from the body the form request.
     let fromUserID = request.session.userID;
@@ -55,32 +55,46 @@ function sendMessage(request, response) {
     // Create a new datetime to be stored as the send time.
     let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    // Create the query for inserting the message to the database/
-    let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES (?,?,?,?)`;
-    query = mysql.format(query,[dateNow, messageText, tutorID, fromUserID]);
-
-    database.query(query, (err) => {
-
-        // If we hit an error we want to display an error on the page so set this bool to false here.
-        let messageSent = false;
-
-        // If we hit an error with the mysql connection or query we just return the above empty data
-        // since we have no data to display from the database. This should never happen in production.
+    let tutorUserIdQuery = `SELECT tutor_post.user_id,\n`+
+                            `       tutor_post.tutor_post_id\n` +
+                            `FROM tutor_post\n` +
+                            `WHERE tutor_post.tutor_post_id = ?;`
+    tutorUserIdQuery = mysql.format(tutorUserIdQuery,[tutorPostId]);
+    database.query(tutorUserIdQuery, (err, result) => {
         if(err) {
-            console.log(`Encountered an error when performing query: ${query}`);
+            console.log(`Encountered an error when performing query: ${tutorUserIdQuery}`);
         }
-        else {
-            // If there is no error we set messageSent to true to display a success message on the page.
-            messageSent = true;
-        }
+        else if(result.length > 0) {
 
-        // Render the tutor info page with proper data and the boolean value of if the message was sent.
-        response.render('tutorinfo',{
-            tutorData: request.tutorData,
-            image: request.image,
-            messageSent: messageSent
-        });
-    })
+            let toUserID = result[0]['user_id']
+            // Create the query for inserting the message to the database/
+            let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES (?,?,?,?)`;
+            query = mysql.format(query,[dateNow, messageText, toUserID, fromUserID]);
+
+            database.query(query, (err) => {
+
+                // If we hit an error we want to display an error on the page so set this bool to false here.
+                let messageSent = false;
+
+                // If we hit an error with the mysql connection or query we just return the above empty data
+                // since we have no data to display from the database. This should never happen in production.
+                if(err) {
+                    console.log(`Encountered an error when performing query: ${query}`);
+                }
+                else {
+                    // If there is no error we set messageSent to true to display a success message on the page.
+                    messageSent = true;
+                }
+
+                // Render the tutor info page with proper data and the boolean value of if the message was sent.
+                response.render('tutorinfo',{
+                    tutorData: request.tutorData,
+                    image: request.image,
+                    messageSent: messageSent
+                });
+            })
+        }
+    });
 }
 
 /**
@@ -95,11 +109,12 @@ function sendMessage(request, response) {
 function getTutorInfo(request, response, callback) {
 
     let tutorURLData = parseTutorDataFromURL(request.url);
-    let tutorID = tutorURLData.tutorID;
+    let tutorPostId = tutorURLData.tutorPostId;
 
     let query = `SELECT users.user_id,\n` +
                 `       users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       tutor_post.tutor_post_id,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_image AS image,\n` +
                 `       tutor_post.post_details,\n` +
@@ -114,8 +129,8 @@ function getTutorInfo(request, response, callback) {
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
                 `WHERE tutor_post.admin_approved = 1 AND ` +
-                `users.user_id = ?`
-    query = mysql.format(query,[tutorID]);
+                `tutor_post.tutor_post_id = ?`
+    query = mysql.format(query,[tutorPostId]);
 
     // Perform the query on the database passing the result to our anonymous callback function.
     database.query(query, (err, result) => {
@@ -126,7 +141,7 @@ function getTutorInfo(request, response, callback) {
             console.log(`Encountered an error when performing query: ${query}`)
             throw(err)
         }
-        else {
+        else if(result.length > 0) {
 
             // We have received data from the database.
             // Make sure the URL and the requested tutor id are the same, if the passed url names dont match do not continue.

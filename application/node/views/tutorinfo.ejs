@@ -40,7 +40,7 @@
                                      
                         <input type="text" id="messageText" class="form-control me-3" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText; %>" <% } %>>
                         <% if(userLoggedIn === false) { %>
-                            <input type="hidden" id="referringTutorPage" class="form-control border=0  rounded-0" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']; %>-<%= tutorData['last_name']; %>-t<%= tutorData['tutor_id']; %>">
+                            <input type="hidden" id="referringTutorPage" class="form-control border=0  rounded-0" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']; %>-<%= tutorData['last_name']; %>-t<%= tutorData['tutor_post_id']; %>">
                         <% } %>
                        
                         <button type="submit" class="btn btn-primary">Contact Me!</button>

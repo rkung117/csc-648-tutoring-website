@@ -96,6 +96,7 @@ function search(request, response, callback) {
     // Create the query based on the data passed. By default we return everything from the table.
     let query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       tutor_post.tutor_post_id,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
@@ -115,6 +116,7 @@ function search(request, response, callback) {
     if(searchTerm !== '' && category !== '') {
         query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       tutor_post.tutor_post_id,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
@@ -138,6 +140,7 @@ function search(request, response, callback) {
     else if(searchTerm !== '' && category === '') {
         query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       tutor_post.tutor_post_id,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
@@ -160,6 +163,7 @@ function search(request, response, callback) {
     else if(searchTerm === '' && category !== '') {
         query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
+                `       tutor_post.tutor_post_id,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
