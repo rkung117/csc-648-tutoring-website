@@ -66,7 +66,7 @@
                         <p><%= item['post_details'];%> <%if(item['post_details_previewed'] === true) { %><b>. . .</b> <% } %></p>
                       </div>
                       <div class="row px-4 text-end">
-                        <p>Post Created: <%= new Date(item['post_created']).toLocaleString();%></p>
+                        <p>Post Created: <%= item['post_created'];%></p>
                       </div>
                     </div> 
                     <div class="col-md-3 mt-0 col d-flex align-items-center">
