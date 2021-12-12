@@ -43,7 +43,6 @@
                     <% for (let major in courseData) { %>
                       <% let majorArray = courseData[major] %>
                       <% for(let course in majorArray) { %>
-                        <% console.log(course) %>
                       <option value="<%= majorArray[course]['courseNumber']; %>"><%= majorArray[course]['courseLabel'] %></option>
                       <% } %>
                     <% } %> 
