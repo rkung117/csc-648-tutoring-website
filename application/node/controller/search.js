@@ -93,7 +93,6 @@ function search(request, response, callback) {
         pageNum = request.query.page - 1;
     }
 
-    // TODO: Update queries to search not only for user name but also for class
     // Create the query based on the data passed. By default we return everything from the table.
     let query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
@@ -133,10 +132,10 @@ function search(request, response, callback) {
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
                 `WHERE tutor_post.admin_approved = 1 AND\n` +
-                `(users.first_name LIKE ? OR users.last_name LIKE ?) AND ` +
+                `(users.first_name LIKE ? OR users.last_name LIKE ? OR course.title LIKE ? OR course.number LIKE ? OR major.major_short_name LIKE ? OR CONCAT(major.major_short_name,' ', course.number) LIKE ? OR CONCAT(major.major_short_name, course.number) LIKE ? OR CONCAT(major.major_long_name, ' ', course.number) LIKE ? OR CONCAT(major.major_long_name, course.number) LIKE ?) AND ` +
                 `major.major_short_name = ?\n` +
                 `ORDER BY tutor_post.post_created DESC`;
-        query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%', category]);
+        query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', category]);
     }
     else if(searchTerm !== '' && category === '') {
         query = `SELECT users.first_name,\n` +
@@ -157,9 +156,9 @@ function search(request, response, callback) {
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
                 `WHERE tutor_post.admin_approved = 1 AND\n` +
-                `(users.first_name LIKE ? OR users.last_name LIKE ?)\n` +
+                `(users.first_name LIKE ? OR users.last_name LIKE ? OR course.title LIKE ? OR course.number LIKE ? OR major.major_short_name LIKE ? OR CONCAT(major.major_short_name,' ', course.number) LIKE ? OR CONCAT(major.major_short_name, course.number) LIKE ? OR CONCAT(major.major_long_name, ' ', course.number) LIKE ? OR CONCAT(major.major_long_name, course.number) LIKE ?)` +
                 `ORDER BY tutor_post.post_created DESC`;
-        query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%']);
+        query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%', '%'+searchTerm+'%']);
     }
     else if(searchTerm === '' && category !== '') {
         query = `SELECT users.first_name,\n` +
