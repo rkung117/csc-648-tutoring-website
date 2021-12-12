@@ -16,7 +16,7 @@ const router = express.Router();
 const lazyReg = require('../model/lazyRegistration');
 const { database, mysql } = require("../model/mysqlConnection");
 
-function getCSC(request, response, callback) {
+function getMostRecentFivePosts(request, response, callback) {
 
     let query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
@@ -24,6 +24,7 @@ function getCSC(request, response, callback) {
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
+                `       tutor_post.post_created,\n`+
                 `       course.number AS courseNumber,\n` +
                 `       course.title AS courseTitle,\n` +
                 `       major.major_long_name,\n` +
@@ -32,7 +33,8 @@ function getCSC(request, response, callback) {
                 `JOIN users ON tutor_post.user_id = users.user_id\n` +
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
-                `WHERE major.major_short_name = 'CSC' AND tutor_post.admin_approved = 1`;
+                `WHERE tutor_post.admin_approved = 1\n`+
+                `ORDER BY tutor_post.post_created DESC`;
 
     // Perform the query on the database passing the result to our anonymous callback function.
     database.query(query, (err, result) => {
@@ -69,7 +71,7 @@ function getCSC(request, response, callback) {
     });
 }
 
-router.get('/', lazyReg.removeLazyRegistrationObject, getCSC, (req, res) => {
+router.get('/', lazyReg.removeLazyRegistrationObject, getMostRecentFivePosts, (req, res) => {
 
     let searchResult = req.searchResult;
     if (Array.isArray(searchResult) === false) {

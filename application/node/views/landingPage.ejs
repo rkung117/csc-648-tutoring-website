@@ -52,10 +52,10 @@
                                 <% item = searchResult[i];%>
                                 <div class="">
                                     <% if (images[i] !== undefined) { %>
-                                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><img class="search_image_sm" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
+                                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['user_id']; %>"><img class="search_image_sm" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
 
                                     <% } else { %>
-                                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><div class="search_image_sm"></div></a>
+                                    <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['user_id']; %>"><div class="search_image_sm"></div></a>
                                     <% } %>
                                 </div>
 

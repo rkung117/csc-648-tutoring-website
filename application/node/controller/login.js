@@ -78,7 +78,8 @@ function validateUserForLogin(request, response, callback) {
         `       users.password_hashed,\n` +
         `       users.password_salt\n` +
         `FROM users\n` +
-        `WHERE users.email = '${userEmail}'`;
+        `WHERE users.email = ?`;
+    query = mysql.format(query,[userEmail]);
 
     // Perform the query on the database passing the result to our anonymous callback function.
     database.query(query, (err, result) => {

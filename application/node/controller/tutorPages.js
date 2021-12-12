@@ -56,7 +56,8 @@ function sendMessage(request, response) {
     let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     // Create the query for inserting the message to the database/
-    let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES ('${dateNow}', '${messageText}', ${tutorID}, ${fromUserID} )`;
+    let query = `INSERT INTO messages (date_sent,message_text,to_user,from_user) VALUES (?,?,?,?)`;
+    query = mysql.format(query,[dateNow, messageText, tutorID, fromUserID]);
 
     database.query(query, (err) => {
 
@@ -97,18 +98,24 @@ function getTutorInfo(request, response, callback) {
     let tutorID = tutorURLData.tutorID;
 
     let query = `SELECT users.user_id,\n` +
-        `       users.first_name,\n` +
-        `       users.last_name,\n` +
-        `       users.major,\n` +
-        `       tutors.tutor_id,\n` +
-        `       tutors.image,\n` +
-        `       tutors.approved,\n` +
-        `       tutors.tutor_description,\n` +
-        `       major.major_long_name\n` +
-        `FROM tutors\n` +
-        `JOIN users ON users.user_id = tutors.tutor_id\n` +
-        `JOIN major ON users.major = major.major_id\n` +
-        `WHERE tutors.tutor_id = ${tutorID} AND tutors.approved = 1`;
+                `       users.first_name,\n` +
+                `       users.last_name,\n` +
+                `       tutor_post.user_id,\n` +
+                `       tutor_post.post_image AS image,\n` +
+                `       tutor_post.post_details,\n` +
+                `       tutor_post.admin_approved,\n` +
+                `       tutor_post.tutoring_course_id,\n` +
+                `       course.number AS courseNumber,\n` +
+                `       course.title AS courseTitle,\n` +
+                `       major.major_long_name,\n` +
+                `       major.major_short_name\n` +
+                `FROM tutor_post\n` +
+                `JOIN users ON tutor_post.user_id = users.user_id\n` +
+                `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
+                `JOIN major ON course.major = major.major_id\n` +
+                `WHERE tutor_post.admin_approved = 1 AND ` +
+                `users.user_id = ?`
+    query = mysql.format(query,[tutorID]);
 
     // Perform the query on the database passing the result to our anonymous callback function.
     database.query(query, (err, result) => {
@@ -117,6 +124,7 @@ function getTutorInfo(request, response, callback) {
         // since we have no data to display from the database. This should never happen in production.
         if(err) {
             console.log(`Encountered an error when performing query: ${query}`)
+            throw(err)
         }
         else {
 
@@ -130,10 +138,6 @@ function getTutorInfo(request, response, callback) {
                 // Extract the images from the result and convert from mysql blob to a viewable image.
                 let image = result[0]['image'];
                 if(image !== null) {
-                    /*
-                    TODO: according to spec this should be a thumbnail. Not sure if
-                     we're supposed to convert here or on upload. Something to ask about?
-                    */
                     image = Buffer.from(image.toString('base64'))
                 }
                 request.image = image;

@@ -37,10 +37,10 @@
                   <% item = searchResult[i];%>
                     <div class="">
                       <% if (images[i] !== undefined) { %>
-                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><img class="search_image_sm" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
+                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['user_id']; %>"><img class="search_image_sm" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
 
                       <% } else { %>
-                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>">
+                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['user_id']; %>">
                           <div class="search_image">
 
                           </div>
@@ -48,7 +48,7 @@
                       <% } %>
                     </div>
                     <div class="col-md-7 mt-0">
-                      <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['tutor_id'];%>"><h1>&nbsp;&nbsp; <%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
+                      <a href="/tutor/<%=item['first_name'];%>-<%= item['last_name'];%>-t<%= item['user_id'];%>"><h1>&nbsp;&nbsp; <%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
                       <h4>&nbsp;&nbsp;&nbsp;&nbsp;Major: <%= item['major_long_name'];%></h4>
                     </div> 
                     <div class="col-md-3 mt-0">

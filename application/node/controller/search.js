@@ -95,6 +95,7 @@ function search(request, response, callback) {
                 `       users.last_name,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.post_details,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -111,6 +112,7 @@ function search(request, response, callback) {
                 `       users.last_name,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.post_details,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -121,14 +123,17 @@ function search(request, response, callback) {
                 `JOIN users ON tutor_post.user_id = users.user_id\n` +
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
-                `WHERE tutor_post.admin_approved = 1 AND` +
-                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
+                `WHERE tutor_post.admin_approved = 1 AND\n` +
+                `(users.first_name LIKE ? OR users.last_name LIKE ?) AND ` +
+                `major.major_short_name = ?`;
+        query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%', category]);
     }
     else if(searchTerm !== '' && category === '') {
         query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.post_details,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -139,14 +144,16 @@ function search(request, response, callback) {
                 `JOIN users ON tutor_post.user_id = users.user_id\n` +
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
-                `WHERE tutor_post.admin_approved = 1 AND` +
-                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
+                `WHERE tutor_post.admin_approved = 1 AND\n` +
+                `(users.first_name LIKE ? OR users.last_name LIKE ?)`;
+        query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%']);
     }
     else if(searchTerm === '' && category !== '') {
         query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.post_details,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -157,8 +164,9 @@ function search(request, response, callback) {
                 `JOIN users ON tutor_post.user_id = users.user_id\n` +
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
-                `WHERE tutor_post.admin_approved = 1 AND` +
-                `major.major_short_name = '${category}'`;
+                `WHERE tutor_post.admin_approved = 1 AND\n` +
+                `major.major_short_name = ?`;
+        query = mysql.format(query,[category]);
     }
 
     // Perform the query on the database passing the result to our anonymous callback function.

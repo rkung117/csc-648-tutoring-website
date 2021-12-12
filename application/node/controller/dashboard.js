@@ -38,9 +38,10 @@ function loadDashboard(req, res) {
                 `       users.last_name AS from_user_last_name\n` +
                 `FROM messages\n` +
                 `JOIN users ON users.user_id = messages.from_user\n` +
-                `WHERE messages.to_user = ${userID}\n` +
+                `WHERE messages.to_user = ?\n` +
                 `ORDER BY messages.date_sent DESC`;
-
+    query = mysql.format(query,[userID]);
+    
     // Perform the query on the database passing the result to our anonymous callback function.
     database.query(query, (err, result) => {
 
