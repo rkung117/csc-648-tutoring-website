@@ -59,9 +59,10 @@
                                     <% } %>
                                 </div>
 
-                                <div class="col mt-0">
+                                <div class="col mt-0 px-2">
                                     <a href="/#"><h1><%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
-                                    <h4>Major: <%= item['major_long_name'];%></h4>
+                                    <h5>Is offering tutoring for:</h5>
+                                    <h5><%= item['major_short_name'].toUpperCase() %> <%= item['courseNumber']%> <%= item['courseTitle']%>%></h5>
                                 </div>
 
                                 <div class="flex-grow-0">
