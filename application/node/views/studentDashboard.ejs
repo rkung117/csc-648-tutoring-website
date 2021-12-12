@@ -14,20 +14,8 @@
     <title>Student Dashboard</title>
   </head>
   <body>
-  
-    <script>
-      function toggleTable1() {
-        
-        document.getElementById("mymessage").classList.toggle("hidden");
-      
-      }
-      function toggleTable2() {
-      
-      document.getElementById("mytutors").classList.toggle("hidden");
+ 
     
-      }
-    </script>
-
     <%- include('partials/header') %>
 
     <br>
@@ -43,8 +31,8 @@
         <div class="col-md-10 mt-0">
           <h3 class="h3 mb-4 text-center ">My Dashboard!</h3>
           <div class="d-grid gap-2 d-md-block">
-            <button onClick="toggleTable1()" class="btn btn-success">My Messages</button>
-            <button onClick="toggleTable2()" class="btn btn-success">My Tutors</button>
+            <button  class="btn btn-success">My Messages</button>
+           
           </div>
           <div class="text-center box shadow bg-white p-4 mt-3">
             <div class="card" >
@@ -52,7 +40,7 @@
                 <h4 class="card-title">My Activities!!</h4>  
               </div>
               <div class="card-content table-responsive">
-                <table id="mymessage" class=" hidden table table-hover">
+                <table id="mymessage" class="  table table-hover">
                   <thead class="text-primary">
                     <tr>
                       <th>Tutor Name</th>
@@ -68,7 +56,14 @@
                         <td><%= messages[i]['tutorName']; %></td>
                         <td><%= messages[i]['messageText']; %></td>
                         <td><%= messages[i]['dateTime']; %></td>
-                        <td><%= messages[i]['status']; %></td>
+                        <td>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked">
+                            <label class="form-check-label" for="flexCheckChecked">
+                              Read
+                            </label>
+                          </div>
+                        </td>
                       </tr>
                     <% } %>
                   <% } else { %>
@@ -78,33 +73,7 @@
                   <% } %>
                   </tbody>
                 </table>
-                <table id="mytutors" class=" hidden table table-hover">
-                  <thead class="text-primary">
-                    <tr>
-                      <th>Tutor Name</th>
-                      <th colspan="2">Action</th>  
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Kesha Mourey</td>
-                      <td colspan="2">
-                        <div class="d-grid gap-4 d-md-flex justify-content-center">
-                          <button class="btn btn-success">Contact</button>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>    
-                        <td>Joe Pierce</td>
-                        <td colspan="2">
-                          <div class="d-grid gap-4 d-md-flex justify-content-center">
-                            <button class="btn btn-success">Contact</button>
-                          </div>
-                        </td>
-                      </tr>
-                      
-                  </tbody>
-                </table>
+                
               </div>
    
 
