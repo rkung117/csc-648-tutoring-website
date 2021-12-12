@@ -28,7 +28,7 @@
               <div class="row">
                 
                 <div class="form-floating mb-3 col-md-6">
-                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" required autofocus>
+                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" onchange="updateCoursesBasedOnMajor(value)" required autofocus>
                     <option value="">Select One</option>
                     <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
                       <option value="<%= searchCategoriesShortName[i]; %>"><%= searchCategoriesLongName[i];%></option>
@@ -38,13 +38,17 @@
                   
                 </div>
                 <div class="form-floating mb-3 col-md-6">
-                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" required autofocus>
+                  <select class="form-select" id="courseSelect" aria-label="Floating label select example" required autofocus>
                     <option value="">Select One</option>
-                    <% for(let i = 0; i < searchCategoriesNumber.length; i++) { %>
-                      <option value="<%= searchCategoriesNumber[i]; %>"><%= searchCategoriesNumber[i]+searchCategoriesTitle[i];%></option>
-                    <%}%>
+                    <% for (let major in courseData) { %>
+                      <% let majorArray = courseData[major] %>
+                      <% for(let course in majorArray) { %>
+                        <% console.log(course) %>
+                      <option value="<%= majorArray[course]['courseNumber']; %>"><%= majorArray[course]['courseLabel'] %></option>
+                      <% } %>
+                    <% } %> 
                   </select>
-                  <label for="floatingSelect">Courses</label>
+                  <label for="courseSelect">Courses</label>
                 </div>
                 <div class="form-floating mb-3">
                   <textarea class="form-control rounded-0" id="floatingInput" rows="3" required autofocus></textarea>
@@ -55,7 +59,7 @@
                 <div class="mb-5">
                   <label for="Image" class="form-label">Upload your Profile Image<span class="text-danger">*</span></label>
                     <input class="form-control" type="file" id="formFile" onchange="preview()" required autofocus>
-                    <button onclick="clearImage()" class="btn btn-primary mt-3">Click me</button>
+                    <!-- <button onclick="clearImage()" class="btn btn-primary mt-3">Click me</button> -->
                 </div>
                 <img id="frame" src="" class="img-fluid" />
             
@@ -63,10 +67,11 @@
                   function preview() {
                         frame.src = URL.createObjectURL(event.target.files[0]);
                     }
-                    function clearImage() {
-                        document.getElementById('formFile').value = null;
-                        frame.src = "";
-                    }
+                    // REMOVED clear image button and function as it is not really needed if image is mandatory.
+                    // function clearImage() {
+                    //     document.getElementById('formFile').value = null;
+                    //     frame.src = "";
+                    // }
                 </script>
 
                 <div class="mb-3 col-md-6">
@@ -94,7 +99,53 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
-   
+    <script>
+
+      // Use EJS and json to load all of the course data into a variable directly.
+      // set our course select dropdown variable here to be loaded by the 
+      // init function below.
+      let dataForAllCourses = <%- JSON.stringify(courseData) %>;
+      let courseSelect = null;
+
+      // When a major is selected from the dropdown this function is called.
+      function updateCoursesBasedOnMajor(selectedMajor) {
+        
+        // Remove all other items from the courses, leaving this at 1 will
+        // keep the default "select one" option in the list while removing
+        // the rest.
+        courseSelect.length = 1;
+
+        if(selectedMajor in dataForAllCourses) {
+
+          appendCoursesFromMajorToSelect(selectedMajor)
+        }
+        else if(selectedMajor === "") {
+
+          // Loop through every major in the dictionary and append all 
+          // of the classes to the dropdown.
+          for(let major in dataForAllCourses) {
+
+            appendCoursesFromMajorToSelect(major)
+          }
+        }
+      }
+
+      function appendCoursesFromMajorToSelect(selectedMajor) {
+
+        let majorData = dataForAllCourses[selectedMajor];
+        for(let course of majorData) {
+        
+          let option = document.createElement('option');
+          option.value = course['courseNumber'];
+          option.innerHTML = course['courseLabel'];
+          courseSelect.appendChild(option);
+        }
+      }
+
+      (()=>{
+        courseSelect = document.getElementById('courseSelect');
+      })()
+    </script>
   </body>
 </html>
 

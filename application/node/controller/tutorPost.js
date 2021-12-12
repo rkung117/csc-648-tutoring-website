@@ -74,12 +74,53 @@ function createTutorPost(request, response, callback) {
     callback(request, response)
 }
 
-router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
+function getTutorPostData(request, response, callback) {
 
-    res.render("tutorPost");
+    request.courseData = {}
+
+    const q = ` SELECT course.number AS courseNumber, 
+                       course.major, 
+                       course.title AS courseTitle,
+                       major.major_short_name AS majorShortName
+                FROM course
+                JOIN major ON course.major = major.major_id
+                ORDER BY course.major ASC,
+                         course.number ASC`
+    database.query(q, async (err, result) => {  
+
+        if(err) {
+            console.log(`Encountered an error when performing query: ${majorIdQuery}`)
+            throw (err)
+        }
+        else {
+
+            let courseData = {}
+            for(let item of result) {
+
+                if(item['majorShortName'] in courseData === false) {
+                    courseData[item['majorShortName']] = []
+                }
+                courseData[item['majorShortName']].push({
+                    courseNumber: item['courseNumber'],
+                    courseLabel: `${item['majorShortName'].toUpperCase()} ${item['courseNumber']} ${item['courseTitle']}`
+                })
+            }
+
+            request.courseData = courseData
+        }
+
+        callback()
+    });
+}
+
+router.get('/', getTutorPostData, lazyReg.removeLazyRegistrationObject, (req, res) => {
+
+    res.render("tutorPostInfo", {
+        courseData: req.courseData
+    });
 });
 
-router.post('/', lazyReg.removeLazyRegistrationObject, upload.single("postImage"), (req, res) => {
+router.post('/', getTutorPostData, lazyReg.removeLazyRegistrationObject, upload.single("postImage"), (req, res) => {
 
     // if(req.loginValidated) {
 
