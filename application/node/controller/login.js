@@ -76,10 +76,8 @@ function validateUserForLogin(request, response, callback) {
         `       users.first_name,\n` +
         `       users.email,\n` +
         `       users.password_hashed,\n` +
-        `       users.password_salt,\n` +
-        `       tutors.tutor_id\n` +
+        `       users.password_salt\n` +
         `FROM users\n` +
-        `LEFT OUTER JOIN tutors ON users.user_id = tutors.tutor_id\n` +
         `WHERE users.email = '${userEmail}'`;
 
     // Perform the query on the database passing the result to our anonymous callback function.
@@ -104,11 +102,6 @@ function validateUserForLogin(request, response, callback) {
                     // Set up the session data appending the first name, userID and if the user is a tutor.
                     request.session.firstName = result[0]['first_name'];
                     request.session.userID = result[0]['user_id'];
-                    request.session.userIsTutor = false;
-
-                    if(result[0]['tutor_id'] !== null) {
-                        request.session.userIsTutor = true;
-                    }
                 }
             }
         }

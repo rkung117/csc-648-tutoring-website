@@ -54,16 +54,15 @@ function registerUser(request, response, callback){
             let majorIdQuery = "SELECT major_id FROM major WHERE major_short_name = ?";
             majorIdQuery = mysql.format(majorIdQuery,[major]);
             
-            await database.query (majorIdQuery, async (err, result)=> {  
+            database.query (majorIdQuery, async (err, result)=> {  
                 
-                majorId = result[0]['major_id']
+                let majorId = result[0]['major_id']
 
                 if (result.length > 0) {
 
-                    // TODO: Remove username here after removed from database, this default is being set here until then.
-                    const sqlInsert = "INSERT INTO users (email, username, password_hashed, password_salt, first_name, last_name, major) VALUES (?,?,?,?,?,?,?)";
-                    const insert_query = mysql.format(sqlInsert,[email, "TODO_REMOVE", password_hashed, password_salt, first_name, last_name, majorId]);
-                    await database.query (insert_query, (err, result)=> {   
+                    const sqlInsert = "INSERT INTO users (email, password_hashed, password_salt, first_name, last_name, major) VALUES (?,?,?,?,?,?)";
+                    const insert_query = mysql.format(sqlInsert,[email, password_hashed, password_salt, first_name, last_name, majorId]);
+                    database.query (insert_query, (err, result)=> {   
                 
                         if (err) throw (err);
 
