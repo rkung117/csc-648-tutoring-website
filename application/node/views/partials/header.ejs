@@ -3,7 +3,7 @@
         <div class="row w-100 my-0 mt-0">
             <div class="col-4 pl-lg-0 ">
             <ul class="navbar-nav text-center">
-                <li id="LogoDiv" class="nav-item"><a class="navbar-brand " href="/">TutorPal</a></li>
+                <li id="LogoDiv" class="nav-item"><a class="navbar-brand " href="/"><img src="/img/TutorPal.png" alt="..." height="50"></a></li>
                 <li id="AboutDiv" class="nav-item"><a class="nav-link active" aria-current="page" href="/about">About</a></li>
                 <li id="PostDiv" class="nav-item"><a class="nav-link active" aria-current="page" href="/tutorPost">Tutor Post</a></li>
             </ul>
@@ -35,13 +35,14 @@
             <div class="col-4 pr-lg-0">
                 <ul class="navbar-nav justify-content-end">
                     <% if(userLoggedIn === false) { %>
-                    <li id="Signup" class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/register">SignUp</a>
-                    </li>
-                    <li id="login" class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/login">LogIn</a>
-                    </li>
+                        <li id="Signup" class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/register">SignUp</a>
+                        </li>
+                        <li id="login" class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/login">LogIn</a>
+                        </li>
                     <% } %>
+
                     <!-- <li class="nav-item">
                         
                     </li> -->
