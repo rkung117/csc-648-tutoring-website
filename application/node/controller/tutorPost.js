@@ -11,7 +11,8 @@
  const lazyReg = require('../model/lazyRegistration');
  const { database, mysql } = require("../model/mysqlConnection");
  const sharp = require('sharp');
- const multer  = require('multer')
+ const multer  = require('multer');
+const { response } = require('express');
  const storage = multer.memoryStorage(); 
  const upload = multer({ storage: storage });
 
