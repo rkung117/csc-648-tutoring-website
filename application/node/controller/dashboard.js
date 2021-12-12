@@ -58,7 +58,7 @@ function loadDashboard(req, res) {
             for (let i = 0; i < result.length; i++) {
 
                 let status = "Read";
-                if(result[1]['is_unread']) {
+                if(result[i]['is_unread']) {
                     status = "Unread";
                 }
 
