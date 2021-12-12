@@ -16,13 +16,19 @@
 
     <%- include('partials/header') %>
 
-    <br>
-    <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
-    <div style="text-align:center;"><strong> Fall 2021 | Section 3 | Team 3</strong></div>
-    <br>
-
     <section class="container">
-      <div class="row content d-flex justify-content-center  mt-2">
+      <div class="row content d-flex justify-content-center text-left mt-2">
+
+          <nav aria-label="Page navigation">
+                   <%= lowerBound %> out of <%= upperBound %> total <%= totalNum %>
+              <ul class="pagination pagination-lg justify-content-end">
+                  <% if (pageNum > 0) { %>
+                    <li class="page-item"><a class="page-link" href="/search?category=<% category %>&search=<% searchTerm %>&page=1">Previous</a></li>
+                  <% } %>
+                <li class="page-item"><a class="page-link" href="/search?category=<% category %>&search=<% searchTerm %>&page=2">Next</a></li>
+              </ul>
+          </nav>
+
         <div class="p-3 border bg-light">
           <div id="result">
             <div class="flex-search-results">
@@ -31,7 +37,7 @@
                   <% item = searchResult[i];%>
                     <div class="">
                       <% if (images[i] !== undefined) { %>
-                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><img class="search_image" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
+                        <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>"><img class="search_image_sm" src="data:image/jpeg;base64,  <%- images[i]; %>"></a>
 
                       <% } else { %>
                         <a href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_id']; %>">
@@ -54,8 +60,10 @@
                  </div>
               <% } %>
             </div>
-          </div>            
+          </div>
         </div>
+          <%- include('partials/footer') %>
+
       </div>
     </section>
     <!-- Option 2: Separate Popper and Bootstrap JS -->

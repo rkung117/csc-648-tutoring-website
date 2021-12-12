@@ -79,6 +79,17 @@ function search(request, response, callback) {
     let searchTerm = request.query.search;
     let category = request.query.category;
 
+    // Set default page number to 0 as we use the 0 index to calculate array
+    // indicies.
+    let pageNum = 0;
+    if(request.query.page) {
+
+        // if the request has the page value we want to get the page value passed
+        // from the user to overwrite our default above. Page 1 wants page index 0
+        // and page 2 wants index 1 so we set the pageNum - 1 here.
+        pageNum = request.query.page - 1;
+    }
+
     // Create the query based on the data passed. By default we return everything from the table.
     let query = `SELECT users.user_id,\n` +
                 `       users.first_name,\n` +
@@ -148,6 +159,9 @@ function search(request, response, callback) {
         request.searchTerm = "";
         request.category = "";
         request.images = [];
+        request.pageNum = pageNum;
+        request.upperBound = "";
+        request.lowerBound = "";
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
@@ -173,10 +187,28 @@ function search(request, response, callback) {
             }
 
             // Append the actual data to the request.
-            request.searchResult = result;
             request.searchTerm = searchTerm;
             request.category = category;
-            request.images = images;
+
+            // Since pageNum is always 0 indexed and always has a int value
+            // set above we can calculate what items we want to display here.
+            // if pageNum is 0 we get indicies 0 through 4, etc.
+            //
+            // TODO: Make sure the page number indicies is valid, if user attempts
+            // to load an invalid page number we'll hit a index out of bound error here.
+            request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
+            request.images = images.slice(pageNum * 5, (pageNum * 5) + 5);
+
+            request.totalNum = result.length;
+
+            request.upperBound = (pageNum * 5) + 5;
+
+            if((pageNum * 5) + 5 > result.length) {
+                request.upperBound = result.length
+            }
+
+            request.lowerBound = (pageNum * 5) + 1;
+
         }
 
         callback();
@@ -198,14 +230,20 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
         searchResult = [];
     }
 
+
+
     // Render the vertical prototype template, passing data from
     // model
     res.render("search", {
         results: 1,
+        pageNum: req.pageNum,
         searchTerm: req.searchTerm,
         searchResult: searchResult,
         category: req.category,
-        images: req.images
+        images: req.images,
+        totalNum: req.totalNum,
+        upperBound: req.upperBound,
+        lowerBound: req.lowerBound
     });
 });
 
