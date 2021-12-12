@@ -16,6 +16,7 @@ const router = express.Router();
 const { database, mysql } = require('../model/mysqlConnection');
 
 const lazyReg = require("../model/lazyRegistration");
+const date = require('date-and-time')
 
 /**
  * When the user loads the dashboard this function will retrieve their messages from the database. To get to this point
@@ -33,7 +34,7 @@ function loadDashboard(req, res) {
                 `       messages.message_text,\n` +
                 `       messages.to_user,\n` +
                 `       messages.from_user,\n` +
-                `       messages.is_unread,\n` +
+                `       messages.is_read,\n` +
                 `       users.first_name AS from_user_first_name,\n` +
                 `       users.last_name AS from_user_last_name\n` +
                 `FROM messages\n` +
@@ -47,6 +48,7 @@ function loadDashboard(req, res) {
 
         // Set up empty array to be used if no messages are found
         let messages = [];
+        let messageIds = [];
 
         // If we hit an error with the mysql connection or query we just return the above empty data
         // since we have no data to display from the database. This should never happen in production.
@@ -57,24 +59,30 @@ function loadDashboard(req, res) {
             // For each message found unpack the data and push new structure onto the message array
             for (let i = 0; i < result.length; i++) {
 
-                let status = "Read";
-                if(result[i]['is_unread']) {
-                    status = "Unread";
+                let status = "Unread";
+                if(result[i]['is_read']) {
+                    status = "Read";
                 }
 
+                let newDate = new Date(result[i]['date_sent'] - result[i]['date_sent'].getTimezoneOffset()*60*1000);
+                result[i]['date_sent'] = date.format(newDate,'ddd, MMM DD YYYY HH:mm A')
+
                 messages.push({
-                    tutorName: `${result[i]['from_user_first_name']} ${result[i]['from_user_last_name']}`,
+                    messageId: result[i]['message_id'],
+                    from_user: `${result[i]['from_user_first_name']} ${result[i]['from_user_last_name']}`,
                     messageText: result[i]['message_text'],
                     dateTime: result[i]['date_sent'],
                     status: status
                 });
-                console.log(messages);
+
+                messageIds.push(result[i]['message_id'])
             }
         }
 
         // Render dashboard, passing messages array to the view.
-        res.render("studentDashboard", {
-            messages: messages
+        res.render("dashboard", {
+            messages: messages,
+            messageIds: messageIds
         });
     });
 }
@@ -92,5 +100,47 @@ router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
         loadDashboard(req, res);
     }
 });
+
+router.post('/markRead', lazyReg.removeLazyRegistrationObject, (req, res) => {
+    let ids = req.body.message_ids.split(',');
+    ids = ids.filter((value) => {
+        return value !== "";
+    })
+
+    let query = `UPDATE messages\n`+
+                `SET messages.is_read = 1\n`+
+                `WHERE messages.message_id IN (?);`
+    query = mysql.format(query,[ids]);
+
+    database.query(query, (err, result) => {
+        if (err) {
+            console.log(`Encountered an error when performing query: ${query}`);
+        } else {
+            console.log("Updated messages to read")
+        }
+        res.redirect("/dashboard");
+    });
+})
+
+router.post('/markUnread', lazyReg.removeLazyRegistrationObject, (req, res) => {
+    let ids = req.body.message_ids.split(',');
+    ids = ids.filter((value) => {
+        return value !== "";
+    })
+
+    let query = `UPDATE messages\n`+
+                `SET messages.is_read = 0\n`+
+                `WHERE messages.message_id IN (?);`
+    query = mysql.format(query,[ids]);
+
+    database.query(query, (err, result) => {
+        if (err) {
+            console.log(`Encountered an error when performing query: ${query}`);
+        } else {
+            console.log("Updated messages to unread")
+        }
+        res.redirect("/dashboard");
+    });
+})
 
 module.exports = router;
