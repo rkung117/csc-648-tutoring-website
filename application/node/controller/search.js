@@ -91,64 +91,74 @@ function search(request, response, callback) {
     }
 
     // Create the query based on the data passed. By default we return everything from the table.
-    let query = `SELECT users.user_id,\n` +
-                `       users.first_name,\n` +
+    let query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
-                `       users.major,\n` +
-                `       tutors.tutor_id,\n` +
-                `       tutors.image,\n` +
-                `       tutors.approved,\n` +
+                `       tutor_post.user_id,\n` +
+                `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.admin_approved,\n` +
+                `       tutor_post.tutoring_course_id,\n` +
+                `       course.number AS courseNumber,\n` +
+                `       course.title AS courseTitle,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
-                `FROM tutors\n` +
-                `JOIN users ON users.user_id = tutors.tutor_id\n` +
-                `JOIN major ON users.major = major.major_id\n` +
-                `WHERE tutors.approved = 1`;
+                `FROM tutor_post\n` +
+                `JOIN users ON tutor_post.user_id = users.user_id\n` +
+                `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
+                `JOIN major ON course.major = major.major_id\n` +
+                `WHERE tutor_post.admin_approved = 1`;
     if(searchTerm !== '' && category !== '') {
-        query = `SELECT users.user_id,\n` +
-                `       users.first_name,\n` +
+        query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
-                `       users.major,\n` +
-                `       tutors.tutor_id,\n` +
-                `       tutors.image,\n` +
-                `       tutors.approved,\n` +
+                `       tutor_post.user_id,\n` +
+                `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.admin_approved,\n` +
+                `       tutor_post.tutoring_course_id,\n` +
+                `       course.number AS courseNumber,\n` +
+                `       course.title AS courseTitle,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
-                `FROM tutors\n` +
-                `JOIN users ON users.user_id = tutors.tutor_id\n` +
-                `JOIN major ON users.major = major.major_id\n` +
-                `WHERE major.major_short_name = '${category}' AND \n` +
-                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%') AND tutors.approved = 1`;
+                `FROM tutor_post\n` +
+                `JOIN users ON tutor_post.user_id = users.user_id\n` +
+                `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
+                `JOIN major ON course.major = major.major_id\n` +
+                `WHERE tutor_post.admin_approved = 1 AND` +
+                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
     }
     else if(searchTerm !== '' && category === '') {
-        query = `SELECT users.user_id,\n` +
-                `       users.first_name,\n` +
+        query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
-                `       users.major,\n` +
-                `       tutors.tutor_id,\n` +
-                `       tutors.image,\n` +
-                `       tutors.approved,\n` +
+                `       tutor_post.user_id,\n` +
+                `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.admin_approved,\n` +
+                `       tutor_post.tutoring_course_id,\n` +
+                `       course.number AS courseNumber,\n` +
+                `       course.title AS courseTitle,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
-                `FROM tutors\n` +
-                `JOIN users ON users.user_id = tutors.tutor_id\n` +
-                `JOIN major ON users.major = major.major_id\n` +
-                `WHERE (users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%') AND tutors.approved = 1`;
+                `FROM tutor_post\n` +
+                `JOIN users ON tutor_post.user_id = users.user_id\n` +
+                `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
+                `JOIN major ON course.major = major.major_id\n` +
+                `WHERE tutor_post.admin_approved = 1 AND` +
+                `(users.first_name LIKE '%${searchTerm}%' OR users.last_name LIKE '%${searchTerm}%')`;
     }
     else if(searchTerm === '' && category !== '') {
-        query = `SELECT users.user_id,\n` +
-                `       users.first_name,\n` +
+        query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
-                `       users.major,\n` +
-                `       tutors.tutor_id,\n` +
-                `       tutors.image,\n` +
-                `       tutors.approved,\n` +
+                `       tutor_post.user_id,\n` +
+                `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.admin_approved,\n` +
+                `       tutor_post.tutoring_course_id,\n` +
+                `       course.number AS courseNumber,\n` +
+                `       course.title AS courseTitle,\n` +
                 `       major.major_long_name,\n` +
                 `       major.major_short_name\n` +
-                `FROM tutors\n` +
-                `JOIN users ON users.user_id = tutors.tutor_id\n` +
-                `JOIN major ON users.major = major.major_id\n` +
-                `WHERE major.major_short_name = '${category}' AND tutors.approved = 1`;
+                `FROM tutor_post\n` +
+                `JOIN users ON tutor_post.user_id = users.user_id\n` +
+                `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
+                `JOIN major ON course.major = major.major_id\n` +
+                `WHERE tutor_post.admin_approved = 1 AND` +
+                `major.major_short_name = '${category}'`;
     }
 
     // Perform the query on the database passing the result to our anonymous callback function.
@@ -172,17 +182,14 @@ function search(request, response, callback) {
 
             // We have received data from the database.
             // Extract all of the images from the result and convert them from mysql blob to a viewable image.
-            let images = [];
+            let thumbnails = [];
             for(let i = 0; i < result.length; i++) {
 
-                let image = result[i]['image'];
-                if(image !== null) {
-                    /*
-                    TODO: according to spec this should be a thumbnail. Not sure if
-                     we're supposed to convert here or on upload. Something to ask about?
-                    */
-                    image = Buffer.from(image.toString('base64'));
-                    images.push(image);
+                let thumbnail = result[i]['thumbnail'];
+                if(thumbnail !== null) {
+
+                    thumbnail = Buffer.from(thumbnail.toString('base64'));
+                    thumbnails.push(thumbnail);
                 }
             }
 
@@ -197,7 +204,7 @@ function search(request, response, callback) {
             // TODO: Make sure the page number indicies is valid, if user attempts
             // to load an invalid page number we'll hit a index out of bound error here.
             request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
-            request.images = images.slice(pageNum * 5, (pageNum * 5) + 5);
+            request.thumbnails = thumbnails.slice(pageNum * 5, (pageNum * 5) + 5);
 
             request.totalNum = result.length;
 
@@ -240,7 +247,7 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
         searchTerm: req.searchTerm,
         searchResult: searchResult,
         category: req.category,
-        images: req.images,
+        images: req.thumbnails,
         totalNum: req.totalNum,
         upperBound: req.upperBound,
         lowerBound: req.lowerBound
