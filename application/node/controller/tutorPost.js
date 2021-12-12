@@ -20,7 +20,7 @@ function createTutorPost(request, response, callback) {
 
     const majorShortName = request.body.majorShortName;
     const courseNumber = request.body.courseNumber;
-    const postInfo = request.body.postInfo;
+    const postDetails = request.body.postDetails;
     const majorIdQuery = "SELECT major_id FROM major WHERE major_short_name = ?";
     const majorIdQueryFormatted = mysql.format(majorIdQuery,[majorShortName]);
 
@@ -28,11 +28,12 @@ function createTutorPost(request, response, callback) {
     const courseIdQueryFormatted = mysql.format(courseIdQuery,[courseNumber]);
 
     const userId = request.session.userID
+    const postImage = request.file.buffer;
 
-    sharp(request.file.buffer)
+    sharp(postImage)
     .resize(600, null)
-    .toFile(`tmp.png`)
-    .then(data => {
+    .toBuffer()
+    .then(postThumbnail => {
         request.postCreated = false;
         database.query(majorIdQueryFormatted, async (err, result) => {  
     
@@ -47,7 +48,7 @@ function createTutorPost(request, response, callback) {
 
                 let major_id = result[0]['major_id'];
                 console.log(courseIdQueryFormatted)
-                await database.query(courseIdQueryFormatted, (err, result) => {
+                database.query(courseIdQueryFormatted, (err, result) => {
     
                     if(err) {
                         console.log(`Encountered an error when performing query: ${courseIdQuery}`)
@@ -56,15 +57,19 @@ function createTutorPost(request, response, callback) {
                     else if(result.length > 0) {
                         console.log("Inserting to database.")
 
-                        // TODO: Update this after database refactor.
-                        const sqlInsert = "INSERT INTO tutor_post (tutor_id, post_created, post_details, post_image) VALUES (?,?,?,?)";
-                        // const insert_query = mysql.format(sqlInsert,[userId, "THIS IS ONLY A TEST"]);
-                        // await database.query (insert_query, (err, result)=> {   
+                        let courseId = result[0]['course_id']
+
+                        // Create a new datetime to be stored as the send time.
+                        let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                        console.log(postThumbnail)
+                        const sqlInsert = "INSERT INTO tutor_post (user_id, tutoring_course_id, post_created, post_details, post_image, post_thumbnail) VALUES (?,?,?,?,?,?)";
+                        const insert_query = mysql.format(sqlInsert,[userId, courseId, dateNow, postDetails, postImage, postThumbnail]);
+                        database.query (insert_query, (err, result)=> {   
                     
-                        //     if (err) throw (err);
+                            if (err) throw (err);
         
-                        //     request.postCreated = true;
-                        // })                    
+                            request.postCreated = true;
+                        })                    
                     }
                 });
             }
