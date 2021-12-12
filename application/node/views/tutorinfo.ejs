@@ -24,8 +24,16 @@
     <div class="section">
         <div class="container pt-1">
             <div class="content-section pt-5">
-                <div class="about-text">
-                    <p><%= tutorData['tutor_description'];%></p>
+                <div class="about-text container">
+                    <div class="row">
+                        <h5><%= tutorData['first_name'];%> <%= tutorData['last_name'];%> is offering tutoring for</h5>
+                    </div>
+                    <div class="row">
+                        <h5><%= tutorData['major_short_name'].toUpperCase() %> <%= tutorData['courseNumber']%> <%= tutorData['courseTitle']%></h5>
+                    </div>
+                    <div class="row py-4">
+                        <p><%= tutorData['post_details'];%></p>
+                    </div>
                 </div>
                 <div class="main container text-center">
                     <form <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post" class="d-flex my-2">
@@ -48,9 +56,8 @@
                             <div class="search_image"></div>
                         <% } %>
                     </div>
-                    <div class="about-text">
-                        <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= tutorData['first_name'];%> <%= tutorData['last_name'];%></h3>
-                        <h4>&nbsp;&nbsp;&nbsp;<%= tutorData['major_long_name'];%></h4>
+                    <div class="about-text ps-3">
+                        <h3><%= tutorData['first_name'];%> <%= tutorData['last_name'];%></h3>
                     </div>
             </div> 
         </div>
