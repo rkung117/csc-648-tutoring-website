@@ -12,9 +12,12 @@
 
 const express = require('express');
 const router = express.Router();
+const date = require('date-and-time')
 
 const { database, mysql } = require('../model/mysqlConnection');
 const lazyReg = require("../model/lazyRegistration");
+
+const searchPostPreviewLength = 100
 
 /***
  * getSearchCategories currently retrieves the short and long names of all majors in the database. This can be updated
@@ -96,6 +99,7 @@ function search(request, response, callback) {
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
+                `       tutor_post.post_created,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -106,13 +110,15 @@ function search(request, response, callback) {
                 `JOIN users ON tutor_post.user_id = users.user_id\n` +
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
-                `WHERE tutor_post.admin_approved = 1`;
+                `WHERE tutor_post.admin_approved = 1\n` +
+                `ORDER BY tutor_post.post_created DESC`;
     if(searchTerm !== '' && category !== '') {
         query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
+                `       tutor_post.post_created,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -125,7 +131,8 @@ function search(request, response, callback) {
                 `JOIN major ON course.major = major.major_id\n` +
                 `WHERE tutor_post.admin_approved = 1 AND\n` +
                 `(users.first_name LIKE ? OR users.last_name LIKE ?) AND ` +
-                `major.major_short_name = ?`;
+                `major.major_short_name = ?\n` +
+                `ORDER BY tutor_post.post_created DESC`;
         query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%', category]);
     }
     else if(searchTerm !== '' && category === '') {
@@ -134,6 +141,7 @@ function search(request, response, callback) {
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
+                `       tutor_post.post_created,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -145,7 +153,8 @@ function search(request, response, callback) {
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
                 `WHERE tutor_post.admin_approved = 1 AND\n` +
-                `(users.first_name LIKE ? OR users.last_name LIKE ?)`;
+                `(users.first_name LIKE ? OR users.last_name LIKE ?)\n` +
+                `ORDER BY tutor_post.post_created DESC`;
         query = mysql.format(query,['%'+searchTerm+'%', '%'+searchTerm+'%']);
     }
     else if(searchTerm === '' && category !== '') {
@@ -154,6 +163,7 @@ function search(request, response, callback) {
                 `       tutor_post.user_id,\n` +
                 `       tutor_post.post_thumbnail AS thumbnail,\n` +
                 `       tutor_post.post_details,\n` +
+                `       tutor_post.post_created,\n` +
                 `       tutor_post.admin_approved,\n` +
                 `       tutor_post.tutoring_course_id,\n` +
                 `       course.number AS courseNumber,\n` +
@@ -165,7 +175,8 @@ function search(request, response, callback) {
                 `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
                 `JOIN major ON course.major = major.major_id\n` +
                 `WHERE tutor_post.admin_approved = 1 AND\n` +
-                `major.major_short_name = ?`;
+                `major.major_short_name = ?\n` +
+                `ORDER BY tutor_post.post_created DESC`;
         query = mysql.format(query,[category]);
     }
 
@@ -199,6 +210,15 @@ function search(request, response, callback) {
                     thumbnail = Buffer.from(thumbnail.toString('base64'));
                     thumbnails.push(thumbnail);
                 }
+
+                result[i]['post_details_previewed'] = false;
+                if(result[i]['post_details'].length > searchPostPreviewLength) {
+                    result[i]['post_details'] = result[i]['post_details'].slice(0, searchPostPreviewLength);
+                    result[i]['post_details_previewed'] = true;
+                }
+
+                let newDate = new Date(result[i]['post_created'] - result[i]['post_created'].getTimezoneOffset()*60*1000);
+                result[i]['post_created'] = date.format(newDate,'ddd, MMM DD YYYY HH:mm A')
             }
 
             // Append the actual data to the request.
@@ -215,6 +235,7 @@ function search(request, response, callback) {
             request.thumbnails = thumbnails.slice(pageNum * 5, (pageNum * 5) + 5);
 
             request.totalNum = result.length;
+            request.totalPages = Math.floor(request.totalNum / 5)
 
             request.upperBound = (pageNum * 5) + 5;
 
@@ -223,7 +244,6 @@ function search(request, response, callback) {
             }
 
             request.lowerBound = (pageNum * 5) + 1;
-
         }
 
         callback();
@@ -258,7 +278,8 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
         images: req.thumbnails,
         totalNum: req.totalNum,
         upperBound: req.upperBound,
-        lowerBound: req.lowerBound
+        lowerBound: req.lowerBound,
+        numPages: req.totalPages
     });
 });
 
