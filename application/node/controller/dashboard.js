@@ -64,6 +64,9 @@ function loadDashboard(req, res) {
                     status = "Read";
                 }
 
+                // Format the data into the proper timezone. This is still technically not correct as this
+                // will display the date in the timezone of the poster not the viewer but for now and the scope
+                // of the project I think this is fine. Timezones are a nightmare.
                 let newDate = new Date(result[i]['date_sent'] - result[i]['date_sent'].getTimezoneOffset()*60*1000);
                 result[i]['date_sent'] = date.format(newDate,'ddd, MMM DD YYYY HH:mm A')
 
@@ -88,7 +91,7 @@ function loadDashboard(req, res) {
 }
 
 /**
- * When the user attempts to load the dashboard we check if the user is logged in and if so move forwared with the
+ * When the user attempts to load the dashboard we check if the user is logged in and if so move forward with the
  * request, otherwise the user is redirected to the login page.
  */
 router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
@@ -101,6 +104,13 @@ router.get('/', lazyReg.removeLazyRegistrationObject, (req, res) => {
     }
 });
 
+/***
+ * This function and the one below it are used when the user marks a set of messages as read or unread from their
+ * dashboard. When they click the button the page builds a form, appends a csv list of all messages they want to
+ * mark as read or unread which is then sent here. We unpack that string and then set up the query to update the
+ * database. No matter what happens during the query we redirect the user back to the dashboard which then fetches
+ * any updates to the messages if needed.
+ */
 router.post('/markRead', lazyReg.removeLazyRegistrationObject, (req, res) => {
     let ids = req.body.message_ids.split(',');
     ids = ids.filter((value) => {
@@ -112,11 +122,9 @@ router.post('/markRead', lazyReg.removeLazyRegistrationObject, (req, res) => {
                 `WHERE messages.message_id IN (?);`
     query = mysql.format(query,[ids]);
 
-    database.query(query, (err, result) => {
+    database.query(query, (err) => {
         if (err) {
-            console.log(`Encountered an error when performing query: ${query}`);
-        } else {
-            console.log("Updated messages to read")
+            console.log(`Encountered an error when performing query: ${query}\n\n${err}`)
         }
         res.redirect("/dashboard");
     });
@@ -133,11 +141,9 @@ router.post('/markUnread', lazyReg.removeLazyRegistrationObject, (req, res) => {
                 `WHERE messages.message_id IN (?);`
     query = mysql.format(query,[ids]);
 
-    database.query(query, (err, result) => {
+    database.query(query, (err) => {
         if (err) {
-            console.log(`Encountered an error when performing query: ${query}`);
-        } else {
-            console.log("Updated messages to unread")
+            console.log(`Encountered an error when performing query: ${query}\n\n${err}`)
         }
         res.redirect("/dashboard");
     });

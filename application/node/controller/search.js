@@ -83,7 +83,7 @@ function search(request, response, callback) {
     let category = request.query.category;
 
     // Set default page number to 0 as we use the 0 index to calculate array
-    // indicies.
+    // indices.
     let pageNum = 0;
     if(request.query.page) {
 
@@ -93,6 +93,7 @@ function search(request, response, callback) {
         pageNum = request.query.page - 1;
     }
 
+    // TODO: Update queries to search not only for user name but also for class
     // Create the query based on the data passed. By default we return everything from the table.
     let query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
@@ -231,9 +232,9 @@ function search(request, response, callback) {
 
             // Since pageNum is always 0 indexed and always has a int value
             // set above we can calculate what items we want to display here.
-            // if pageNum is 0 we get indicies 0 through 4, etc.
+            // if pageNum is 0 we get indices 0 through 4, etc.
             //
-            // TODO: Make sure the page number indicies is valid, if user attempts
+            // TODO: Make sure the page number indices is valid, if user attempts
             // to load an invalid page number we'll hit a index out of bound error here.
             request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
             request.thumbnails = thumbnails.slice(pageNum * 5, (pageNum * 5) + 5);
@@ -254,10 +255,12 @@ function search(request, response, callback) {
     });
 }
 
-// Right now our root path is rendered here, we first pass the call to searchCategories to retrieve the categories from
-// the database. Then we pass to the search method to actually search if we have data to search with. Search and
-// searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
-// The search method then calls the final callback (anonymous function here) that renders the data for the client.
+/**
+ * The home page is rendered here, we first pass the call to searchCategories to retrieve the categories from
+ * the database. Then we pass to the search method to actually search if we have data to search with. Search and
+ * searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
+ * The search method then calls the final callback (anonymous function here) that renders the data for the client.
+ */
 router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
 
     // If the search result is not an array we create an empty array
@@ -268,8 +271,6 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
     if (Array.isArray(searchResult) === false) {
         searchResult = [];
     }
-
-
 
     // Render the vertical prototype template, passing data from
     // model

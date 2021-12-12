@@ -51,7 +51,7 @@ app.use('/about', require('./controller/aboutPages'));
 
 app.use('/tutor', require('./controller/tutorPages'));
 
-app.use('/tutorPost', require('./controller/tutorPost'))
+app.use('/createTutorPost', require('./controller/createTutorPost'))
 
 // Tell node our templates will be under the views directory
 app.set('views', path.join(__dirname, 'views'));

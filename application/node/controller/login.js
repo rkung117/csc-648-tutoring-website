@@ -26,12 +26,11 @@ const { database, mysql } = require('../model/mysqlConnection');
  */
 function validateUser(request, response, callback) {
 
-    // Set this data immediatly to be used by the next callback if needed.
+    // Set this data immediately to be used by the next callback if needed.
     request.loginValidated = false;
     response.locals.userLoggedIn = false;
 
     // If the session has the userID stored in it we know the user is logged in.
-    // TODO: update this to use a token when that functionality is implemented.
     if(request.session.userID) {
 
         // Update the request data to inform the next function call that the user is logged in.
@@ -127,9 +126,9 @@ router.get('/', (req, res) => {
 });
 
 /**
- * Rout for post /login, when the user attempts to submit data to log in, passes data to the validation function before
- * getting called back here. If the data is valid redirects to / if not passes data to the view to show the invalid
- * username / password line.
+ * Route for posting data to /login, when the user attempts to submit data to log in, passes data to the validation
+ * function before getting called back here. If the data is valid redirects to / if not passes data to the view to
+ * show the invalid username / password line. <- TODO:
  */
 router.post('/', validateUserForLogin, validateUser, (req, res) => {
 

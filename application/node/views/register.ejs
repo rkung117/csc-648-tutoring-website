@@ -32,7 +32,7 @@
 
     <section class="container">
       <div class="row content d-flex justify-content-center  mt-3">
-        <div class="col-md-5 mt-0">
+        <div class="col-md-6 mt-0">
           <h3 class="h3 mb-4 text-center ">Register Here</h3>
             <div class="signup-form text-center box shadow bg-white p-4 ">
               <form action="/register"  name='registration' method="post" class="mb-3" oninput='confirmpassword.setCustomValidity(confirmpassword.value != password.value ? "Passwords do not match." : "")' >   
@@ -68,14 +68,12 @@
                     </select>
                     <label for="major_dropdown">Major</label>
                   </div>
-                  <div class="mb-3 col-md-6">
-                    <input type="checkbox" class="form-check-input" value="remember-me" id="autoSizingCheck2" required>
-                    <label class="form-check-label" for="remember">Opt in for terms<span class="text-danger">*</span></label>
+                  <div class="mb-3 col-md-8">
+                    <input type="checkbox" class="form-check-input" id="terms_and_conditions" required>
+                    <label class="form-check-label" for="terms_and_conditions">I agree to the site's <a href="#">terms and conditions</a><span class="text-danger">*</span></label>
                   </div>
-
-                 
-                  <div class="mb-3 col-md-6">
-                    <button id="btn-signup" type="submit" class="btn btn-primary float-end">&nbsp Signup Now </button>
+                  <div class="mb-3 col-md-4">
+                    <button class="btn btn-primary float-end">Create Post</button>
                   </div>
 
                   <div class="text-center mt-3 text-secondary">
@@ -84,7 +82,7 @@
                 </div>
             </form> 
           </div>
-          <div style="text-align:center;"><strong> Success! Thanks for registering, User account created!</strong></div>
+<!--          <div style="text-align:center;"><strong> Success! Thanks for registering, User account created!</strong></div>-->
         </div>
       </div>
     </section>

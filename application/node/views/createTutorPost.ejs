@@ -21,7 +21,7 @@
 
     <section class="container">
       <div class="row content d-flex justify-content-center  mt-2">
-        <div class="col-md-5 mt-0">
+        <div class="col-md-6 mt-0">
           <h3 class="h3 mb-4 text-center ">Create your Post Here!</h3>
           <div class="signup-form text-center box shadow bg-white p-4 ">
             <form action="/tutorPost" method="post" enctype="multipart/form-data" class="mb-3">
@@ -50,9 +50,8 @@
                   <label for="courseSelect">Courses</label>
                 </div>
                 <div class="form-floating mb-3">
-                  <textarea class="form-control rounded-0" id="postDetails" name="postDetails" rows="3" required autofocus></textarea>
-                  <label for="postDetails" class="form-label" >Describe yourself<span class="text-danger">*</span></label>
-                  
+                  <textarea class="form-control rounded-0" id="postDetails" name="postDetails" style="height: 150px" required autofocus></textarea>
+                  <label for="postDetails" >Describe yourself<span class="text-danger">*</span></label>
                 </div>
                
                 <div class="mb-5">
@@ -73,16 +72,16 @@
                     // }
                 </script>
 
-                <div class="mb-3 col-md-6">
-                  <input type="checkbox" class="form-check-input" value="remember-me" id="autoSizingCheck2" required>
-                  <label class="form-check-label" for="remember">Opt in for terms<span class="text-danger">*</span></label>
+                <div class="mb-3 col-md-8">
+                  <input type="checkbox" class="form-check-input" id="terms_and_conditions" required>
+                  <label class="form-check-label" for="terms_and_conditions">I agree to the site's <a href="#">terms and conditions</a><span class="text-danger">*</span></label>
                 </div>
-                <div class="mb-3 col-md-6">
-                  <button class="btn btn-primary float-end">Signup Now</button>
+                <div class="mb-3 col-md-4">
+                  <button class="btn btn-primary float-end">Create Post</button>
                 </div>
-                <div class="text-center mt-3 text-secondary">
-                  Already have an account? <a href="/login">Login</a>
-                </div>
+<!--                <div class="text-center mt-3 text-secondary">-->
+<!--                  Already have an account? <a href="/login">Login</a>-->
+<!--                </div>-->
               </div>
             
             </form>

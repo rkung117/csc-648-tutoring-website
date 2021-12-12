@@ -2,9 +2,9 @@
  *
  * This file is used when the user attempt to register. It takes the data user inputs and
  * inserts it into the database. If user is already logged in and attempts to register, it 
- * redirects them to the home page. Otherwise, it continues to the regisration page. If user
+ * redirects them to the home page. Otherwise, it continues to the registration page. If user
  * is already registered and they attempt to register again, they are redirected to the login
- * page. Otherwise, it continues to the regisration page.
+ * page. Otherwise, it continues to the registration page.
  *
  * @author Rollin Kung and Cameron Robinson.
  * @date 12/10/2021
@@ -72,8 +72,7 @@ function registerUser(request, response, callback){
                 }
                 else {
 
-                    // TODO: Set "unknown error" here. This is if the user
-                    // somehow selects an unknown major.
+                    // TODO: Set "unknown error" here. This is if the user somehow selects an unknown major.
                     callback()
                 }
             });
@@ -82,6 +81,10 @@ function registerUser(request, response, callback){
     })
 }
 
+/***
+ * If the user attempt to load the register page but is already logged in we will redirect them to /
+ * otherwise we render the register page.
+ */
 router.get('/', (req, res) => {
 
     if(req.loginValidated) {
@@ -89,10 +92,16 @@ router.get('/', (req, res) => {
         res.redirect("/");
     }
     else {
-        res.render("studentRegister");
+        res.render("register");
     }
 });
 
+/***
+ * When the user submits the registration form the data is directed here, we call the register user function above
+ * to insert the user into the database. After that function completes we are passed back here. We either redirect
+ * the user to the login page (and TODO: show a thank you for registering message
+ * or we route back to the register page and TODO: display an error message
+ */
 router.post('/', registerUser, (req, res) => {
 
     if(req.registered) {
@@ -102,7 +111,7 @@ router.post('/', registerUser, (req, res) => {
     else {
 
         // TODO: Display error message here.
-        res.render("studentRegister");
+        res.render("register");
     }
 });
 

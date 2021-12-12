@@ -15,6 +15,12 @@ const lazyReg = require('../model/lazyRegistration');
 
 const { database, mysql } = require('../model/mysqlConnection');
 
+/***
+ * This function extracts the tutor first name, last name and the tutor post number from the url
+ * when a user views a tutor posting page.
+ * @param url
+ * @returns {{tutorPostId: string, tutorLastName: string, tutorFirstName: string}}
+ */
 function parseTutorDataFromURL(url) {
 
     // Pares the tutor ID out of the url. TODO: This can probably be simplified but is working for now.
@@ -27,6 +33,7 @@ function parseTutorDataFromURL(url) {
     let tutorFirstName = tutor[0];
     let tutorLastName = tutor[1];
 
+    // Get the tutor post id from the end, remove the first character to end up with only a numeric value.
     let tutorPostId = tutor[2];
     tutorPostId = tutorPostId.substring(1, tutorPostId.length);
 
@@ -162,17 +169,31 @@ function getTutorInfo(request, response, callback) {
         callback();
     });
 }
+
+/***
+ * If a user attempts to load the /tutor page we return 404.
+ */
 router.get('/', (req, res) => {
   res.sendStatus(404);
 });
 
+/***
+ * If a user attempts to contact a tutor but they are not logged in this path is routed to first. We stop here and
+ * save all of the post data the user had already entered into the form before then continuing on to the login page.
+ */
 router.post("/contactlogin", (req, res) => {
 
     req.session.lazyRegistration = lazyReg.getLazyRegistrationObject(req.body.referringTutorPage, req.body.messageText);
     res.redirect('/login');
 });
 
-// All requests under products/ will be routed here
+/***
+ * All requests under tutor/ will be routed here we extract the specific tutor being requested from the url in the
+ * parseTutorDataFromURL function above. After getting the tutor data we check if the user is logged in and if
+ * so we check if there is lazyRegistration data saved in the session storage. If needed we unwrap the saved data
+ * and append it back to the response before then rendering the page. The saved data will be pasted back into
+ * the form fields when the page is rendered.
+ */
 router.get("/*", getTutorInfo, (req, res) => {
 
     // If the data was not found and appended to the request we want to return 404 because something went wrong.
@@ -182,13 +203,9 @@ router.get("/*", getTutorInfo, (req, res) => {
 
             if(req.session.lazyRegistration) {
                 res.locals.messageText = req.session.lazyRegistration.data;
-                console.log(req.session);
                 delete req.session.lazyRegistration;
-                console.log(req.session);
             }
         }
-
-        console.log(res.locals);
 
         res.render('tutorinfo',{
             tutorData: req.tutorData,
@@ -200,6 +217,12 @@ router.get("/*", getTutorInfo, (req, res) => {
     }
 });
 
+/***
+ * When the user posts data to the server to send a message to a tutor this route is called. It will capture
+ * the entered data and pass it to the send message function. If the user is not logged in it will not
+ * send the message but that should not happen because we check if the user needs to login before reaching this point
+ * and perform lazy registration.
+ */
 router.post("/*", getTutorInfo, (req, res) => {
 
     // If the data was not found and appended to the request we want to return 404 because something went wrong.
@@ -221,4 +244,5 @@ router.post("/*", getTutorInfo, (req, res) => {
         res.sendStatus(404);
     }
 });
+
 module.exports = router;

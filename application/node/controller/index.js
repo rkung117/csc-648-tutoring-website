@@ -72,6 +72,10 @@ function getMostRecentFivePosts(request, response, callback) {
     });
 }
 
+/***
+ * This function is called when the user loads to the home page. It first calls the getMostRecentFivePosts and then
+ * displays the home page with the results found.
+ */
 router.get('/', lazyReg.removeLazyRegistrationObject, getMostRecentFivePosts, (req, res) => {
 
     let searchResult = req.searchResult;
@@ -85,16 +89,6 @@ router.get('/', lazyReg.removeLazyRegistrationObject, getMostRecentFivePosts, (r
         images: req.thumbnails
     });
 });
-
-
-/**
- * If the user attempts to search a post, the user is redirected to /
- */
-router.get('/tutorPostInfo', (req, res) => {
-
-    res.render("tutorPostInfo");
-});
-
 
 /**
  * When a user hits the logout button the session data is destroyed and then the user is redirected to /
