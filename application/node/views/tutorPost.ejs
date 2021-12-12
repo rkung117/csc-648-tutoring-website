@@ -24,48 +24,43 @@
         <div class="col-md-5 mt-0">
           <h3 class="h3 mb-4 text-center ">Create your Post Here!</h3>
           <div class="signup-form text-center box shadow bg-white p-4 ">
-            <form action="/tutorPost" method="post" class="mb-3">
+            <form action="/tutorPost" method="post" enctype="multipart/form-data" class="mb-3">
               <div class="row">
                 
                 <div class="form-floating mb-3 col-md-6">
-                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example" required autofocus>
+                  <select class="form-select" id="majorShortName" name="majorShortName" aria-label="Floating label select example" required autofocus>
                     <option value="">Select One</option>
                     <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
                       <option value="<%= searchCategoriesShortName[i]; %>"><%= searchCategoriesLongName[i];%></option>
                     <%}%>
                   </select>
-                  <label for="floatingSelect">Major<span class="text-danger">*</span></label>
+                  <label for="majorShortName">Major<span class="text-danger">*</span></label>
                   
                 </div>
                 <div class="form-floating mb-3 col-md-6">
-                  <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                  <select class="form-select" id="courseNumber" name="courseNumber"  aria-label="Floating label select example">
                     <option selected>Other</option>
-                    <option value="1">CSC 600</option>
-                    <option value="2">CSC 700</option>
-                    <option value="3">CSC 230</option>
+                    <option value="600">CSC 600</option>
+                    <option value="700">CSC 700</option>
+                    <option value="230">CSC 230</option>
                   </select>
-                  <label for="floatingSelect">Courses to Tutor</label>
+                  <label for="courseNumber">Courses to Tutor</label>
                 </div>
                 <div class="form-floating mb-3">
-                  <textarea class="form-control rounded-0" id="floatingInput" rows="3" required autofocus></textarea>
-                  <label for="floatingInput" class="form-label" >Describe yourself<span class="text-danger">*</span></label>
+                  <textarea class="form-control rounded-0" id="postInfo" name="postInfo" rows="3" required autofocus></textarea>
+                  <label for="postInfo" class="form-label" >Describe yourself<span class="text-danger">*</span></label>
                   
                 </div>
                
                 <div class="mb-5">
-                  <label for="Image" class="form-label">Upload your Profile Image<span class="text-danger">*</span></label>
-                    <input class="form-control" type="file" id="formFile" onchange="preview()" required autofocus>
-                    <button onclick="clearImage()" class="btn btn-primary mt-3">Click me</button>
+                  <label for="postImage" class="form-label">Upload your Profile Image<span class="text-danger">*</span></label>
+                  <input class="form-control" type="file" accept="image/*" id="postImage" name="postImage" onchange="preview()" required autofocus>
                 </div>
                 <img id="frame" src="" class="img-fluid" />
             
                 <script>
                   function preview() {
                         frame.src = URL.createObjectURL(event.target.files[0]);
-                    }
-                    function clearImage() {
-                        document.getElementById('formFile').value = null;
-                        frame.src = "";
                     }
                 </script>
 
@@ -74,7 +69,7 @@
                   <label class="form-check-label" for="remember">Opt in for terms<span class="text-danger">*</span></label>
                 </div>
                 <div class="mb-3 col-md-6">
-                  <button class="btn btn-primary float-end">Signup Now</button>
+                  <button class="btn btn-primary float-end" type="submit">Signup Now</button>
                 </div>
                 <div class="text-center mt-3 text-secondary">
                   Already have an account? <a href="/login">Login</a>
