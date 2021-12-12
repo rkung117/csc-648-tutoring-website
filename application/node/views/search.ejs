@@ -57,10 +57,7 @@
                         <hr>
                       </div>
                       <div class="row ps-4">
-                        <h4>Course: <%= item['courseTitle'];%></h4>
-                      </div>
-                      <div class="row ps-4">
-                        <h4>Major: <%= item['major_long_name'];%></h4>
+                        <h5>Course: <%= item['major_short_name'].toUpperCase();%> <%= item['courseNumber'];%>  <%= item['courseTitle'];%></h5>
                       </div>
                       <div class="row px-4 py-2">
                         <p><%= item['post_details'];%> <%if(item['post_details_previewed'] === true) { %><b>. . .</b> <% } %></p>
