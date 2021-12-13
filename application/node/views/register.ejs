@@ -39,16 +39,16 @@
                 <div class="row">
                   <!-- floatingInput -->
                   <div class="form-floating mb-3 col-md-6">    
-                    <input type="text" name="first_name" class="form-control rounded-0" id="first_name" placeholder="First Name" required autofocus>
+                    <input type="text" name="first_name" class="form-control rounded-0" id="first_name" placeholder="First Name"  pattern="[a-zA-Z]{2,40}" required autofocus>
                     <label for="first_name">First Name<span class="text-danger">*</span></label>
                   </div>
                   <div class="form-floating mb-3 col-md-6">    
-                    <input type="text" name="last_name" class="form-control rounded-0" id="last_name" placeholder="Last Name" required autofocus>
+                    <input type="text" name="last_name" class="form-control rounded-0" id="last_name" placeholder="Last Name" pattern="[a-zA-Z]{2,40}" required autofocus>
                     <label for="last_name">Last Name<span class="text-danger">*</span></label>
                   </div>
 
                   <div class="form-floating mb-3">
-                    <input type="email" name="email" class="form-control rounded-0" id="email" placeholder="Email Address" required autofocus>
+                    <input type="email" name="email" class="form-control rounded-0" id="email" placeholder="Email Address" pattern="[[a-zA-Z0-9._]*@[[a-zA-Z0-9._]*\.(sfsu\.edu)$" required autofocus>
                     <label for="email">SFSU Email Address<span class="text-danger">*</span></label>
                   </div>
                   <div class="form-floating mb-3 col-md-12">
@@ -73,7 +73,7 @@
                     <label class="form-check-label" for="terms_and_conditions">I agree to the site's <a href="#">terms and conditions</a><span class="text-danger">*</span></label>
                   </div>
                   <div class="mb-3 col-md-4">
-                    <button class="btn btn-primary float-end">Create Post</button>
+                    <button class="btn btn-primary float-end">Signup</button>
                   </div>
 
                   <div class="text-center mt-3 text-secondary">
