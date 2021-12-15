@@ -22,7 +22,7 @@
                             ><%= searchCategoriesLongName[i]; %></option>
                         <% } %>
                     </select>
-                    <input class="form-control me-2" id="search" name="search"
+                    <input class="form-control me-2" id="search" pattern="{0,40}" name="search"
                         <% if(typeof(searchTerm) !== 'undefined') { %>
                                     value="<%= searchTerm ;%>"
                         <% } else { %>
