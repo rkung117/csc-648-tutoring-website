@@ -19,6 +19,32 @@ body{
     background-image: linear-gradient(90deg, #e5edfd, #d9d2e6);
 }
 
+.btn-btn-primary{
+    background-color: #FFE872;
+    font-family: sans-serif;
+    border-radius: 30px;
+}
+
+.btn-btn-secondary{
+    background-color:#ECD0F3 ;
+    font-family: sans-serif;
+    border-radius: 30px;
+}
+
+.modal-title{
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+.modal-header{
+    background-color: #CCE6FC;
+}
+
+.modal-body{
+        background-color: #ADEBFF;
+        font-size: 15px;
+    }
+
 .about-item .team-item .row .team-details .btn {
     font-size: 25px;
 }
@@ -76,6 +102,7 @@ width: 40%;
     margin-top: 90px;
 }
 
+
 /* .content-section .content .button a{
     background-color: #3d3d3d;
     padding: 12px 40px;
@@ -130,5 +157,5 @@ width: 40%;
     }
     .content-section .social{
     margin-top: 70px 90px;
-}   
+    } 
 }
