@@ -47,7 +47,6 @@ function registerUser(request, response, callback){
         if (result.length != 0) {
             console.log("------> User already exists");
 
-            // TODO: Set value to say that user email for username already exists?
             callback()
         } 
         else {
@@ -98,20 +97,25 @@ router.get('/', (req, res) => {
 
 /***
  * When the user submits the registration form the data is directed here, we call the register user function above
- * to insert the user into the database. After that function completes we are passed back here. We either redirect
- * the user to the login page (and TODO: show a thank you for registering message
- * or we route back to the register page and TODO: display an error message
+ * to insert the user into the database. After that function completes we are passed back here. We either 
+ * render the login page from here and pass the userRegistered value to the 
+ * login page to show a thank you for registering message or we rerender the 
+ * register page and display an error message
  */
 router.post('/', registerUser, (req, res) => {
 
     if(req.registered) {
 
-        res.redirect("/login");
+        res.render("login", {
+            userRegistered: true
+        });
     }
     else {
 
         // TODO: Display error message here.
-        res.render("register");
+        res.render("register", {
+            userRegistered: false
+        });
     }
 });
 
