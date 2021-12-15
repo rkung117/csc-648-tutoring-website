@@ -34,14 +34,14 @@
         <div class="col-md-6 mt-0">
           <h3 class="h3 mb-4 text-center ">Create your Post Here!</h3>
           <div class="signup-form text-center box shadow bg-white p-4 ">
-            <form action="/createTutorPost" method="post" enctype="multipart/form-data" class="mb-3">
+            <form id="submitPostForm" <% if(userLoggedIn === false) { %> action="/createTutorPost/loginFirst" <% } else { %> action="/createTutorPost" <% } %> method="post" enctype="multipart/form-data" class="mb-3">
               <div class="row">
                 
                 <div class="form-floating mb-3 col-md-6">
                   <select class="form-select" id="majorShortName" name="majorShortName" aria-label="Floating label select example" onchange="updateCoursesBasedOnMajor(value)" required autofocus>
                     <option value="">Select One</option>
                     <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-                      <option value="<%= searchCategoriesShortName[i]; %>"><%= searchCategoriesLongName[i];%></option>
+                      <option value="<%= searchCategoriesShortName[i]; %>" <% if(lazyRegPostData && searchCategoriesShortName[i] === lazyRegPostData['majorShortName']) { %> selected <% } %> ><%= searchCategoriesLongName[i];%></option>
                     <%}%>
                   </select>
                   <label for="majorShortName">Major<span class="text-danger">*</span></label>
@@ -50,30 +50,38 @@
                 <div class="form-floating mb-3 col-md-6">
                   <select class="form-select" id="courseSelect" name="courseNumber" aria-label="Floating label select example" required autofocus>
                     <option value="">Select One</option>
-                    <% for (let major in courseData) { %>
-                      <% let majorArray = courseData[major] %>
+                    <% if(lazyRegPostData === null || lazyRegPostData['majorShortName'] === "") { %>
+                      <% for (let major in courseData) { %>
+                        <% let majorArray = courseData[major] %>
+                        <% for(let course in majorArray) { %>
+                        <option value="<%= majorArray[course]['courseNumber']; %>" <% if(lazyRegPostData && majorArray[course]['courseNumber'].toString() === lazyRegPostData['courseNumber']) {%> selected <% } %>><%= majorArray[course]['courseLabel'] %></option>
+                        <% } %>
+                      <% } %> 
+                    <% } else { %>
+                      <% let majorArray = courseData[lazyRegPostData['majorShortName']] %>
                       <% for(let course in majorArray) { %>
-                      <option value="<%= majorArray[course]['courseNumber']; %>"><%= majorArray[course]['courseLabel'] %></option>
+                      <option value="<%= majorArray[course]['courseNumber']; %>" <%if(lazyRegPostData && majorArray[course]['courseNumber'].toString() === lazyRegPostData['courseNumber']) { %> selected <% } %>><%= majorArray[course]['courseLabel'] %></option>
                       <% } %>
-                    <% } %> 
+                    <% } %>
                   </select>
                   <label for="courseSelect">Courses</label>
                 </div>
                 <div class="form-floating mb-3">
-                  <textarea class="form-control rounded-0" id="postDetails" name="postDetails" style="height: 150px" required autofocus></textarea>
+                  <textarea class="form-control rounded-0" id="postDetails" name="postDetails" style="height: 150px" required autofocus><% if(lazyRegPostData) { %><%=lazyRegPostData['postDetails']%><% } %></textarea>
                   <label for="postDetails" >Describe yourself<span class="text-danger">*</span></label>
                 </div>
                
                 <div class="mb-5">
-                  <label for="postImage" class="form-label">Upload your Profile Image<span class="text-danger">*</span></label>
-                    <input class="form-control" type="file" id="postImage" name="postImage" onchange="preview()" required autofocus>
+                  <label id="uploadButton" for="postImage" class="btn btn-primary"><% if(lazyRegImageData !== null){%>Change Profile Image<% } else { %>Upload your Profile Image<% } %></label><span class="text-danger">*</span>
+                    <input style="visibility:hidden;" class="form-control" accept="image/*" type="file" id="postImage" name="postImage" onchange="preview()" <% if(lazyRegImageData !== null){ %> value="Image loaded." src="data:image/png;base64,  <%= lazyRegImageData %>" <% } %>  <% if(lazyRegImageData === null){ %> required <% } %> autofocus>
                     <!-- <button onclick="clearImage()" class="btn btn-primary mt-3">Click me</button> -->
                 </div>
-                <img id="frame" src="" class="img-fluid" />
+                <img id="frame" class="img-fluid" <% if(lazyRegImageData !== null){%> src="data:image/png;base64,  <%= lazyRegImageData %>" <% } else { %> src="" <% } %>/>
             
                 <script>
                   function preview() {
-                        frame.src = URL.createObjectURL(event.target.files[0]);
+                      document.getElementById("uploadButton").innerHTML = "Change Profile Image"
+                      frame.src = URL.createObjectURL(event.target.files[0]);
                     }
                     // REMOVED clear image button and function as it is not really needed if image is mandatory.
                     // function clearImage() {
@@ -87,7 +95,12 @@
                   <label class="form-check-label" for="terms_and_conditions">I agree to the site's <a href="#">terms and conditions</a><span class="text-danger">*</span></label>
                 </div>
                 <div class="mb-3 col-md-4">
-                  <button class="btn btn-primary float-end">Create Post</button>
+                  <% // Add a button to show the login modal or the actual submit to create post if the user is logged in.%>
+                  <% if(userLoggedIn === false) { %>
+                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target= "#login-modal">Create Post</button>                       
+                    <% } else { %>
+                        <button type="submit" class="btn btn-primary float-end">Create Post</button>                       
+                    <% } %>
                 </div>
 <!--                <div class="text-center mt-3 text-secondary">-->
 <!--                  Already have an account? <a href="/login">Login</a>-->
@@ -155,6 +168,34 @@
       })()
     </script>
   </body>
+<% /**
+    * If the user is not logged in we set up the login modal on the page 
+    * but do not display it until the user attempts to send the message.
+    */
+%>
+<% if(userLoggedIn === false) { %>
+  <div class="modal fade" id="login-modal"  data-bs-backdrop="static" tabindex="-2" aria-labelledby="modal-title" aria-hideen="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="modal-title">Sorry!</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <p>To offer tutoring services must first create and account or log in.</p>
+                  <p>Would you like to do that in now?</p>
+                  <button type="button" class="btn-btn-secondary p-2" data-dismiss="modal" onclick="lazyLogin()">Log In</button>
+                  <button class="btn-btn-primary p-2" data-bs-dismiss="modal">No</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script>
+      function lazyLogin() {
+          document.getElementById("submitPostForm").submit()
+      }
+  </script>
+<% } %>
 </html>
 
 

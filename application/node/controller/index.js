@@ -78,6 +78,11 @@ function getMostRecentFivePosts(request, response, callback) {
  */
 router.get('/', lazyReg.removeLazyRegistrationObject, getMostRecentFivePosts, (req, res) => {
 
+    if(req.session && req.session.tutoringPostCreated) {
+        delete req.session.tutoringPostCreated
+        res.locals.tutoringPostCreated = true
+    }
+
     let searchResult = req.searchResult;
     if (Array.isArray(searchResult) === false) {
         searchResult = [];

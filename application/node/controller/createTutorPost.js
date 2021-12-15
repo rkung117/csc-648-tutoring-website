@@ -35,8 +35,19 @@ function createTutorPost(request, response, callback) {
     // To get to this point the user must already be logged in, we get their userId from the session storage here.
     const userId = request.session.userID
 
-    // Load the image from the file buffer created by multer.
-    const postImage = request.file.buffer;
+    let postImage = null
+    if(request.file) {
+
+        postImage = request.file.buffer
+    }
+    else if(request.session.lazyRegistration.data) {
+
+        postImage = new Buffer.from(request.session.lazyRegistration.data.imageBuffer)
+        delete request.session.lazyRegistration;
+    }
+    else {
+        // TODO: return error to post page.
+    }
 
     // Attempt to create the thumbnail of the image. We set the thumbnail to be a max of 600px wide at the
     // same aspect ratio. Then we set the data as a buffer and process the rest of the request.
@@ -121,10 +132,27 @@ function getTutorPostData(request, response, callback) {
     });
 }
 
+router.post("/loginFirst", upload.single("postImage"), (req, res) => {
+
+    req.session.lazyRegistration = lazyReg.getLazyRegistrationObject("/createTutorPost", {body: req.body, imageBuffer: req.file.buffer});
+    res.redirect('/login');
+});
+
 /***
  * If the user wants to load the create tutor post page we render that here.
  */
-router.get('/', getTutorPostData, lazyReg.removeLazyRegistrationObject, (req, res) => {
+router.get('/', getTutorPostData, (req, res) => {
+
+    res.locals.lazyRegPostData = null;
+    res.locals.lazyRegImageData = null;
+    if(req.loginValidated) {
+
+        if(req.session.lazyRegistration) {
+            res.locals.lazyRegPostData = req.session.lazyRegistration.data.body
+            // res.locals.lazyRegImageData = req.session.lazyRegistration.data.imageBuffer
+            res.locals.lazyRegImageData = new Buffer.from(req.session.lazyRegistration.data.imageBuffer).toString("base64")
+        }
+    }
 
     res.render("createTutorPost", {
         courseData: req.courseData
@@ -132,18 +160,26 @@ router.get('/', getTutorPostData, lazyReg.removeLazyRegistrationObject, (req, re
 });
 
 /***
- * If the user attempts to post data we first check if they are logged in. If not we redirect them to the login page
- * for lazy registration. TODO: Save data to be set back into the form fields here.
+ * When the user posts at this point they must be logged in, if not we just
+ * return a blank page. This is a potential bug but it should never happen.
+ * 
+ * If the user is logged in and we reach this point then the post was submitted
+ * properly, we want to render the home page and display a message to the user
+ * saying thank you.
  */
-router.post('/', getTutorPostData, lazyReg.removeLazyRegistrationObject, upload.single("postImage"), (req, res) => {
+router.post('/', getTutorPostData,  upload.single("postImage"), (req, res) => {
 
     if(req.loginValidated) {
         createTutorPost(req, res, (req, res) => {
+
+            req.session.tutoringPostCreated = true
             res.redirect("/");
         })
     }
     else {
-        res.render("login");
+        res.render("createTutorPost", {
+            courseData: req.courseData
+        });
     }
 });
 
