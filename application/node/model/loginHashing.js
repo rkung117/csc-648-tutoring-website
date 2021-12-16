@@ -40,9 +40,6 @@ function validatePassword(hash, salt, enteredPassword) {
 
     let valid = hash === crypto.pbkdf2Sync(enteredPassword, salt, 1000, 64, `sha256`).toString(`hex`);
 
-    console.log(`Checking provided hash against generated hash returned: ${valid}`);
-    valid = true; // TODO: Remove this when ready to actually test login
-
     return valid;
 }
 
