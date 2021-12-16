@@ -26,12 +26,11 @@ const { database, mysql } = require('../model/mysqlConnection');
  */
 function validateUser(request, response, callback) {
 
-    // Set this data immediatly to be used by the next callback if needed.
+    // Set this data immediately to be used by the next callback if needed.
     request.loginValidated = false;
     response.locals.userLoggedIn = false;
 
     // If the session has the userID stored in it we know the user is logged in.
-    // TODO: update this to use a token when that functionality is implemented.
     if(request.session.userID) {
 
         // Update the request data to inform the next function call that the user is logged in.
@@ -76,11 +75,10 @@ function validateUserForLogin(request, response, callback) {
         `       users.first_name,\n` +
         `       users.email,\n` +
         `       users.password_hashed,\n` +
-        `       users.password_salt,\n` +
-        `       tutors.tutor_id\n` +
+        `       users.password_salt\n` +
         `FROM users\n` +
-        `LEFT OUTER JOIN tutors ON users.user_id = tutors.tutor_id\n` +
-        `WHERE users.email = '${userEmail}'`;
+        `WHERE users.email = ?`;
+    query = mysql.format(query,[userEmail]);
 
     // Perform the query on the database passing the result to our anonymous callback function.
     database.query(query, (err, result) => {
@@ -104,11 +102,6 @@ function validateUserForLogin(request, response, callback) {
                     // Set up the session data appending the first name, userID and if the user is a tutor.
                     request.session.firstName = result[0]['first_name'];
                     request.session.userID = result[0]['user_id'];
-                    request.session.userIsTutor = false;
-
-                    if(result[0]['tutor_id'] !== null) {
-                        request.session.userIsTutor = true;
-                    }
                 }
             }
         }
@@ -133,13 +126,14 @@ router.get('/', (req, res) => {
 });
 
 /**
- * Rout for post /login, when the user attempts to submit data to log in, passes data to the validation function before
- * getting called back here. If the data is valid redirects to / if not passes data to the view to show the invalid
- * username / password line.
+ * Route for posting data to /login, when the user attempts to submit data to log in, passes data to the validation
+ * function before getting called back here. If the data is valid redirects to / if not passes data to the view to
+ * show the invalid username / password error
  */
-router.post('/', validateUserForLogin, (req, res) => {
+router.post('/', validateUserForLogin, validateUser, (req, res) => {
 
     if(req.loginValidated) {
+
         if(req.session.lazyRegistration) {
             res.redirect(req.session.lazyRegistration.referringPage);
         }
