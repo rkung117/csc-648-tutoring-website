@@ -20,15 +20,11 @@ body{
 }
 
 .btn-btn-primary{
-    background-color: #FFE872;
     font-family: sans-serif;
-    border-radius: 30px;
 }
 
 .btn-btn-secondary{
-    background-color:#ECD0F3 ;
     font-family: sans-serif;
-    border-radius: 30px;
 }
 
 .modal-title{
@@ -36,12 +32,7 @@ body{
     font-size: 30px;
 }
 
-.modal-header{
-    background-color: #CCE6FC;
-}
-
 .modal-body{
-        background-color: #ADEBFF;
         font-size: 15px;
     }
 
