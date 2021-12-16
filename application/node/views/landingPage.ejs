@@ -26,7 +26,6 @@
     <title>TutorPal Landing Page</title>
     <style>
         body {
-            padding-top: 20px;
             padding-bottom: 20px;
         }
         .jumbotron {
@@ -71,7 +70,7 @@
                                 </div>
 
                                 <div class="col mt-0 px-2">
-                                    <a  class="text-left" href="/#"><h4 ><%= item['first_name']; %> <%= item['last_name']; %> </h4></a>
+                                    <a  class="text-left" href="/tutor/<%=item['first_name']; %>-<%= item['last_name']; %>-t<%= item['tutor_post_id']; %>"><h4 ><%= item['first_name']; %> <%= item['last_name']; %> </h4></a>
                                     <p  class="text-left">Is offering tutoring for:<br><%= item['major_short_name'].toUpperCase() %> <%= item['courseNumber']%> <%= item['courseTitle']%>%></p>
                                 </div>
 
