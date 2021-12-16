@@ -132,6 +132,13 @@ function getTutorPostData(request, response, callback) {
     });
 }
 
+/***
+ * This route is used when a user attempts to go to the login or register page
+ * from our tutor post page and acts as the breakpoint between the two pages.
+ * We cache their responses to the form on the tutor post page here and if 
+ * they return to the page after logging in we can fill the data back into the
+ * form so they don't have to submit data into the form again.
+ */
 router.post("/loginFirst", upload.single("postImage"), (req, res) => {
 
     req.session.lazyRegistration = lazyReg.getLazyRegistrationObject("/createTutorPost", {body: req.body, imageBuffer: req.file.buffer});
@@ -172,6 +179,8 @@ router.post('/', getTutorPostData,  upload.single("postImage"), (req, res) => {
     if(req.loginValidated) {
         createTutorPost(req, res, (req, res) => {
 
+            // TODO: Check here if the create tutor post function returned an
+            // error and if so handle that here.
             req.session.tutoringPostCreated = true
             res.redirect("/");
         })

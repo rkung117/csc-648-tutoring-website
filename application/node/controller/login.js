@@ -128,7 +128,7 @@ router.get('/', (req, res) => {
 /**
  * Route for posting data to /login, when the user attempts to submit data to log in, passes data to the validation
  * function before getting called back here. If the data is valid redirects to / if not passes data to the view to
- * show the invalid username / password line. <- TODO:
+ * show the invalid username / password error
  */
 router.post('/', validateUserForLogin, validateUser, (req, res) => {
 
