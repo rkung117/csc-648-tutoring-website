@@ -36,13 +36,13 @@
               <div class="row">
                 
                 <div class="form-floating mb-3 col-md-6">
-                  <select class="form-select" id="majorShortName" name="majorShortName" aria-label="Floating label select example" onchange="updateCoursesBasedOnMajor(value)" required autofocus>
+                  <select class="form-select" id="majorShortName" name="majorShortName" aria-label="Floating label select example" onchange="updateCoursesBasedOnMajor(value)" autofocus>
                     <option value="">Select One</option>
                     <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
                       <option value="<%= searchCategoriesShortName[i]; %>" <% if(lazyRegPostData && searchCategoriesShortName[i] === lazyRegPostData['majorShortName']) { %> selected <% } %> ><%= searchCategoriesLongName[i];%></option>
                     <%}%>
                   </select>
-                  <label for="majorShortName">Major<span class="text-danger">*</span></label>
+                  <label for="majorShortName">Filter Courses by major</label>
                   
                 </div>
                 <div class="form-floating mb-3 col-md-6">
@@ -62,7 +62,7 @@
                       <% } %>
                     <% } %>
                   </select>
-                  <label for="courseSelect">Courses</label>
+                  <label for="courseSelect">Course<span class="text-danger">*</span></label>
                 </div>
                 <div class="form-floating mb-3">
                   <textarea class="form-control rounded-0" id="postDetails" name="postDetails" style="height: 150px" required autofocus><% if(lazyRegPostData) { %><%=lazyRegPostData['postDetails']%><% } %></textarea>
