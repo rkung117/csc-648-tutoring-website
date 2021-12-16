@@ -82,37 +82,32 @@ function search(request, response, callback) {
     let searchTerm = request.query.search;
     let category = request.query.category;
 
-    // Set default page number to 0 as we use the 0 index to calculate array
-    // indices.
-    let pageNum = 0;
-    if(request.query.page) {
-
-        // if the request has the page value we want to get the page value passed
-        // from the user to overwrite our default above. Page 1 wants page index 0
-        // and page 2 wants index 1 so we set the pageNum - 1 here.
-        pageNum = request.query.page - 1;
-    }
+    // Append the actual data to the response.
+    response.locals.searchTerm = searchTerm;
+    response.locals.category = category;
 
     // Create the query based on the data passed. By default we return everything from the table.
-    let query = `SELECT users.first_name,\n` +
-                `       users.last_name,\n` +
-                `       tutor_post.tutor_post_id,\n` +
-                `       tutor_post.user_id,\n` +
-                `       tutor_post.post_thumbnail AS thumbnail,\n` +
-                `       tutor_post.post_details,\n` +
-                `       tutor_post.post_created,\n` +
-                `       tutor_post.admin_approved,\n` +
-                `       tutor_post.tutoring_course_id,\n` +
-                `       course.number AS courseNumber,\n` +
-                `       course.title AS courseTitle,\n` +
-                `       major.major_long_name,\n` +
-                `       major.major_short_name\n` +
-                `FROM tutor_post\n` +
-                `JOIN users ON tutor_post.user_id = users.user_id\n` +
-                `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
-                `JOIN major ON course.major = major.major_id\n` +
-                `WHERE tutor_post.admin_approved = 1\n` +
-                `ORDER BY tutor_post.post_created DESC`;
+    let allPostsQuery = `SELECT users.first_name,\n` +
+                        `       users.last_name,\n` +
+                        `       tutor_post.tutor_post_id,\n` +
+                        `       tutor_post.user_id,\n` +
+                        `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                        `       tutor_post.post_details,\n` +
+                        `       tutor_post.post_created,\n` +
+                        `       tutor_post.admin_approved,\n` +
+                        `       tutor_post.tutoring_course_id,\n` +
+                        `       course.number AS courseNumber,\n` +
+                        `       course.title AS courseTitle,\n` +
+                        `       major.major_long_name,\n` +
+                        `       major.major_short_name\n` +
+                        `FROM tutor_post\n` +
+                        `JOIN users ON tutor_post.user_id = users.user_id\n` +
+                        `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
+                        `JOIN major ON course.major = major.major_id\n` +
+                        `WHERE tutor_post.admin_approved = 1\n` +
+                        `ORDER BY tutor_post.post_created DESC`;
+
+    let query = allPostsQuery;
     if(searchTerm !== '' && category !== '') {
         query = `SELECT users.first_name,\n` +
                 `       users.last_name,\n` +
@@ -192,7 +187,7 @@ function search(request, response, callback) {
         request.searchTerm = "";
         request.category = "";
         request.images = [];
-        request.pageNum = pageNum;
+        request.pageNum = 1;
         request.upperBound = "";
         request.lowerBound = "";
 
@@ -201,57 +196,78 @@ function search(request, response, callback) {
         if(err) {
             console.log(`Encountered an error when performing query: ${query}`);
         }
+        else if(result.length > 0){
+            extractDataFromQuery(result, request, response, callback)
+        }
         else {
-
-            // We have received data from the database.
-            // Extract all of the images from the result and convert them from mysql blob to a viewable image.
-            let thumbnails = [];
-            for(let i = 0; i < result.length; i++) {
-
-                let thumbnail = result[i]['thumbnail'];
-                if(thumbnail !== null) {
-
-                    thumbnail = Buffer.from(thumbnail.toString('base64'));
-                    thumbnails.push(thumbnail);
+            response.locals.noResultsFound = true
+            database.query(allPostsQuery, (err, result) => {
+                if(err) {
+                    console.log(`Encountered an error when performing query: ${query}`);
                 }
+                extractDataFromQuery(result, request, response, callback)
+            });
+        }
+    });
+}
 
-                result[i]['post_details_previewed'] = false;
-                if(result[i]['post_details'].length > searchPostPreviewLength) {
-                    result[i]['post_details'] = result[i]['post_details'].slice(0, searchPostPreviewLength);
-                    result[i]['post_details_previewed'] = true;
-                }
+function extractDataFromQuery(result, request, response, callback) {
 
-                let newDate = new Date(result[i]['post_created'] - result[i]['post_created'].getTimezoneOffset()*60*1000);
-                result[i]['post_created'] = date.format(newDate,'ddd, MMM DD YYYY HH:mm A')
-            }
+    // Set default page number to 0 as we use the 0 index to calculate array
+    // indices.
+    let pageNum = 0;
+    if(request.query.page) {
 
-            // Append the actual data to the request.
-            request.searchTerm = searchTerm;
-            request.category = category;
+        // if the request has the page value we want to get the page value passed
+        // from the user to overwrite our default above. Page 1 wants page index 0
+        // and page 2 wants index 1 so we set the pageNum - 1 here.
+        pageNum = request.query.page - 1;
+    }
+    request.pageNum = pageNum;
 
-            // Since pageNum is always 0 indexed and always has a int value
-            // set above we can calculate what items we want to display here.
-            // if pageNum is 0 we get indices 0 through 4, etc.
-            //
-            // TODO: Make sure the page number indices is valid, if user attempts
-            // to load an invalid page number we'll hit a index out of bound error here.
-            request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
-            request.thumbnails = thumbnails.slice(pageNum * 5, (pageNum * 5) + 5);
+    // We have received data from the database.
+    // Extract all of the images from the result and convert them from mysql blob to a viewable image.
+    let thumbnails = [];
+    for(let i = 0; i < result.length; i++) {
 
-            request.totalNum = result.length;
-            request.totalPages = Math.floor(request.totalNum / 5)
+        let thumbnail = result[i]['thumbnail'];
+        if(thumbnail !== null) {
 
-            request.upperBound = (pageNum * 5) + 5;
-
-            if((pageNum * 5) + 5 > result.length) {
-                request.upperBound = result.length
-            }
-
-            request.lowerBound = (pageNum * 5) + 1;
+            thumbnail = Buffer.from(thumbnail.toString('base64'));
+            thumbnails.push(thumbnail);
         }
 
-        callback();
-    });
+        result[i]['post_details_previewed'] = false;
+        if(result[i]['post_details'].length > searchPostPreviewLength) {
+            result[i]['post_details'] = result[i]['post_details'].slice(0, searchPostPreviewLength);
+            result[i]['post_details_previewed'] = true;
+        }
+
+        let newDate = new Date(result[i]['post_created'] - result[i]['post_created'].getTimezoneOffset()*60*1000);
+        result[i]['post_created'] = date.format(newDate,'ddd, MMM DD YYYY HH:mm A')
+    }
+
+    // Since pageNum is always 0 indexed and always has a int value
+    // set above we can calculate what items we want to display here.
+    // if pageNum is 0 we get indices 0 through 4, etc.
+    //
+    // TODO: Make sure the page number indices is valid, if user attempts
+    // to load an invalid page number we'll hit a index out of bound error here.
+    request.searchResult = result.slice(pageNum * 5, (pageNum * 5) + 5);
+    request.thumbnails = thumbnails.slice(pageNum * 5, (pageNum * 5) + 5);
+
+    request.totalNum = result.length;
+    request.totalPages = Math.ceil(request.totalNum / 5)
+
+    request.upperBound = (pageNum * 5) + 5;
+
+    if((pageNum * 5) + 5 > result.length) {
+        request.upperBound = result.length
+    }
+
+    request.lowerBound = (pageNum * 5) + 1;
+
+    callback()
 }
 
 /**
@@ -276,9 +292,7 @@ router.get('/', lazyReg.removeLazyRegistrationObject, search, (req, res) => {
     res.render("search", {
         results: 1,
         pageNum: req.pageNum,
-        searchTerm: req.searchTerm,
         searchResult: searchResult,
-        category: req.category,
         images: req.thumbnails,
         totalNum: req.totalNum,
         upperBound: req.upperBound,
