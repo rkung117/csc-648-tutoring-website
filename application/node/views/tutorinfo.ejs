@@ -42,17 +42,36 @@
                     </div>
                 </div>
                 <div class="main container text-center pt-3">
-                    <form id="sendMessageForm" <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post" class="d-flex my-2">
-                                     
-                        <input type="text" id="messageText" class="form-control me-3" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText; %>" <% } %>>
-                        <% if(userLoggedIn === false) { %>
-                        <% // This line adds a hidden field to the page to set what page to return to after logging in. This is a simple semi-hacky way of accomplishing this task.%>
-                            <input type="hidden" id="referringTutorPage" class="form-control border=0  rounded-0" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']; %>-<%= tutorData['last_name']; %>-t<%= tutorData['tutor_post_id']; %>">
-                        <% // Add a button to show the login modal..%>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target= "#login-modal">Contact Me!</button>                        
-                        <% } else { %>
-                            <button type="submit" class="btn btn-primary">Contact Me!</button>                        
-                        <% } %>
+                    <form id="sendMessageForm" <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post">
+                        
+                        <div class="container pt-0">
+                            <div class="row">
+                                <div class="col-12">
+                                    <b>
+                                        TutorPal does not handle communication between students and tutors. Make sure to include your contact information in your message.
+                                    </b>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    <div class="form-floating">
+                                        <textarea class="form-control rounded-0" id="messageText" name="messageText" style="height: 150px" required autofocus><% if(typeof(messageText) !== 'undefined') { %> <%= messageText; %> <% } %></textarea>
+                                        <label for="messageText" >Write your message here.</label>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <% if(userLoggedIn === false) { %>
+                                        <% // This line adds a hidden field to the page to set what page to return to after logging in. This is a simple semi-hacky way of accomplishing this task.%>
+                                            <input type="hidden" id="referringTutorPage" class="form-control border=0  rounded-0" name="referringTutorPage" value="/tutor/<%= tutorData['first_name']; %>-<%= tutorData['last_name']; %>-t<%= tutorData['tutor_post_id']; %>">
+                                        <% // Add a button to show the login modal..%>
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target= "#login-modal">Contact Me!</button>                        
+                                        <% } else { %>
+                                            <button type="submit" class="btn btn-primary">Contact Me!</button>                        
+                                        <% } %>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <input type="text" id="messageText" class="form-control me-3" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText; %>" <% } %>> -->
                     </form>
                 </div>    
             </div>
