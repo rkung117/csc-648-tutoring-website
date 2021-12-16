@@ -58,6 +58,7 @@
                       <th scope="col" class="col-7">Message:</th>
                       <th scope="col" class="col-2">From:</th>                      
                       <th scope="col" class="col-3">Date:</th>
+                      <th scope="col" class="col-2">Status:</th>
                       <th scope="col" class="col-1 text-center">Select</th>
                     </tr>
                   </thead>
@@ -78,6 +79,11 @@
                         <td>
                           <% if(messages[i]['status'] === "Unread") { %> <b> <% } %>
                           <%= messages[i]['dateTime']; %>
+                          <% if(messages[i]['status'] === "Unread") { %> </b> <% } %>
+                        </td>
+                        <td>
+                          <% if(messages[i]['status'] === "Unread") { %> <b> <% } %>
+                            <%= messages[i]['status'] %>
                           <% if(messages[i]['status'] === "Unread") { %> </b> <% } %>
                         </td>
                         <td>      
