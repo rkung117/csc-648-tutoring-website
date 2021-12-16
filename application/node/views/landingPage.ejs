@@ -38,9 +38,8 @@
 <%- include('partials/header') %>
 
 
-
 <div class="container text-center px-4 pt-0">
-    <div class="row gx-5">
+    <div class="row gx-5 pt-0">
         <div class="col">
             <div class="p-1 border bg-light">
                 <div class="p-5 mb-4 bg-light rounded-3">
@@ -73,7 +72,7 @@
 
                                 <div class="col mt-0 px-2">
                                     <a  class="text-left" href="/#"><h4 ><%= item['first_name']; %> <%= item['last_name']; %> </h4></a>
-                                    <p  class="text-left">Is offering tutoring for:<%= item['major_short_name'].toUpperCase() %> <%= item['courseNumber']%> <%= item['courseTitle']%>%></p>
+                                    <p  class="text-left">Is offering tutoring for:<br><%= item['major_short_name'].toUpperCase() %> <%= item['courseNumber']%> <%= item['courseTitle']%>%></p>
                                 </div>
 
                                 <div class="flex-grow-0 pt-3">

@@ -30,19 +30,18 @@
  
     <div class="section">
         <div class="container pt-1">
-            <div class="content-section pt-5">
-                <div class="about-text container">
-                    <div class="row">
-                        <h5><%= tutorData['first_name'];%> <%= tutorData['last_name'];%> is offering tutoring for</h5>
-                    </div>
-                    <div class="row">
-                        <h5><%= tutorData['major_short_name'].toUpperCase() %> <%= tutorData['courseNumber']%> <%= tutorData['courseTitle']%></h5>
+            <div class="content-section pt-5 mx-3">
+                <div class="about-text container pt-3 font-italic">
+                    <div class="row"><h1><u><strong> Tutor Details!</strong></u></h1></div>
+                    <div class="row pt-5 ">
+                        <h5><strong><%= tutorData['first_name'];%>  is offering tutoring for : </strong> 
+                        <em><u><%= tutorData['major_short_name'].toUpperCase() %> <%= tutorData['courseNumber']%> <%= tutorData['courseTitle']%></u></em></h5>
                     </div>
                     <div class="row py-4">
-                        <p><%= tutorData['post_details'];%></p>
+                        <h3><u>Post Description:</u></h3><p><%= tutorData['post_details'];%></p>
                     </div>
                 </div>
-                <div class="main container text-center">
+                <div class="main container text-center pt-3">
                     <form id="sendMessageForm" <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post" class="d-flex my-2">
                                      
                         <input type="text" id="messageText" class="form-control me-3" name="messageText" <% if(typeof(messageText) !== 'undefined') { %> value="<%= messageText; %>" <% } %>>
@@ -58,15 +57,15 @@
                 </div>    
             </div>
             <div class="image1-section pt-2">
-                    <div class="img-fluid rounded mx-auto d-block">
+                    <div class="img-fluid rounded mx-auto d-block pt-5">
                         <% if (image !== undefined) { %>
-                            <img class="search_image" src="data:image/jpeg;base64,  <%- image; %>">
+                            <img class="search_image mx-5" src="data:image/jpeg;base64,  <%- image; %>">
                         <% } else { %>
                             <div class="search_image"></div>
                         <% } %>
                     </div>
-                    <div class="about-text ps-3">
-                        <h3><%= tutorData['first_name'];%> <%= tutorData['last_name'];%></h3>
+                    <div class="about-text pt-2">
+                        <h3 class="mx-5"><u><%= tutorData['first_name'];%> <%= tutorData['last_name'];%></u></h3>
                     </div>
             </div> 
         </div>
@@ -120,8 +119,8 @@
                 </div>
                 <div class="modal-body">
                     <p>To contact this tutor you must first log in. Would you like to log in now?</p>
-                    <button type="button" class="btn-btn-secondary btn-lg p-2" data-dismiss="modal" onclick="lazyLogin()">Log In</button>
-                    <button class="btn-btn-primary btn-lg p-2" data-bs-dismiss="modal">No</button>
+                    <button type="button" class=" btn-lg p-2" data-dismiss="modal" onclick="lazyLogin()">Log In</button>
+                    <button class=" btn-lg p-2" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
