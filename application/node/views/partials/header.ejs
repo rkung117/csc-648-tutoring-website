@@ -3,7 +3,7 @@
         <div class="row w-100 my-0 mt-0">
             <div class="col-4 pl-lg-0 ">
             <ul class="navbar-nav text-center">
-                <li id="LogoDiv" class="nav-item"><a class="navbar-brand " href="/"><img src="/img/TutorPal.png" alt="..." height="50"></a></li>
+                <li id="LogoDiv" class="nav-item"><a class="navbar-brand " href="/"><img src="/img/TutorPal.png" alt="..." height="60" ></a></li>
                 <li id="AboutDiv" class="nav-item"><a class="nav-link active" aria-current="page" href="/about">About</a></li>
                 <li id="PostDiv" class="nav-item"><a class="nav-link active" aria-current="page" href="/createTutorPost">Offer Tutoring</a></li>
             </ul>
@@ -22,7 +22,7 @@
                             ><%= searchCategoriesLongName[i]; %></option>
                         <% } %>
                     </select>
-                    <input class="form-control me-2" id="search" name="search"
+                    <input class="form-control me-2" id="search" pattern="{0,40}" name="search"
                         <% if(typeof(searchTerm) !== 'undefined') { %>
                                     value="<%= searchTerm ;%>"
                         <% } else { %>
@@ -68,3 +68,7 @@
         </div>
     </div>
 </nav>
+<br>
+    <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
+    <div style="text-align:center;"><strong> Fall 2021 | Section 3 | Team 3</strong></div>
+<br>

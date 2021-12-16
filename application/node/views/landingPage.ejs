@@ -37,10 +37,12 @@
 <body>
 <%- include('partials/header') %>
 
-<div class="container text-center px-4">
+
+
+<div class="container text-center px-4 pt-0">
     <div class="row gx-5">
         <div class="col">
-            <div class="p-3 border bg-light">
+            <div class="p-1 border bg-light">
                 <div class="p-5 mb-4 bg-light rounded-3">
                     <div class="container-fluid py-5">
                         <h1 class="display-1">TutorPal</h1>
@@ -55,7 +57,7 @@
             <div class="p-3 border bg-light">
                 <p class="col-md-12 fs-4">Recently Added Tutors</p>
                 <div id="result">
-                    <div class="flex-search-results">
+                    <div class="flex-search-results ">
 
                         <% for(let i = 0; i < searchResult.length; i++) { %>
                             <div class="flex-search-item-no-outline">
@@ -70,9 +72,8 @@
                                 </div>
 
                                 <div class="col mt-0 px-2">
-                                    <a href="/#"><h1><%= item['first_name']; %> <%= item['last_name']; %> </h1></a>
-                                    <h5>Is offering tutoring for:</h5>
-                                    <h5><%= item['major_short_name'].toUpperCase() %> <%= item['courseNumber']%> <%= item['courseTitle']%>%></h5>
+                                    <a href="/#"><h4><%= item['first_name']; %> <%= item['last_name']; %> </h4></a>
+                                    <h5>Is offering tutoring for:<%= item['major_short_name'].toUpperCase() %> <%= item['courseNumber']%> <%= item['courseTitle']%>%></h5>
                                 </div>
 
                                 <div class="flex-grow-0">
@@ -88,7 +89,7 @@
             </div>
         </div>
     </div>
-    <%- include('partials/footer') %>
+   
 </div>
 
 <!-- Option 2: Separate Popper and Bootstrap JS -->
