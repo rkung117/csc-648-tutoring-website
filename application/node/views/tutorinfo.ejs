@@ -32,7 +32,7 @@
         <div class="container pt-1">
             <div class="content-section pt-5 mx-3">
                 <div class="about-text container pt-3 font-italic">
-                    <div class="row"><h1><u><strong> Tutor Details!</strong></u></h1></div>
+                    <div class="row "><h1><u><strong> Tutor Details!</strong></u></h1></div>
                     <div class="row pt-5 ">
                         <h5><strong><%= tutorData['first_name'];%>  is offering tutoring for : </strong> 
                         <em><u><%= tutorData['major_short_name'].toUpperCase() %> <%= tutorData['courseNumber']%> <%= tutorData['courseTitle']%></u></em></h5>
@@ -41,7 +41,7 @@
                         <h3><u>Post Description:</u></h3><p><%= tutorData['post_details'];%></p>
                     </div>
                 </div>
-                <div class="main container text-center pt-3">
+                <div class="main container text-center pt-0">
                     <form id="sendMessageForm" <% if(userLoggedIn === false) { %> action="/tutor/contactlogin" <% } %> method="post">
                         
                         <div class="container pt-0">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                             <div class="row align-items-center">
-                                <div class="col-9">
+                                <div class="col-9 pt-3">
                                     <div class="form-floating">
                                         <textarea class="form-control rounded-0" id="messageText" name="messageText" style="height: 150px" required autofocus><% if(typeof(messageText) !== 'undefined') { %> <%= messageText; %> <% } %></textarea>
                                         <label for="messageText" >Write your message here.</label>
@@ -75,7 +75,7 @@
                     </form>
                 </div>    
             </div>
-            <div class="image1-section pt-2">
+            <div class="image1-section pt-5">
                     <div class="img-fluid rounded mx-auto d-block pt-5">
                         <% if (image !== undefined) { %>
                             <img class="search_image mx-5" src="data:image/jpeg;base64,  <%- image; %>">
@@ -84,7 +84,7 @@
                         <% } %>
                     </div>
                     <div class="about-text pt-2">
-                        <h3 class="mx-5"><u><%= tutorData['first_name'];%> <%= tutorData['last_name'];%></u></h3>
+                        <h3 class="mx-5"><u><em><%= tutorData['first_name'];%> <%= tutorData['last_name'];%></em></u></h3>
                     </div>
             </div> 
         </div>
