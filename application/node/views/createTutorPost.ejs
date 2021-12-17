@@ -39,7 +39,9 @@
                   <select class="form-select" id="majorShortName" name="majorShortName" aria-label="Floating label select example" onchange="updateCoursesBasedOnMajor(value)" autofocus>
                     <option value="">Select One</option>
                     <% for(let i = 0; i < searchCategoriesShortName.length; i++) { %>
-                      <option value="<%= searchCategoriesShortName[i]; %>" <% if(lazyRegPostData && searchCategoriesShortName[i] === lazyRegPostData['majorShortName']) { %> selected <% } %> ><%= searchCategoriesLongName[i];%></option>
+                      <% if(searchCategoriesShortName[i] !== "undc") { %>
+                        <option value="<%= searchCategoriesShortName[i]; %>" <% if(lazyRegPostData && searchCategoriesShortName[i] === lazyRegPostData['majorShortName']) { %> selected <% } %> ><%= searchCategoriesLongName[i];%></option>
+                      <% } %>
                     <%}%>
                   </select>
                   <label for="majorShortName">Filter Courses by major</label>
@@ -63,6 +65,11 @@
                     <% } %>
                   </select>
                   <label for="courseSelect">Course<span class="text-danger">*</span></label>
+                </div>
+                <div class="col-12 pt-3">
+                  <b>
+                    Make sure to include information about your tutoring credentials and when you are available for tutoring in your post description.
+                  </b>
                 </div>
                 <div class="form-floating mb-3">
                   <textarea class="form-control rounded-0" id="postDetails" name="postDetails" style="height: 150px" required autofocus><% if(lazyRegPostData) { %><%=lazyRegPostData['postDetails']%><% } %></textarea>
