@@ -10,66 +10,101 @@
  * @since  0.0.1
  */
 
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
-const searchModel = require('../model/search');
+const lazyReg = require('../model/lazyRegistration');
+const { database, mysql } = require("../model/mysqlConnection");
 
-router.get('/', searchModel.searchCategories, (req, res) => {
-    res.render("landingPage");
-});
+function getMostRecentFivePosts(request, response, callback) {
 
-// Right now our root path is rendered here, we first pass the call to searchCategories to retrieve the categories from
-// the database. Then we pass to the search method to actually search if we have data to search with. Search and
-// searchCategories are both mart of the model which hold code that performs the interaction with the SQL database.
-// The searchModel method then calls the final callback (anonymous function here) that renders the data for the client.
-router.get('/search', searchModel.searchCategories, searchModel.search, (req, res) => {
+    let query = `SELECT users.first_name,\n` +
+                `       users.last_name,\n` +
+                `       tutor_post.tutor_post_id,\n` +
+                `       tutor_post.user_id,\n` +
+                `       tutor_post.post_thumbnail AS thumbnail,\n` +
+                `       tutor_post.admin_approved,\n` +
+                `       tutor_post.tutoring_course_id,\n` +
+                `       tutor_post.post_created,\n`+
+                `       course.number AS courseNumber,\n` +
+                `       course.title AS courseTitle,\n` +
+                `       major.major_long_name,\n` +
+                `       major.major_short_name\n` +
+                `FROM tutor_post\n` +
+                `JOIN users ON tutor_post.user_id = users.user_id\n` +
+                `JOIN course ON tutor_post.tutoring_course_id = course.course_id\n` +
+                `JOIN major ON course.major = major.major_id\n` +
+                `WHERE tutor_post.admin_approved = 1\n`+
+                `ORDER BY tutor_post.post_created DESC`;
 
-    // If the search result is not an array we create an empty array
-    // to keep from type errors in the template. This is temporary
-    // because of loading the index page into a black VP template page
-    // when we have a real search bar across the site this will be removed.
-    let searchResult = req.searchResult;
-    if (Array.isArray(searchResult) === false) {
-        searchResult = []
+    // Perform the query on the database passing the result to our anonymous callback function.
+    database.query(query, (err, result) => {
+
+        // Append default data to the request before calling callback.
+        request.searchResult = "";
+        request.images = [];
+
+        // If we hit an error with the mysql connection or query we just return the above empty data
+        // since we have no data to display from the database. This should never happen in production.
+        if(err) {
+            console.log(`Encountered an error when performing query: ${query}`);
+        }
+        else {
+
+            // We have received data from the database.
+            // Extract all of the images from the result and convert them from mysql blob to a viewable image.
+            let thumbnails = [];
+            for(let i = 0; i < result.length; i++) {
+
+                let thumbnail = result[i]['thumbnail'];
+                if(thumbnail !== null) {
+                    thumbnail = Buffer.from(thumbnail.toString('base64'));
+                    thumbnails.push(thumbnail);
+                }
+            }
+
+            // Append the actual data to the request.
+            request.searchResult = result.slice(0, 5); // Only take the first 5 items from the results found.
+            request.thumbnails = thumbnails.slice(0, 5); // Only take the first 5 items from the results found.
+        }
+
+        callback();
+    });
+}
+
+/***
+ * This function is called when the user loads to the home page. It first calls the getMostRecentFivePosts and then
+ * displays the home page with the results found.
+ */
+router.get('/', lazyReg.removeLazyRegistrationObject, getMostRecentFivePosts, (req, res) => {
+
+    if(req.session && req.session.tutoringPostCreated) {
+        delete req.session.tutoringPostCreated
+        res.locals.tutoringPostCreated = true
     }
 
-    // Render the vertical prototype template, passing data from
-    // model
-    res.render("search", {
+    let searchResult = req.searchResult;
+    if (Array.isArray(searchResult) === false) {
+        searchResult = [];
+    }
+
+    res.render("landingPage", {
         results: 1,
-        searchTerm: req.searchTerm,
         searchResult: searchResult,
-        category: req.category,
-        images: req.images
+        images: req.thumbnails
     });
 });
 
-router.get('/login', searchModel.searchCategories, (req, res) => {
-
-    res.render("login");
+/**
+ * When a user hits the logout button the session data is destroyed and then the user is redirected to /
+ */
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if(err) {
+            return console.log(err);
+        }
+        res.redirect('/');
+    })
 });
 
-router.get('/dashboard', searchModel.searchCategories, (req, res) => {
-
-    res.render("studentDashboard");
-});
-
-router.get('/register', searchModel.searchCategories, (req, res) => {
-
-    res.render("studentRegister");
-});
-
-router.get('/tutorRegister', searchModel.searchCategories, (req, res) => {
-
-    res.render("tutorRegister");
-});
-
-router.get('/tutorDashboard', searchModel.searchCategories, (req, res) => {
-
-    res.render("tutorDashboard");
-});
-router.get('/tutorinfo',  searchModel.searchCategories, (req, res) => {
-    res.render("tutorinfo")
-});
 module.exports = router;

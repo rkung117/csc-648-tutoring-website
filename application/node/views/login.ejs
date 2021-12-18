@@ -1,6 +1,16 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-VK8RNJL01F"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-VK8RNJL01F');
+    </script>
+    
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,32 +25,29 @@
   <body>
 
     <%- include('partials/header') %>
-    <br>
-    <div style="text-align:center;"><strong> Software Engineering Project CSC 648-848, Fall 2021 For Demonstration Only</strong></div>
-    <div style="text-align:center;"><strong> Fall 2021 | Section 3 | Team 3</strong></div>
-    <br>
+    
     <section class="container">
-      <div class="row content d-flex justify-content-center  mt-5">
+      <div class="row content d-flex justify-content-center  ">
         <div class="col-md-5 mt-0">
           <h3 class="h3 mb-4 text-center ">Login</h3>
           <div class="text-center box shadow bg-white p-4">
-            <form class="mb-3">
+            <form action="/login" class="mb-3" method="post">
               <img class="mt-4 mb-4 img-thumbnail img-responsive" src="https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png" style="height: 15%  ; width: 15%; margin: auto;"  alt="Login logo">
                 <div class="form-floating mb-3">
-                  <input type="email" class="form-control rounded-0" id="floatingInput" placeholder="Email Address" required autofocus>
-                  <label for="floatingInput">Email Address</label>
+                  <input type="email" class="form-control rounded-0" id="userEmail" name="userEmail" placeholder="Email Address" required autofocus>
+                  <label for="userEmail">Email Address</label>
                 </div>
                 <div class="form-floating mb-3">
-                  <input type="password" class="form-control rounded-0" id="floatingPassword" placeholder="password" required autofocus>
-                  <label for="floatingPassword">Password</label>
+                  <input type="password" class="form-control rounded-0" id="enteredPassword" name="enteredPassword" placeholder="password" required autofocus>
+                  <label for="enteredPassword">Password</label>
                 </div>
                 <div class="mb-3 ">
-                  <input class="form-check-input" type="checkbox" value="remember-me" id="autoSizingCheck2" required>
+                  <input class="form-check-input" type="checkbox" value="remember-me" id="autoSizingCheck2">
                   <label class="form-check-label" for="remember">Remember Me</label>
                   <a href="#" title="Forgot Password" class="text-decoration-none">Forgot Password?</a>
                 </div>
                 <div class="form-group d-grid gap-2 mb-3">
-                  <button type="submit" class="btn btn-dark btn-lg border=0 rounded-0">Login</button>
+                  <button type="submit" class="btn btn-primary btn-lg border=0 rounded-0">Login</button>
                 </div>
               
                 <div class="margin-top20 text-center">
@@ -61,4 +68,49 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
    
   </body>
+  <% if(typeof(userRegistered) !== 'undefined' && userRegistered === true) { %>
+  <div class="modal fade" id="registered-modal" tabindex="-1" aria-labelledby="modal-title"
+    aria-hideen="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Congratulations!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Thank you for registering! Please log in.</p>
+          <button class=" btn-lg p-2" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (()=>{
+        let registrationConfirmation = new bootstrap.Modal(document.getElementById('registered-modal'))
+        registrationConfirmation.show()
+    })()
+  </script>
+  <% } else if(typeof(invalidAttempt) !== 'undefined' && invalidAttempt === true) {%>
+    <div class="modal fade" id="registered-modal" tabindex="-1" aria-labelledby="modal-title"
+    aria-hideen="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-title">Sorry!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>The username or password entered was not valid. Please try again.</p>
+          <button class=" btn-lg p-2" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (()=>{
+        let registrationConfirmation = new bootstrap.Modal(document.getElementById('registered-modal'))
+        registrationConfirmation.show()
+    })()
+  </script>
+  <% } %>
 </html>

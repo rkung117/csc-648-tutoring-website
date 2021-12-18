@@ -19,6 +19,23 @@ body{
     background-image: linear-gradient(90deg, #e5edfd, #d9d2e6);
 }
 
+.btn-btn-primary{
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-btn-secondary{
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-title{
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+}
+
+.modal-body{
+        font-size: 15px;
+    }
+
 .about-item .team-item .row .team-details .btn {
     font-size: 25px;
 }
@@ -29,7 +46,7 @@ body{
     padding-top: 100px;
 }
 .content-section{
-    float: left;
+    float: right;
     width: 55%;
 
 }
@@ -44,11 +61,16 @@ body{
     
 }
 .image-section{
-float: right;
+float: left;
 width: 40%;
 }
 .image-section img{
     width: 60%;
+    height: auto;
+}
+
+.image1-section img{
+    width: 20%;
     height: auto;
 }
 .content-section .title{
@@ -70,6 +92,7 @@ width: 40%;
 .content-section .content .button a{
     margin-top: 90px;
 }
+
 
 /* .content-section .content .button a{
     background-color: #3d3d3d;
@@ -125,5 +148,5 @@ width: 40%;
     }
     .content-section .social{
     margin-top: 70px 90px;
-}   
+    } 
 }

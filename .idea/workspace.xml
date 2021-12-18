@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4344e5fd-17d6-4e1e-976b-ab25546d6081" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/node/views/landingPage.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/application/node/views/landingPage.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/node/controller/search.js" beforeDir="false" afterPath="$PROJECT_DIR$/application/node/controller/search.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,8 +23,15 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/application/node/model/search.js" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/node/controller/index.js" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/application/node/app.js" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -47,6 +54,7 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -66,6 +74,8 @@
       <workItem from="1636320203409" duration="2766000" />
       <workItem from="1636745891150" duration="32000" />
       <workItem from="1636746141333" duration="6248000" />
+      <workItem from="1638647292578" duration="4137000" />
+      <workItem from="1639169981229" duration="23360000" />
     </task>
     <servers />
   </component>
