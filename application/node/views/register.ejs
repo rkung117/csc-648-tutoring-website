@@ -54,7 +54,7 @@
                   </div>
 
                   <div class="form-floating mb-3">
-                    <input type="email" name="email" class="form-control rounded-0" id="email" placeholder="Email Address" pattern="[[a-zA-Z0-9._]*@[[a-zA-Z0-9._]*\.(sfsu\.edu)$" oninvalid="setCustomValidity('Please enter SFSU email!')" onchange="try{setCustomValidity('')}catch(e){}" required autofocus>
+                    <input type="email" name="email" class="form-control rounded-0" id="email" placeholder="Email Address" pattern="^[a-zA-Z0-9._]*@[[a-zA-Z0-9._]*\.?(sfsu\.edu)$" oninvalid="setCustomValidity('Please enter SFSU email!')" onchange="try{setCustomValidity('')}catch(e){}" required autofocus>
                     <label for="email">SFSU Email Address<span class="text-danger">*</span></label>
                   </div>
                   <div class="form-floating mb-3 col-md-12">
