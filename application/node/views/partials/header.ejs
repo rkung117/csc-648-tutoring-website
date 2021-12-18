@@ -10,10 +10,12 @@
                 <div id="AboutDiv" class="nav-item"><a class="nav-link active" aria-current="page" href="/about">
                         <h5 class="p-2">About</h5>
                     </a></div>
-                <div id="PostDiv" class="nav-item"><a class="nav-link col-5 active" aria-current="page"
+                <div id="PostDiv" class="nav-item col-8">
+                    <a class="nav-link  active" aria-current="page"
                         href="/createTutorPost">
                         <h5 class="p-2">Offer Tutoring</h5>
-                    </a></div>
+                    </a>
+                </div>
             </div>
             <div class="navbar-nav text-center">
                 <form action="/search" class="d-flex my-2">
@@ -38,7 +40,7 @@
                     <button class="btn btn-outline-primary" type="submit">Search</button>
                 </form>
             </div>
-            <div class="navbar-nav col-3 col-md-3 justify-content-end">
+            <div class="navbar-nav col justify-content-end">
                 <% if(userLoggedIn===false) { %>
                     <div id="Signup" class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/register">
