@@ -28,6 +28,7 @@ function createTutorPost(request, response, callback) {
     // Ge the course number from the posted data. We do not need the major selected by the
     // user as we just use the major linked to the course in the database.
     const courseNumber = request.body.courseNumber;
+    const majorShortName = request.body.majorShortName;
 
     // This is the string of text inserted by the user to be used as the main body of the tutor post.
     const postDetails = request.body.postDetails;
@@ -57,30 +58,44 @@ function createTutorPost(request, response, callback) {
     .then(postThumbnail => {
         request.postCreated = false;
 
-        const courseIdQuery = "SELECT course_id FROM course WHERE number = ?";
-        const courseIdQueryFormatted = mysql.format(courseIdQuery,[courseNumber]);
-
-        database.query(courseIdQueryFormatted, (err, result) => {
+        const majorIdQuery = "SELECT major_id FROM major WHERE major_short_name = ?";
+        const majorIdQueryFormatted = mysql.format(majorIdQuery,[majorShortName]);
+        database.query(majorIdQueryFormatted, (err, result) => {
 
             if(err) {
-                console.log(`Encountered an error when performing query: ${courseIdQuery}`)
+                console.log(`Encountered an error when performing query: ${majorIdQueryFormatted}`)
                 throw (err)
             }
             else if(result.length > 0) {
 
-                let courseId = result[0]['course_id']
-
-                // Create a new datetime to be stored as the send time.
-                let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-                const sqlInsert = "INSERT INTO tutor_post (user_id, tutoring_course_id, post_created, post_details, post_image, post_thumbnail) VALUES (?,?,?,?,?,?)";
-                const insert_query = mysql.format(sqlInsert,[userId, courseId, dateNow, postDetails, postImage, postThumbnail]);
-                database.query (insert_query, (err, result)=> {
-
-                    if (err) throw (err);
-
-                    request.postCreated = true;
-                })
+                const majorId = result[0]['major_id']
+                const courseIdQuery = "SELECT course_id FROM course WHERE number = ? AND major = ?";
+                const courseIdQueryFormatted = mysql.format(courseIdQuery,[courseNumber, majorId]);
+                console.log(courseIdQueryFormatted)
+                database.query(courseIdQueryFormatted, (err, result) => {
+        
+                    if(err) {
+                        console.log(`Encountered an error when performing query: ${courseIdQueryFormatted}`)
+                        throw (err)
+                    }
+                    else if(result.length > 0) {
+        
+                        let courseId = result[0]['course_id']
+                        console.log(courseId)
+                        
+                        // Create a new datetime to be stored as the send time.
+                        let dateNow = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        
+                        const sqlInsert = "INSERT INTO tutor_post (user_id, tutoring_course_id, post_created, post_details, post_image, post_thumbnail) VALUES (?,?,?,?,?,?)";
+                        const insert_query = mysql.format(sqlInsert,[userId, courseId, dateNow, postDetails, postImage, postThumbnail]);
+                        database.query (insert_query, (err, result)=> {
+        
+                            if (err) throw (err);
+        
+                            request.postCreated = true;
+                        })
+                    }
+                });
             }
         });
     })
